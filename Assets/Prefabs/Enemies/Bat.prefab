@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &3599650291232264782
+--- !u!1 &5707308963716222226
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,41 +8,43 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3788209856584910814}
-  - component: {fileID: 2429469872445490720}
-  - component: {fileID: -1618432182755534701}
-  - component: {fileID: -3239043657072823728}
-  - component: {fileID: -62004766197904820}
+  - component: {fileID: 6440090668078912837}
+  - component: {fileID: 2055016325272498474}
+  - component: {fileID: 2045952987023461714}
+  - component: {fileID: 7026190704556200323}
+  - component: {fileID: 608866913188787242}
+  - component: {fileID: -7669806749505458749}
+  - component: {fileID: 8114253272205908444}
   m_Layer: 0
-  m_Name: Terrain Sprite Sheet_6
-  m_TagString: Prop
+  m_Name: Bat
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3788209856584910814
+--- !u!4 &6440090668078912837
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3599650291232264782}
+  m_GameObject: {fileID: 5707308963716222226}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 19.288212, y: -11.692323, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &2429469872445490720
+--- !u!212 &2055016325272498474
 SpriteRenderer:
   serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3599650291232264782}
+  m_GameObject: {fileID: 5707308963716222226}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -80,27 +82,49 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: -2065096735
-  m_SortingLayer: 2
+  m_SortingLayerID: -80060991
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 604072639, guid: 290b28fac4a59f74996390ba5bb4e689, type: 3}
+  m_Sprite: {fileID: 4148932211056241817, guid: de50cf52220d29549be6037356e332ff, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.27, y: 0.13}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!61 &-1618432182755534701
+--- !u!95 &2045952987023461714
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5707308963716222226}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: f2599ca1bdd95c949a202e0ea1e435d9, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!61 &7026190704556200323
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3599650291232264782}
+  m_GameObject: {fileID: 5707308963716222226}
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
@@ -132,40 +156,56 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
+    oldSize: {x: 0.27, y: 0.13}
+    newSize: {x: 0.27, y: 0.13}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.27, y: 0.13}
   m_EdgeRadius: 0
---- !u!114 &-3239043657072823728
+--- !u!114 &608866913188787242
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3599650291232264782}
+  m_GameObject: {fileID: 5707308963716222226}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fb1bf9de6f2d9d45819065dac76b1b8, type: 3}
+  m_Script: {fileID: 11500000, guid: f56e663a5d83826438cc5600935b48e9, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BreakableProps
-  health: 50
---- !u!114 &-62004766197904820
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyMovement
+  moveSpeed: 2
+--- !u!114 &-7669806749505458749
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3599650291232264782}
+  m_GameObject: {fileID: 5707308963716222226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92d9db15815a6b740a8796cc51381644, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyStats
+  enemyData: {fileID: 11400000, guid: df191bbbb56e4da4382e1b13a9b6dfe2, type: 2}
+  currentMoveSpeed: 0
+  currentHealth: 0
+  currentDamage: 0
+--- !u!114 &8114253272205908444
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5707308963716222226}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aa2ea603522069945ad99d4be4ba7124, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DropRateManagerr
   drops:
-  - name: Red potion
-    itemPrefab: {fileID: 6096279593853477433, guid: 64bcfcad873711f49b27582572037bdf, type: 3}
+  - name: Blue gem
+    itemPrefab: {fileID: 7748952014671748350, guid: 6f3de92992e77de4a94d6480f454aea3, type: 3}
     dropRate: 50

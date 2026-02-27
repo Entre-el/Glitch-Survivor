@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.U2D.Animation;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : MonoBehaviour
 {
-    public float moveSpeed;
     Rigidbody2D rb;
     [HideInInspector]
     public float lastHorizontalVector;
@@ -15,9 +16,10 @@ public class PlayerMovement : MonoBehaviour
     public Vector2 moveDir;
     [HideInInspector]
     public Vector2 lastMoveVector;
-
+    PlayerStats player;
     void Start()
     { 
+        player = GetComponent<PlayerStats>();
         lastMoveVector = new Vector2(1, 0f);
         rb = GetComponent<Rigidbody2D>();
     }
@@ -52,7 +54,7 @@ public class PlayerMovement : MonoBehaviour
     }
     void Move()
     {
-        rb.linearVelocity = new Vector2(moveDir.x * moveSpeed, moveDir.y * moveSpeed);
+        rb.linearVelocity = new Vector2(moveDir.x * player.currentMoveSpeed, moveDir.y * player.currentMoveSpeed);
     }
     
 }

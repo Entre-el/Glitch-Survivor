@@ -17,9 +17,9 @@ public class MapController : MonoBehaviour
     // Value (GameObject): 实际生成的地图物体
     // 作用：用来快速查找“这里有没有生成过地图”
     private Dictionary<Vector2, GameObject> loadedChunks = new Dictionary<Vector2, GameObject>();
-
     void Start()
     {
+        loadedChunks.Add(new Vector2(0, 0), terrainChunks[0]);
         // 初始生成一次
         UpdateChunks();
     }
