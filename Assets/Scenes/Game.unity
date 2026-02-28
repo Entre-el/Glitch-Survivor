@@ -412,53 +412,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &700258082
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 700258083}
-  - component: {fileID: 700258084}
-  m_Layer: 0
-  m_Name: Garlic Controller
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &700258083
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 700258082}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1327191079}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &700258084
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 700258082}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c6c109d14893d645adf89687ab2646e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GarlicController
-  prefab: {fileID: 8627147615011920374, guid: 53899aeb8a633924e8ac2972ad885e0f, type: 3}
-  currentCooldown: 0
-  weaponData: {fileID: 11400000, guid: 94d2069dba2a3f64ab870f3e8541d9e8, type: 2}
 --- !u!1 &930514761
 GameObject:
   m_ObjectHideFlags: 0
@@ -512,53 +465,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1085743032
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1085743033}
-  - component: {fileID: 1085743034}
-  m_Layer: 0
-  m_Name: Kinfe Controller
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1085743033
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1085743032}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1327191079}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1085743034
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1085743032}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2da53d970eca215478b4804a95c88efd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::KnifeController
-  prefab: {fileID: 1873771884457773354, guid: 7bd5f00d4b0c0024d98e813b63938ab6, type: 3}
-  currentCooldown: 0
-  weaponData: {fileID: 11400000, guid: 9b0a5f76233eafb45a125898572bc938, type: 2}
 --- !u!1 &1327191075
 GameObject:
   m_ObjectHideFlags: 0
@@ -727,8 +633,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 700258083}
-  - {fileID: 1085743033}
   - {fileID: 1648545352}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -793,8 +697,8 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2d18bfc8e6ee4504982a3284ff3a7e2d, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::NewMonoBehaviourScript
-  characterData: {fileID: 11400000, guid: 3b80702dfc976bb46b2b6b551db66577, type: 2}
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
+  characterData: {fileID: 0}
   currentHealth: 0
   currentMaxHealth: 0
   currentMoveSpeed: 0
@@ -804,18 +708,19 @@ MonoBehaviour:
   currentMagnet: 0
   experience: 0
   level: 1
-  experienceCap: 100
+  experienceCap: 0
+  spawnedWeapons: []
   levelRanges:
   - startLevel: 1
     endLevel: 3
     experienceCapIncrease: 100
   - startLevel: 4
-    endLevel: 5
+    endLevel: 6
     experienceCapIncrease: 200
-  - startLevel: 6
+  - startLevel: 7
     endLevel: 9999
     experienceCapIncrease: 300
-  invincibilityDuration: 0.5
+  invincibilityDuration: 0
 --- !u!1 &1648545351
 GameObject:
   m_ObjectHideFlags: 0

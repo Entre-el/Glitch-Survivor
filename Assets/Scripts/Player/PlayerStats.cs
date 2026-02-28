@@ -31,9 +31,11 @@ public class PlayerStats : MonoBehaviour
         public int endLevel;
         public int experienceCapIncrease;
     } 
+    public List<GameObject> spawnedWeapons;
     
     void Awake()
     {
+        characterData = CharacterSelector.GetData();
         currentHealth = characterData.MaxHealth;
         currentMaxHealth = characterData.MaxHealth;
         currentMoveSpeed = characterData.MoveSpeed;
@@ -41,6 +43,7 @@ public class PlayerStats : MonoBehaviour
         currentMight = characterData.Might;
         currentProjectileSpeed = characterData.ProjectileSpeed;
         currentMagnet = characterData.Magnet;
+        SpawnWeapon(characterData.StartingWeapon);
     }
     public List<LevelRange> levelRanges;
     void Start()
@@ -122,5 +125,11 @@ public class PlayerStats : MonoBehaviour
                 currentHealth = currentMaxHealth;
             }
         }
+    }
+    public void SpawnWeapon(GameObject weaponPrefab)
+    {
+        GameObject newWeapon = Instantiate(weaponPrefab, transform.position, Quaternion.identity);
+        newWeapon.transform.SetParent(transform);
+        spawnedWeapons.Add(newWeapon);
     }
 }

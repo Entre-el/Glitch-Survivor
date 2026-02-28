@@ -6,7 +6,7 @@ public class CharacterScriptableObject : ScriptableObject
 {
     [SerializeField]
     GameObject startingWeapon;
-    public GameObject SrartingWeapon{get => startingWeapon; private set => startingWeapon = value;}
+    public GameObject StartingWeapon{get => startingWeapon; private set => startingWeapon = value;}
     [SerializeField]
     float maxHealth;
     public float MaxHealth { get => maxHealth; private set => maxHealth = value; }

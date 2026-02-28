@@ -5,6 +5,8 @@
 /[Bb]uilds/
 /[Ll]ogs/
 /[Mm]emoryCaptures/
+TextMesh Pro/
+[Ll]ibrary/
 *.csproj
 *.unityproj
 *.sln

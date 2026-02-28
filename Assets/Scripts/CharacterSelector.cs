@@ -1,16 +1,34 @@
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
-public class Menu : MonoBehaviour
+public class CharacterSelector : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public static CharacterSelector instance;
+    public CharacterScriptableObject charaterData;
+    void Awake()
     {
-        
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Debug.LogWarning("EXTRA "+ this +" DESTROYING DUPLICATE...");
+            Destroy(gameObject);
+        }
     }
-
-    // Update is called once per frame
-    void Update()
+    public static CharacterScriptableObject GetData()
     {
-        
+        return instance.charaterData;
+    }
+    public void SelectCharater(CharacterScriptableObject character)
+    {
+        charaterData = character;
+    }
+    public void DestroySingleton()
+    {
+        instance = null;
+        Destroy(gameObject);
     }
 }
