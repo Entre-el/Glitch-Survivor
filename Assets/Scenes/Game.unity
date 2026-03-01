@@ -119,6 +119,110 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &87711287
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 87711288}
+  - component: {fileID: 87711289}
+  m_Layer: 0
+  m_Name: EnemySpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &87711288
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 87711287}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &87711289
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 87711287}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eca21b0d753aa154380c34b6b4989cf0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
+  WaveSpawnInterval: 10
+  waveSpawnTimer: 8
+  GroupSpawnInterval: 2
+  groupSpawnTimer: 0
+  currentWaveCount: 0
+  currentGroupCount: 0
+  roundEdgeLength: 10
+  waves:
+  - waveName: 
+    enemyGroups:
+    - enemysList:
+      - enemyPrefab: {fileID: 5707308963716222226, guid: a58676795aeb74f4f864528b69736e8c, type: 3}
+        enemyCount: 3
+      isGathered: 1
+      difficultyLevel: 0
+    - enemysList:
+      - enemyPrefab: {fileID: 5707308963716222226, guid: da4aa330a2433f548b33710dd50b0e1d, type: 3}
+        enemyCount: 0
+      isGathered: 0
+      difficultyLevel: 0
+  - waveName: 
+    enemyGroups:
+    - enemysList:
+      - enemyPrefab: {fileID: 5707308963716222226, guid: a58676795aeb74f4f864528b69736e8c, type: 3}
+        enemyCount: 5
+      - enemyPrefab: {fileID: 5707308963716222226, guid: da4aa330a2433f548b33710dd50b0e1d, type: 3}
+        enemyCount: 1
+      isGathered: 1
+      difficultyLevel: 0
+    - enemysList:
+      - enemyPrefab: {fileID: 5707308963716222226, guid: a58676795aeb74f4f864528b69736e8c, type: 3}
+        enemyCount: 20
+      isGathered: 1
+      difficultyLevel: 0
+    - enemysList:
+      - enemyPrefab: {fileID: 5707308963716222226, guid: da4aa330a2433f548b33710dd50b0e1d, type: 3}
+        enemyCount: 3
+      isGathered: 0
+      difficultyLevel: 0
+  - waveName: 
+    enemyGroups:
+    - enemysList:
+      - enemyPrefab: {fileID: 5707308963716222226, guid: a58676795aeb74f4f864528b69736e8c, type: 3}
+        enemyCount: 10
+      - enemyPrefab: {fileID: 5707308963716222226, guid: da4aa330a2433f548b33710dd50b0e1d, type: 3}
+        enemyCount: 1
+      isGathered: 1
+      difficultyLevel: 0
+    - enemysList:
+      - enemyPrefab: {fileID: 5707308963716222226, guid: da4aa330a2433f548b33710dd50b0e1d, type: 3}
+        enemyCount: 5
+      isGathered: 1
+      difficultyLevel: 0
+    - enemysList:
+      - enemyPrefab: {fileID: 5707308963716222226, guid: a58676795aeb74f4f864528b69736e8c, type: 3}
+        enemyCount: 20
+      - enemyPrefab: {fileID: 5707308963716222226, guid: da4aa330a2433f548b33710dd50b0e1d, type: 3}
+        enemyCount: 3
+      isGathered: 1
+      difficultyLevel: 0
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -283,6 +387,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Terrain Chunk (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 182824908571045898, guid: 0f5c9262e39de0a4a80f9fd3d00d7a0b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4542680077730779107, guid: 0f5c9262e39de0a4a80f9fd3d00d7a0b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -423,7 +531,7 @@ GameObject:
   - component: {fileID: 930514763}
   - component: {fileID: 930514762}
   m_Layer: 6
-  m_Name: Map Controller
+  m_Name: MapController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -698,7 +806,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d18bfc8e6ee4504982a3284ff3a7e2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
-  characterData: {fileID: 0}
+  characterData: {fileID: 11400000, guid: 3b80702dfc976bb46b2b6b551db66577, type: 2}
   currentHealth: 0
   currentMaxHealth: 0
   currentMoveSpeed: 0
@@ -720,7 +828,7 @@ MonoBehaviour:
   - startLevel: 7
     endLevel: 9999
     experienceCapIncrease: 300
-  invincibilityDuration: 0
+  invincibilityDuration: 0.5
 --- !u!1 &1648545351
 GameObject:
   m_ObjectHideFlags: 0
@@ -823,9 +931,17 @@ PrefabInstance:
       propertyPath: moveSpeed
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 2055016325272498474, guid: a58676795aeb74f4f864528b69736e8c, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 5271031278664896106, guid: de50cf52220d29549be6037356e332ff, type: 3}
     - target: {fileID: 5707308963716222226, guid: a58676795aeb74f4f864528b69736e8c, type: 3}
       propertyPath: m_Name
       value: Bat
+      objectReference: {fileID: 0}
+    - target: {fileID: 5707308963716222226, guid: a58676795aeb74f4f864528b69736e8c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6440090668078912837, guid: a58676795aeb74f4f864528b69736e8c, type: 3}
       propertyPath: m_LocalScale.x
@@ -906,3 +1022,4 @@ SceneRoots:
   - {fileID: 1327191079}
   - {fileID: 930514763}
   - {fileID: 1335535944514112235}
+  - {fileID: 87711288}
