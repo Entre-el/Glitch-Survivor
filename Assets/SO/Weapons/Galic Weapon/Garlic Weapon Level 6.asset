@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Garlic Weapon Level 6
   m_EditorClassIdentifier: Assembly-CSharp::WeaponScriptableObject
   prefab: {fileID: 8627147615011920374, guid: fbbc4eed58b0a534db50b06ef5933f0a, type: 3}
-  damage: 5
+  damage: 50
   speed: 0
   cooldownDuration: 3
   pierce: 0

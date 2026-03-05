@@ -25,6 +25,7 @@ public class PlayerMovement : MonoBehaviour
     }
     void Update()
     {
+        if(GameManager.instance.isGameOver) return; 
         InputManagement();
     }
     void FixedUpdate()

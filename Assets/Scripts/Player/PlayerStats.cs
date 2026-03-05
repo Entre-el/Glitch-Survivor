@@ -19,6 +19,10 @@ public class PlayerStats : MonoBehaviour
         set { if(currentHealth != value)
             {
                 currentHealth = value;
+                if(GameManager.instance != null)
+                {
+                    GameManager.instance.currentHealthDisplay.text = "Health: " + currentHealth.ToString("F0");
+                }
             }
         }
     }
@@ -28,6 +32,10 @@ public class PlayerStats : MonoBehaviour
         set { if(currentMaxHealth != value)
             {
                 currentMaxHealth = value;
+                if(GameManager.instance != null)
+                {
+                    GameManager.instance.currentHealthDisplay.text = "Health: " + currentHealth.ToString("F0") + "/" + currentMaxHealth.ToString("F0");
+                }
             }
         }
     }
@@ -37,6 +45,10 @@ public class PlayerStats : MonoBehaviour
         set { if(currentMoveSpeed != value)
             {
                 currentMoveSpeed = value;
+                if(GameManager.instance != null)
+                {
+                    GameManager.instance.currentMoveSpeedDisplay.text = "Move Speed: " + currentMoveSpeed.ToString("F1");
+                }
             }
         }
     }
@@ -46,6 +58,10 @@ public class PlayerStats : MonoBehaviour
         set { if(currentRecovery != value)
             {
                 currentRecovery = value;
+                if(GameManager.instance != null)
+                {
+                    GameManager.instance.currentRecoveryDisplay.text = "Recovery: " + currentRecovery.ToString("F1");
+                }
             }
         }
     }
@@ -55,6 +71,10 @@ public class PlayerStats : MonoBehaviour
         set { if(currentMight != value)
             {
                 currentMight = value;
+                if(GameManager.instance != null)
+                {
+                    GameManager.instance.currentMightDisplay.text = "Might: " + currentMight.ToString("F1");
+                }
             }
         }
     }
@@ -64,6 +84,10 @@ public class PlayerStats : MonoBehaviour
         set { if(currentProjectileSpeed != value)
             {
                 currentProjectileSpeed = value;
+                if(GameManager.instance != null)
+                {
+                    GameManager.instance.currentProjectileSpeedDisplay.text = "Projectile Speed: " + currentProjectileSpeed.ToString("F1");
+                }
             }
         }
     }
@@ -73,6 +97,10 @@ public class PlayerStats : MonoBehaviour
         set { if(currentMagnet != value)
             {
                 currentMagnet = value;
+                if(GameManager.instance != null)
+                {
+                    GameManager.instance.currentMagnetDisplay.text = "Magnet: " + currentMagnet.ToString("F1");
+                }
             }
         }
     }
@@ -95,6 +123,7 @@ public class PlayerStats : MonoBehaviour
     public GameObject firstPassiveItem;
     public GameObject secondPassiveItem;
     public GameObject SecondaryWeapon;
+    private float timeSurvived;
     
     void Awake()
     {
@@ -118,7 +147,15 @@ public class PlayerStats : MonoBehaviour
     public List<LevelRange> levelRanges;
     void Start()
     {
+        timeSurvived = 0;
         experienceCap = levelRanges[0].experienceCapIncrease;
+        GameManager.instance.currentHealthDisplay.text = "Health: " + CurrentHealth.ToString("F0") + "/" + CurrentMaxHealth.ToString("F0");
+        GameManager.instance.currentMoveSpeedDisplay.text = "Move Speed: " + CurrentMoveSpeed.ToString("F1");
+        GameManager.instance.currentRecoveryDisplay.text = "Recovery: " + CurrentRecovery.ToString("F1");
+        GameManager.instance.currentMightDisplay.text = "Might: " + CurrentMight.ToString("F1");
+        GameManager.instance.currentProjectileSpeedDisplay.text = "Projectile Speed: " + CurrentProjectileSpeed.ToString("F1");
+        GameManager.instance.currentMagnetDisplay.text = "Magnet: " + CurrentMagnet.ToString("F1");
+        GameManager.instance.AssignChosenCharacterUI(characterData);
     }
     public void IncreaseExperience(int amount)
     {
@@ -162,7 +199,13 @@ public class PlayerStats : MonoBehaviour
     }
     public void Kill()
     {
-        Debug.Log("PLAYER IS DEAD");
+        if(!GameManager.instance.isGameOver)
+        {
+            GameManager.instance.AssignLevelReachedUI(level);
+            GameManager.instance.AssignTimeSurvivedUI((int)timeSurvived);
+            GameManager.instance.AssignChosenWeaponUI(inventory.weaponSlotImages,inventory.passiveItemSlotImages);
+            GameManager.instance.GameOver();
+        }   
     }
     public void RestoreHealth(float amount)
     {
@@ -184,6 +227,7 @@ public class PlayerStats : MonoBehaviour
            isInvincible = false;
         }
         Recover();
+        timeSurvived += Time.deltaTime;
     }
     void Recover()
     {
