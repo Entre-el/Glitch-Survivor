@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7435543532506133100}
   - component: {fileID: 2572097506447437378}
   m_Layer: 0
-  m_Name: Knife Controller
+  m_Name: Knife Controller Level 6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44,6 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2da53d970eca215478b4804a95c88efd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KnifeController
-  prefab: {fileID: 1873771884457773354, guid: 7bd5f00d4b0c0024d98e813b63938ab6, type: 3}
+  prefab: {fileID: 1873771884457773354, guid: 1719852060ac07949a05278ea2f690ad, type: 3}
   currentCooldown: 0
-  weaponData: {fileID: 11400000, guid: 9b0a5f76233eafb45a125898572bc938, type: 2}
+  weaponData: {fileID: 11400000, guid: e31341cf4d212a341b8ddfea9b7f5c36, type: 2}

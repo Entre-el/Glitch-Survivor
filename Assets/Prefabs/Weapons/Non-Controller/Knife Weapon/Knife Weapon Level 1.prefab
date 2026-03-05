@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 341458710056024361}
   - component: {fileID: 2348272801766792520}
   m_Layer: 0
-  m_Name: Knife Weapon
+  m_Name: Knife Weapon Level 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -106,7 +106,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 638dd7d1217a34d4f858fec03b5d3ebf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KnifeBehaviour
-  weaponData: {fileID: 11400000, guid: 9b0a5f76233eafb45a125898572bc938, type: 2}
+  weaponData: {fileID: 11400000, guid: efe12dba49a094144b4900ad4e6cac8e, type: 2}
   destroyAfterSeconds: 3
 --- !u!60 &341458710056024361
 PolygonCollider2D:

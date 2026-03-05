@@ -5,20 +5,78 @@ using UnityEngine.Timeline;
 public class PlayerStats : MonoBehaviour
 {
     public CharacterScriptableObject characterData;
-    [HideInInspector]
-    public float currentHealth;
-    [HideInInspector]
-    public float currentMaxHealth;
-    [HideInInspector]
-    public float currentMoveSpeed;
-    [HideInInspector]
-    public float currentRecovery;
-    [HideInInspector]
-    public float currentMight;
-    [HideInInspector]
-    public float currentProjectileSpeed;
-    [HideInInspector]
-    public float currentMagnet;
+    private float currentHealth;
+    private float currentMaxHealth;
+    private float currentMoveSpeed;
+    private float currentRecovery;
+    private float currentMight;
+    private float currentProjectileSpeed;
+    private float currentMagnet;
+    #region Current Stats Properties
+    private float CurrentHealth
+    {
+        get { return currentHealth; }
+        set { if(currentHealth != value)
+            {
+                currentHealth = value;
+            }
+        }
+    }
+    public float CurrentMaxHealth
+    {
+        get { return currentMaxHealth; }
+        set { if(currentMaxHealth != value)
+            {
+                currentMaxHealth = value;
+            }
+        }
+    }
+    public float CurrentMoveSpeed
+    {
+        get { return currentMoveSpeed; }
+        set { if(currentMoveSpeed != value)
+            {
+                currentMoveSpeed = value;
+            }
+        }
+    }
+    public float CurrentRecovery
+    {
+        get { return currentRecovery; }
+        set { if(currentRecovery != value)
+            {
+                currentRecovery = value;
+            }
+        }
+    }
+    public float CurrentMight
+    {
+        get { return currentMight; }
+        set { if(currentMight != value)
+            {
+                currentMight = value;
+            }
+        }
+    }
+    public float CurrentProjectileSpeed
+    {
+        get { return currentProjectileSpeed; }
+        set { if(currentProjectileSpeed != value)
+            {
+                currentProjectileSpeed = value;
+            }
+        }
+    }
+    public float CurrentMagnet
+    {
+        get { return currentMagnet; }
+        set { if(currentMagnet != value)
+            {
+                currentMagnet = value;
+            }
+        }
+    }
+    #endregion
 
     [Header("Experience/Level")]
     public int experience = 0;
@@ -31,7 +89,12 @@ public class PlayerStats : MonoBehaviour
         public int endLevel;
         public int experienceCapIncrease;
     } 
-    public List<GameObject> spawnedWeapons;
+    InventoryManager inventory;
+    public int nextWeaponIndex = 0;
+    public int nextPassiveItemIndex = 0;
+    public GameObject firstPassiveItem;
+    public GameObject secondPassiveItem;
+    public GameObject SecondaryWeapon;
     
     void Awake()
     {
@@ -39,14 +102,18 @@ public class PlayerStats : MonoBehaviour
         {
         characterData = CharacterSelector.GetData();
         }
-        currentHealth = characterData.MaxHealth;
-        currentMaxHealth = characterData.MaxHealth;
-        currentMoveSpeed = characterData.MoveSpeed;
-        currentRecovery = characterData.Recovery;
-        currentMight = characterData.Might;
-        currentProjectileSpeed = characterData.ProjectileSpeed;
-        currentMagnet = characterData.Magnet;
+        CurrentHealth = characterData.MaxHealth;
+        CurrentMaxHealth = characterData.MaxHealth;
+        CurrentMoveSpeed = characterData.MoveSpeed;
+        CurrentRecovery = characterData.Recovery;
+        CurrentMight = characterData.Might;
+        CurrentProjectileSpeed = characterData.ProjectileSpeed;
+        CurrentMagnet = characterData.Magnet;
+        inventory = GetComponent<InventoryManager>();
         SpawnWeapon(characterData.StartingWeapon);
+        SpawnWeapon(SecondaryWeapon);
+        SpawnPassiveItem(firstPassiveItem); 
+        SpawnPassiveItem(secondPassiveItem);
     }
     public List<LevelRange> levelRanges;
     void Start()
@@ -84,10 +151,10 @@ public class PlayerStats : MonoBehaviour
     {
         if(!isInvincible)
         {
-            currentHealth -= damage;
+            CurrentHealth -= damage;
             isInvincible = true;
             invincibilityTimer = invincibilityDuration;
-            if (currentHealth <= 0)
+            if (CurrentHealth <= 0)
             {
                 Kill();
             }
@@ -100,11 +167,11 @@ public class PlayerStats : MonoBehaviour
     public void RestoreHealth(float amount)
     {
         
-        if (currentHealth > currentMaxHealth)
+        if (CurrentHealth > CurrentMaxHealth)
         {
-            currentHealth += amount; 
+            CurrentHealth += amount; 
         }
-        else currentHealth = currentMaxHealth;
+        else CurrentHealth = CurrentMaxHealth;
     }
     void Update()
     {
@@ -120,19 +187,45 @@ public class PlayerStats : MonoBehaviour
     }
     void Recover()
     {
-        if (currentHealth < currentMaxHealth)
+        if (CurrentHealth < CurrentMaxHealth)
         {
-            currentHealth += currentRecovery * Time.deltaTime;
-            if (currentHealth > currentMaxHealth)
+            CurrentHealth += CurrentRecovery * Time.deltaTime;
+            if (CurrentHealth > CurrentMaxHealth)
             {
-                currentHealth = currentMaxHealth;
+                CurrentHealth = CurrentMaxHealth;
             }
         }
     }
-    public void SpawnWeapon(GameObject weaponPrefab)
+    public void SpawnWeapon(GameObject weapon)
     {
-        GameObject newWeapon = Instantiate(weaponPrefab, transform.position, Quaternion.identity);
+        if(nextWeaponIndex >= inventory.weaponSlots.Count - 1)
+        {
+            Debug.LogWarning("Maximum weapon slots reached. Cannot add more weapons.");
+            return;
+        }   
+        GameObject newWeapon = Instantiate(weapon, transform.position, Quaternion.identity);
         newWeapon.transform.SetParent(transform);
-        spawnedWeapons.Add(newWeapon);
+        inventory = GetComponent<InventoryManager>();
+        if (inventory != null)
+        {
+            inventory.AddWeapon(nextWeaponIndex, newWeapon.GetComponent<WeaponController>());            
+            nextWeaponIndex++;
+        }
+    }
+        public void SpawnPassiveItem(GameObject passiveItem)
+    {
+        if(nextPassiveItemIndex >= inventory.passiveItemSlots.Count - 1)
+        {
+            Debug.LogWarning("Maximum passiveItem slots reached. Cannot add more passiveItems.");
+            return;
+        }   
+        GameObject newPassiveItem = Instantiate(passiveItem, transform.position, Quaternion.identity);
+        newPassiveItem.transform.SetParent(transform);
+        inventory = GetComponent<InventoryManager>();
+        if (inventory != null)
+        {
+            inventory.AddPassiveItem(nextPassiveItemIndex, newPassiveItem.GetComponent<PassiveItem>());            
+            nextPassiveItemIndex++;
+        }
     }
 }

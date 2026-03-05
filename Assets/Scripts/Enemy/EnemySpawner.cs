@@ -98,7 +98,7 @@ public class EnemySpawner : MonoBehaviour
             {
                 for (int i = 0; i < enemies.enemyCount; i++)
                 {
-                    Vector2 offset = new Vector2(Random.Range(-0.5f, 0.5f), Random.Range(-0.5f, 0.5f));
+                    Vector2 offset = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
                     Instantiate(enemies.enemyPrefab, spawnPosition + offset, Quaternion.identity);
                 }
             }

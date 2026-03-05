@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class ProjectileWeaponBehaviour : MonoBehaviour
@@ -27,6 +28,10 @@ public class ProjectileWeaponBehaviour : MonoBehaviour
     {
         
     }
+    public float GetCurrentDamage()
+    {
+        return currentDamage *=FindAnyObjectByType<PlayerStats>().CurrentMight;
+    }
     public void DirectionChecker(Vector3 dir)
     {
         direction = dir; 
@@ -44,13 +49,13 @@ public class ProjectileWeaponBehaviour : MonoBehaviour
         {
             EnemyStats enemy = col.GetComponent<EnemyStats>();
             ReducePierce();
-            enemy.TakeDamage(currentDamage);
+            enemy.TakeDamage(GetCurrentDamage());
         }
         else if(col.CompareTag("Prop"))
         {
             if (col.gameObject.TryGetComponent<BreakableProps>(out BreakableProps prop))
             {
-                prop.TakeDamage(currentDamage);
+                prop.TakeDamage(GetCurrentDamage());
                 ReducePierce();
             }
         }
