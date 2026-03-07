@@ -142,7 +142,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d71e55584c98284c9491237ce582dec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExpericenceGem
-  experienceGranted: 100
+  experienceGranted: 1000
 --- !u!50 &-310993146596228531
 Rigidbody2D:
   serializedVersion: 5

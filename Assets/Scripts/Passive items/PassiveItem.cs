@@ -6,9 +6,8 @@ public class PassiveItem : MonoBehaviour
     public PassiveItemScriptableObject passiveItemData;
     protected virtual void ApplyEffect()
     {
-        // This method should be overridden in derived classes to apply the specific effect of the passive item
+        // 由具体被动子类覆写，实现属性加成/效果逻辑
     }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         playerStats = FindAnyObjectByType<PlayerStats>();

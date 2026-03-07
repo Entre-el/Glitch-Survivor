@@ -4,18 +4,21 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance; // Singleton instance of the GameManager
+    // 单例：用于全局访问当前局的状态与 UI
+    public static GameManager instance;
     public enum GameState
     {
         Playing,
         Paused,
-        GameOver
+        GameOver,
+        LevelingUp
     }
     public GameState currentGameState;
     public GameState previousGameState;
     [Header("Screens")] 
     public GameObject pauseScreens; 
     public GameObject resultsScreen;
+    public GameObject levelUpScreen;
     [Header("Current Stats Display")]
     public Text currentHealthDisplay;
     public Text currentRecoveryDisplay;
@@ -30,19 +33,28 @@ public class GameManager : MonoBehaviour
     public Text TimeSurvivedDisplay;
     public List<Image> chosenWeaponIcons = new(6);
     public List<Image> chosenPassiveIcons = new(6);
+    [Header("Stopwatch")]
+    // 存活时间上限（秒）
+    public float timeLimit;
+    float stopwatchTime;
+    public Text stopwatchDisplay;
+
+
     public bool isGameOver = false;
+    public bool isLevelingUp = false;
+    public GameObject playerObject;
     void Awake()
     {
         if(instance == null)
         {
-            instance = this; // Set the singleton instance
+            instance = this;
         }
         else
         {
             Debug.LogWarning("Multiple instances of GameManager detected. Destroying duplicate.");
-            Destroy(gameObject); // Ensure only one instance exists
+            Destroy(gameObject);
         }
-        DisableScreens(); // Hide the pause menu UI at the start
+        DisableScreens();
     }
     void Update()
     {
@@ -50,6 +62,7 @@ public class GameManager : MonoBehaviour
         {
             case GameState.Playing:
                     CheckForPauseAndResume();
+                    UpdateStopwatch();
                 break;
             case GameState.Paused:
                     CheckForPauseAndResume();
@@ -57,13 +70,22 @@ public class GameManager : MonoBehaviour
             case GameState.GameOver:
                 if(!isGameOver){
                     isGameOver = true;
-                    Time.timeScale = 0f; // Pause the game
+                    Time.timeScale = 0f;
                     Debug.Log("Game Over");
                     DisplayResults();
                 }
                 break;
+            case GameState.LevelingUp:
+                if(!isLevelingUp)
+                {
+                    isLevelingUp = true;
+                    Time.timeScale = 0f;
+                    levelUpScreen.SetActive(true);
+                    Debug.Log("Level Up!");
+                }
+                break;
             default:
-                Time.timeScale = 1f; // Default to normal time
+                Time.timeScale = 1f;
                 break;
         }
     }
@@ -75,10 +97,10 @@ public class GameManager : MonoBehaviour
     {
         if(currentGameState != GameState.Paused)
         {
-            previousGameState = currentGameState; // Store the previous state before pausing
+            previousGameState = currentGameState;
             ChangeState(GameState.Paused);
-            Time.timeScale = 0f; // Pause the game
-            pauseScreens.SetActive(true); // Show the pause menu UI
+            Time.timeScale = 0f;
+            pauseScreens.SetActive(true);
             Debug.Log("Game Paused");
         }
     }
@@ -86,9 +108,9 @@ public class GameManager : MonoBehaviour
     {
         if(currentGameState == GameState.Paused)
         {
-            ChangeState(previousGameState); // Restore the previous state when resuming
-            Time.timeScale = 1f; // Resume the game
-            DisableScreens(); // Hide the pause menu UI
+            ChangeState(previousGameState);
+            Time.timeScale = 1f;
+            DisableScreens();
             Debug.Log("Game Resumed");
         }
     }
@@ -110,9 +132,12 @@ public class GameManager : MonoBehaviour
     {
         pauseScreens.SetActive(false);
         resultsScreen.SetActive(false);
+        levelUpScreen.SetActive(false);
     }
     public void GameOver()
     {
+        // 结算时展示本局存活时间
+        TimeSurvivedDisplay.text = stopwatchDisplay.text;
         ChangeState(GameState.GameOver);
     }
     void DisplayResults()
@@ -128,10 +153,6 @@ public class GameManager : MonoBehaviour
     {
         levelReachedDisplay.text =  levelReachedData.ToString();
     }
-    public void AssignTimeSurvivedUI(int timeSurvivedData)
-    {
-        TimeSurvivedDisplay.text = timeSurvivedData.ToString() + "seconds";
-    }
     public void AssignChosenWeaponUI(List<Image> chosenWeaponIconsData,List<Image> chosenPassiveIconsData)
     {
         if(chosenWeaponIconsData.Count != chosenWeaponIcons.Count || chosenPassiveIconsData.Count != chosenPassiveIcons.Count)
@@ -141,21 +162,49 @@ public class GameManager : MonoBehaviour
         }
         for(int i = 0; i < chosenWeaponIcons.Count; i++)
         {
-            chosenWeaponIcons[i].enabled = false; // Disable the icon if no weapon is assigned
-            if(chosenWeaponIconsData[i].enabled) // Check if the weapon icon data is enabled before assigning
+            chosenWeaponIcons[i].enabled = false;
+            if(chosenWeaponIconsData[i].enabled)
             {
-                chosenWeaponIcons[i].enabled = true; // Ensure the icon is enabled
+                chosenWeaponIcons[i].enabled = true;
                 chosenWeaponIcons[i].sprite = chosenWeaponIconsData[i].sprite;
             }
         }
         for(int j = 0; j < chosenPassiveIcons.Count; j++)
         {
-            chosenPassiveIcons[j].enabled = false; // Disable the icon if no passive is assigned
+            chosenPassiveIcons[j].enabled = false;
             if(chosenPassiveIconsData[j].enabled)
             {
-                chosenPassiveIcons[j].enabled = true; // Ensure the icon is enabled
+                chosenPassiveIcons[j].enabled = true;
                 chosenPassiveIcons[j].sprite = chosenPassiveIconsData[j].sprite;
             }
         }
+    }
+    void UpdateStopwatch()
+    {
+        stopwatchTime += Time.deltaTime;
+        UpdateStopwatchDisplay();
+        if(stopwatchTime >= timeLimit)
+        {
+            GameOver();
+        }
+    }
+    void UpdateStopwatchDisplay()
+    {
+        int minutes = Mathf.FloorToInt(stopwatchTime / 60f);
+        int seconds = Mathf.FloorToInt(stopwatchTime % 60f);
+        stopwatchDisplay.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+    }
+    public void StartLevelUp()
+    {
+        // 进入升级：暂停时间、打开升级界面，并让玩家刷新可选升级按钮
+        ChangeState(GameState.LevelingUp);
+        playerObject.SendMessage("RemoveAndApplyUpgradeOptions");
+    }
+    public void EndLevelUp()
+    {
+        isLevelingUp = false;
+        Time.timeScale = 1f;
+        levelUpScreen.SetActive(false);
+        ChangeState(GameState.Playing);
     }
 }

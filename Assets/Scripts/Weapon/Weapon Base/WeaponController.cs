@@ -9,14 +9,14 @@ public class WeaponController : MonoBehaviour
     protected PlayerMovement pm;
     public WeaponScriptableObject weaponData;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    // 初始化：读取武器数据并设置初始冷却
     protected virtual void Start()
     {
         pm = FindAnyObjectByType<PlayerMovement>();
         currentCooldown =  weaponData.CooldownDuration;
     }
 
-    // Update is called once per frame
+    // 通过冷却计时器控制攻击频率
     protected virtual void Update()
     {
         currentCooldown -= Time.deltaTime;

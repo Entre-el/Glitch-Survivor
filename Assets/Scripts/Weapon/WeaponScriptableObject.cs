@@ -5,7 +5,7 @@ public class WeaponScriptableObject : ScriptableObject
     [SerializeField]
    GameObject prefab;
    public GameObject Prefab { get => prefab; private set => prefab = value; }
-    //Base stats for the weapon
+    // 武器的基础数值配置（每个等级通常会对应一份独立的 ScriptableObject 数据）
     [SerializeField]
     float damage;
     public float Damage { get => damage; private set => damage = value; }
@@ -24,6 +24,12 @@ public class WeaponScriptableObject : ScriptableObject
     [SerializeField]
     GameObject nextLevelPrefab;
     public GameObject NextLevelPrefab { get => nextLevelPrefab; private set => nextLevelPrefab = value; }
+    [SerializeField]
+    new string name;
+    public string Name { get => name; private set => name = value; }
+    [SerializeField]
+    string description;
+    public string Description { get => description; private set => description = value; }
     [SerializeField]
     Sprite icon;
     public Sprite Icon { get => icon; private set => icon = value; }

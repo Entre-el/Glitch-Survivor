@@ -120,11 +120,6 @@ public class PlayerStats : MonoBehaviour
     InventoryManager inventory;
     public int nextWeaponIndex = 0;
     public int nextPassiveItemIndex = 0;
-    public GameObject firstPassiveItem;
-    public GameObject secondPassiveItem;
-    public GameObject SecondaryWeapon;
-    private float timeSurvived;
-    
     void Awake()
     {
         if(characterData == null)
@@ -140,14 +135,10 @@ public class PlayerStats : MonoBehaviour
         CurrentMagnet = characterData.Magnet;
         inventory = GetComponent<InventoryManager>();
         SpawnWeapon(characterData.StartingWeapon);
-        SpawnWeapon(SecondaryWeapon);
-        SpawnPassiveItem(firstPassiveItem); 
-        SpawnPassiveItem(secondPassiveItem);
     }
     public List<LevelRange> levelRanges;
     void Start()
     {
-        timeSurvived = 0;
         experienceCap = levelRanges[0].experienceCapIncrease;
         GameManager.instance.currentHealthDisplay.text = "Health: " + CurrentHealth.ToString("F0") + "/" + CurrentMaxHealth.ToString("F0");
         GameManager.instance.currentMoveSpeedDisplay.text = "Move Speed: " + CurrentMoveSpeed.ToString("F1");
@@ -164,7 +155,7 @@ public class PlayerStats : MonoBehaviour
     }
     void LevelUpChecker()
     {
-        while (experience >= experienceCap)
+        if (experience >= experienceCap)
         {
             experience -= experienceCap;
             level++;
@@ -178,6 +169,8 @@ public class PlayerStats : MonoBehaviour
                 }
             }
             experienceCap += experienceCapIncrease;
+            // 进入升级阶段：暂停游戏并刷新升级选项（武器/被动）
+            GameManager.instance.StartLevelUp();
         }
     }
     [Header("I-Frames")]
@@ -202,7 +195,6 @@ public class PlayerStats : MonoBehaviour
         if(!GameManager.instance.isGameOver)
         {
             GameManager.instance.AssignLevelReachedUI(level);
-            GameManager.instance.AssignTimeSurvivedUI((int)timeSurvived);
             GameManager.instance.AssignChosenWeaponUI(inventory.weaponSlotImages,inventory.passiveItemSlotImages);
             GameManager.instance.GameOver();
         }   
@@ -227,7 +219,6 @@ public class PlayerStats : MonoBehaviour
            isInvincible = false;
         }
         Recover();
-        timeSurvived += Time.deltaTime;
     }
     void Recover()
     {

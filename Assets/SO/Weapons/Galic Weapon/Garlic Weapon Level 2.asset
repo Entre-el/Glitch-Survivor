@@ -19,4 +19,6 @@ MonoBehaviour:
   pierce: 0
   level: 2
   nextLevelPrefab: {fileID: 8154892233836092062, guid: 4d31076ea3864ea48a0342d0a2ec597a, type: 3}
+  name: Garlic Level 2
+  description: Damage is up by 5
   icon: {fileID: 21300000, guid: 0337b0f53ac5ea54d8052d85856a9550, type: 2}
