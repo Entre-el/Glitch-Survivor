@@ -48,6 +48,7 @@ public class EnemySpawner : MonoBehaviour
     }
     void Start()
     {
+        enemiesAlive = 0;
         player = GameObject.FindAnyObjectByType<PlayerMovement>().transform;
         // 游戏开始，直接启动刷怪流水线！
         StartCoroutine(SpawnProcess());
@@ -100,6 +101,7 @@ public class EnemySpawner : MonoBehaviour
                 {
                     Vector2 offset = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
                     Instantiate(enemies.enemyPrefab, spawnPosition + offset, Quaternion.identity);
+                    enemiesAlive++;
                 }
             }
         }
@@ -138,6 +140,10 @@ public class EnemySpawner : MonoBehaviour
             throw new System.Exception($"Unexpected edge value: {edge}");
         }
         return spawnPosition;
+    }
+    public void OnEnemyKilled()
+    {
+        enemiesAlive--;
     }
 }
  

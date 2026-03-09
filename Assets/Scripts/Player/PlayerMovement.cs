@@ -31,25 +31,20 @@ public class PlayerMovement : MonoBehaviour
     {
         Move();
     }
-    void InputManagement()
+       void InputManagement()
     {
-        float moveX = Input.GetAxisRaw("Horizontal");
-        float moveY = Input.GetAxisRaw("Vertical");
+        // 1. 从总线读取解耦后的向量
+        moveDir = InputManager.instance != null ? InputManager.instance.movementVector : Vector2.zero;
 
-        moveDir = new Vector2(moveX, moveY).normalized;
-        if(moveDir.x != 0)
+        // 2. 指令流优化：只在向量发生物理偏转时，才执行一次赋值与拆包
+        if (moveDir != Vector2.zero)
         {
+            // 直接将当前的非零向量锁存进内存
+            lastMoveVector = moveDir; 
+            
+            // 如果你的其他脚本（如动画控制器）严格依赖这单独的 X 和 Y 标量，在此处进行拆包
             lastHorizontalVector = moveDir.x;
-            lastMoveVector = new Vector2(lastHorizontalVector, 0f);
-        }
-        if(moveDir.y != 0)
-        {
             lastVerticalVector = moveDir.y;
-            lastMoveVector = new Vector2(0f, lastVerticalVector);
-        }
-        if(moveDir.x != 0 && moveDir.y != 0)
-        {
-            lastMoveVector = new Vector2(lastHorizontalVector, lastVerticalVector);
         }
     }
     void Move()

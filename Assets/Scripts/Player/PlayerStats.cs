@@ -128,9 +128,13 @@ public class PlayerStats : MonoBehaviour
     public Text levelDisplay;
     void Awake()
     {
-        if(characterData == null)
+        if(characterData == null && CharacterSelector.instance != null)
         {
         characterData = CharacterSelector.GetData();
+        }
+        if(characterData == null && CharacterSelector.instance == null)
+        {
+           Debug.LogWarning("Character data not assigned and CharacterSelector instance not found. Please assign characterData in the inspector or ensure CharacterSelector is set up correctly.");
         }
         CurrentHealth = characterData.MaxHealth;
         CurrentMaxHealth = characterData.MaxHealth;
@@ -160,14 +164,17 @@ public class PlayerStats : MonoBehaviour
     public void IncreaseExperience(int amount)
     {
         experience += amount;
+        UpdateExpBar();
         LevelUpChecker();
     }
     void LevelUpChecker()
     {
-        if (experience >= experienceCap)
+        while (experience >= experienceCap)
         {
             experience -= experienceCap;
+            UpdateExpBar();
             level++;
+            UpdateLevelDisplay();
             int experienceCapIncrease = 0;
             foreach (LevelRange range in levelRanges)
             {
@@ -292,7 +299,7 @@ public class PlayerStats : MonoBehaviour
     {
         if(levelDisplay != null)
         {
-            levelDisplay.text = "Level: " + level.ToString();
+            levelDisplay.text = "LV: " + level.ToString();
         }
     }
 }
