@@ -19,4 +19,6 @@ MonoBehaviour:
   pierce: 0
   level: 6
   nextLevelPrefab: {fileID: 0}
+  name: Garlic Level 6
+  description: Damage is up by 20
   icon: {fileID: 21300000, guid: 668d4c8876154134fabf36174e88db5f, type: 2}

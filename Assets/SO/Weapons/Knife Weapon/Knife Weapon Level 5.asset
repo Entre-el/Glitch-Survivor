@@ -16,7 +16,9 @@ MonoBehaviour:
   damage: 20
   speed: 10
   cooldownDuration: 2
-  pierce: 2
+  pierce: 3
   level: 5
   nextLevelPrefab: {fileID: 5471823024443172348, guid: c5ff5b05e7a9ec44a81a51e1ba8d7c8c, type: 3}
+  name: Knife Level 5
+  description: 'Pierce is up by 1 '
   icon: {fileID: 21300000, guid: 99cb89256df2d2f44988c5491efaf5d1, type: 2}

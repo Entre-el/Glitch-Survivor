@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Timeline;
+using UnityEngine.UI;
 
 public class PlayerStats : MonoBehaviour
 {
@@ -120,6 +122,10 @@ public class PlayerStats : MonoBehaviour
     InventoryManager inventory;
     public int nextWeaponIndex = 0;
     public int nextPassiveItemIndex = 0;
+    [Header("UI")]
+    public Image healthBar;
+    public Image expBar;
+    public Text levelDisplay;
     void Awake()
     {
         if(characterData == null)
@@ -147,6 +153,9 @@ public class PlayerStats : MonoBehaviour
         GameManager.instance.currentProjectileSpeedDisplay.text = "Projectile Speed: " + CurrentProjectileSpeed.ToString("F1");
         GameManager.instance.currentMagnetDisplay.text = "Magnet: " + CurrentMagnet.ToString("F1");
         GameManager.instance.AssignChosenCharacterUI(characterData);
+        UpdateHealthBar();
+        UpdateExpBar();
+        UpdateLevelDisplay();
     }
     public void IncreaseExperience(int amount)
     {
@@ -182,6 +191,7 @@ public class PlayerStats : MonoBehaviour
         if(!isInvincible)
         {
             CurrentHealth -= damage;
+            UpdateHealthBar();
             isInvincible = true;
             invincibilityTimer = invincibilityDuration;
             if (CurrentHealth <= 0)
@@ -197,7 +207,7 @@ public class PlayerStats : MonoBehaviour
             GameManager.instance.AssignLevelReachedUI(level);
             GameManager.instance.AssignChosenWeaponUI(inventory.weaponSlotImages,inventory.passiveItemSlotImages);
             GameManager.instance.GameOver();
-        }   
+        }
     }
     public void RestoreHealth(float amount)
     {
@@ -207,6 +217,7 @@ public class PlayerStats : MonoBehaviour
             CurrentHealth += amount; 
         }
         else CurrentHealth = CurrentMaxHealth;
+            UpdateHealthBar();
     }
     void Update()
     {
@@ -261,6 +272,27 @@ public class PlayerStats : MonoBehaviour
         {
             inventory.AddPassiveItem(nextPassiveItemIndex, newPassiveItem.GetComponent<PassiveItem>());            
             nextPassiveItemIndex++;
+        }
+    }
+    void UpdateHealthBar()
+    {
+        if(healthBar != null)
+        {
+            healthBar.fillAmount = (float)CurrentHealth / CurrentMaxHealth;
+        }
+    }
+    void UpdateExpBar()
+    {
+        if(expBar != null)
+        {
+            expBar.fillAmount = (float)experience / experienceCap;
+        }
+    }
+    void UpdateLevelDisplay()
+    {
+        if(levelDisplay != null)
+        {
+            levelDisplay.text = "Level: " + level.ToString();
         }
     }
 }

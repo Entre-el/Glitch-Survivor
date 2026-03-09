@@ -176,7 +176,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f56e663a5d83826438cc5600935b48e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMovement
-  moveSpeed: 2
+  moveSpeed: 4
 --- !u!114 &-7669806749505458749
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -209,4 +209,4 @@ MonoBehaviour:
   drops:
   - name: Blue gem
     itemPrefab: {fileID: 7748952014671748350, guid: 6f3de92992e77de4a94d6480f454aea3, type: 3}
-    dropRate: 50
+    dropRate: 100
