@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 7149460787415153427}
   - component: {fileID: 8379900409635139381}
-  - component: {fileID: 5715438137348919163}
   - component: {fileID: 6001602169328009085}
-  - component: {fileID: -2420568640065401433}
+  - component: {fileID: 7073468178281296218}
+  - component: {fileID: -8765013737902459526}
   m_Layer: 0
   m_Name: Terrain Sprite Sheet_8
   m_TagString: Prop
@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 9190815077980395461}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 17.544338, y: -8.538511, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -82,9 +82,9 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -2065096735
   m_SortingLayer: 2
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 1504305512, guid: 290b28fac4a59f74996390ba5bb4e689, type: 3}
+  m_Sprite: {fileID: 666134904684700971, guid: 04bb3867d963c704abb2b60b648ffd17, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -94,7 +94,23 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!61 &5715438137348919163
+--- !u!114 &6001602169328009085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9190815077980395461}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fb1bf9de6f2d9d45819065dac76b1b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BreakableProps
+  damageColor: {r: 0.7688678, g: 0.50300676, b: 0.039893996, a: 1}
+  damageFlashDuration: 0.2
+  deathFadeTime: 0.6
+  health: 15
+--- !u!61 &7073468178281296218
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -128,7 +144,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.011505187, y: -0.16846874}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -138,9 +154,9 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.40821844, y: 0.42638463}
   m_EdgeRadius: 0
---- !u!114 &6001602169328009085
+--- !u!114 &-8765013737902459526
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -149,23 +165,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 9190815077980395461}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fb1bf9de6f2d9d45819065dac76b1b8, type: 3}
+  m_Script: {fileID: 11500000, guid: 6caf08a19f88c064cb6ca2850880ed14, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BreakableProps
-  health: 50
---- !u!114 &-2420568640065401433
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9190815077980395461}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa2ea603522069945ad99d4be4ba7124, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DropRateManagerr
+  m_EditorClassIdentifier: Assembly-CSharp::DropRateManager
   drops:
-  - name: Red potion
+  - name: Heart
     itemPrefab: {fileID: 6096279593853477433, guid: 64bcfcad873711f49b27582572037bdf, type: 3}
+    dropRate: 20
+  - name: Coin
+    itemPrefab: {fileID: 7748952014671748350, guid: cbe603fde614eac439590fd134b31b3e, type: 3}
     dropRate: 50

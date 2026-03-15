@@ -1,21 +1,36 @@
+using System.Collections;
 using UnityEngine;
 
+[RequireComponent(typeof(SpriteRenderer))]
+[RequireComponent(typeof(EnemyMovement))]
 public class EnemyStats : MonoBehaviour
 {
-    private Transform player;
+    private PlayerMovement player = null;
+    private Transform playerTransform;
     public EnemyScriptableObject enemyData;
     [HideInInspector]
     public float currentMoveSpeed;
     [HideInInspector]
     public float currentHealth;
     [HideInInspector]
-    public float  currentDamage;
+    public float currentDamage;
     public float despawnDistance = 20f;
+    [Header("Damage Feedback")]
+    public Color damageColor = new Color(1, 0, 0, 1);
+    public float damageFlashDuration = 0.2f;
+    public float deathFadeTime = 0.6f;
+    Color originalColor;
+    SpriteRenderer sr;
+    EnemyMovement enemyMovement;
     void Start()
     {
-        player = GameObject.FindAnyObjectByType<PlayerMovement>().transform;
+            player = GameObject.FindAnyObjectByType<PlayerMovement>();
+            playerTransform = player.transform;
+        sr = GetComponent<SpriteRenderer>();
+        originalColor = sr.color;
+        enemyMovement = GetComponent<EnemyMovement>();
     }
-     void Awake()
+    void Awake()
     {
         currentHealth = enemyData.MaxHealth;
         currentMoveSpeed = enemyData.MoveSpeed;
@@ -25,26 +40,42 @@ public class EnemyStats : MonoBehaviour
     {
         if (player != null)
         {
-            float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+            float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
             if (distanceToPlayer > despawnDistance)
             {
                 ReturnEnemy();
             }
         }
     }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public void TakeDamage(float dmg)
+    public void TakeDamage(float dmg, Vector2 sourcePosition, float knockbackForce = 5f, float knockbackDuration = 0.2f)
     {
         currentHealth -= dmg;
+        StartCoroutine(DamageFlash());
+        if (knockbackForce > 0)
+        {
+            Vector2 dir = (Vector2)transform.position - sourcePosition;
+            enemyMovement.Knockback(dir.normalized * knockbackForce, knockbackDuration);
+        }
+        if (dmg > 0) GameManager.GenerateFloatingText(Mathf.FloorToInt(dmg).ToString(), transform);
         if (currentHealth <= 0)
         {
             Kill();
         }
     }
+    IEnumerator DamageFlash()
+    {
+        sr.color = damageColor;
+        yield return new WaitForSecondsRealtime(damageFlashDuration);
+        sr.color = originalColor;
+    }
+    private bool isDead = false;
     public void Kill()
     {
-        GetComponent<DropRateManagerr>().DropItem();
-        Destroy(gameObject);
+        if (isDead) return;
+        isDead = true;
+        GetComponent<DropRateManager>().DropItem();
+        StartCoroutine(KillFade());
+        EnemySpawner.instance.OnEnemyKilled();
     }
     private void OnCollisionStay2D(Collision2D collision)
     {
@@ -53,10 +84,23 @@ public class EnemyStats : MonoBehaviour
             PlayerStats player = collision.gameObject.GetComponent<PlayerStats>();
             player.TakeDamage(currentDamage);
         }
-}
-private void ReturnEnemy()
+    }
+    private void ReturnEnemy()
     {
         EnemySpawner spawner = FindAnyObjectByType<EnemySpawner>();
         transform.position = spawner.GetRoundEnemyPosition(spawner.roundEdgeLength);
+    }
+    IEnumerator KillFade()
+    {
+        WaitForEndOfFrame w = new WaitForEndOfFrame();
+        float t = 0, origAlpha = sr.color.a;
+
+        while (t < deathFadeTime)
+        {
+            yield return w;
+            t += Time.deltaTime;
+            sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, (1 - t / deathFadeTime) * origAlpha);
+        }
+        Destroy(gameObject);
     }
 }

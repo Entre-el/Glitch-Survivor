@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: Knife Weapon Level 2
   m_EditorClassIdentifier: Assembly-CSharp::WeaponScriptableObject
   prefab: {fileID: 1873771884457773354, guid: a9ae7ddca5604054695b5d036e25a8a1, type: 3}
-  damage: 10
+  damage: 8
   speed: 10
-  cooldownDuration: 2
+  cooldownDuration: 1.5
   pierce: 1
   level: 2
   nextLevelPrefab: {fileID: 5471823024443172348, guid: cc58992ddbbb3f544b48e63e69369a5d, type: 3}
   name: Knife Level 2
-  description: 'Damage is up by 5 '
-  icon: {fileID: 21300000, guid: 99cb89256df2d2f44988c5491efaf5d1, type: 2}
+  description: Damage is up by 3
+  icon: {fileID: -6813189574185817458, guid: fd83c0cee7d647f438aaa104590d4fa4, type: 3}

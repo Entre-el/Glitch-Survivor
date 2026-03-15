@@ -1,7 +1,5 @@
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "CharacterScriptableObject", menuName = "ScriptableObjects/Character")]
 public class CharacterScriptableObject : ScriptableObject
 {
     [SerializeField]
@@ -12,7 +10,7 @@ public class CharacterScriptableObject : ScriptableObject
     public string Name { get => name; private set => name = value; }
     [SerializeField]
     GameObject startingWeapon;
-    public GameObject StartingWeapon{get => startingWeapon; private set => startingWeapon = value;}
+    public GameObject StartingWeapon { get => startingWeapon; private set => startingWeapon = value; }
     [SerializeField]
     float maxHealth;
     public float MaxHealth { get => maxHealth; private set => maxHealth = value; }
@@ -27,7 +25,6 @@ public class CharacterScriptableObject : ScriptableObject
     public float Might { get => might; private set => might = value; }
     [SerializeField]
     float projectileSpeed;
-    
     public float ProjectileSpeed { get => projectileSpeed; private set => projectileSpeed = value; }
     [SerializeField]
     float magnet;

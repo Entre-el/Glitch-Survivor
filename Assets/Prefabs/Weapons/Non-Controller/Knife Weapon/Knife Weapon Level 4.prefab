@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 8697924750068606442}
   - component: {fileID: 7790172106557270282}
   - component: {fileID: 2407310389262856320}
-  - component: {fileID: 341458710056024361}
   - component: {fileID: 2348272801766792520}
+  - component: {fileID: -6588516412336151358}
   m_Layer: 0
   m_Name: Knife Weapon Level 4
   m_TagString: Untagged
@@ -28,13 +28,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1873771884457773354}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: -0.38268343, w: 0.92387956}
-  m_LocalPosition: {x: -1.7344, y: -0.3615, z: 0}
-  m_LocalScale: {x: 1.0115, y: 1.0615, z: 1}
+  m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -45}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
 --- !u!212 &7790172106557270282
 SpriteRenderer:
   serializedVersion: 2
@@ -84,7 +84,7 @@ SpriteRenderer:
   m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -1324318189544361227, guid: dc7128011d06b9f45b864451c36cecf4, type: 3}
+  m_Sprite: {fileID: -6813189574185817458, guid: fd83c0cee7d647f438aaa104590d4fa4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -108,8 +108,35 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KnifeBehaviour
   weaponData: {fileID: 11400000, guid: d85d4d44d2649944cb4c242ca58befb6, type: 2}
   destroyAfterSeconds: 3
---- !u!60 &341458710056024361
-PolygonCollider2D:
+--- !u!50 &2348272801766792520
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1873771884457773354}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
+--- !u!61 &-6588516412336151358
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -146,52 +173,11 @@ PolygonCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.78125, y: 0.8125}
+    oldSize: {x: 0.4375, y: 1}
     newSize: {x: 0.78125, y: 0.8125}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: -0.36339375, y: -0.13457942}
-      - {x: -0.2816455, y: -0.20709284}
-      - {x: -0.3728278, y: -0.31662387}
-      - {x: -0.31788862, y: -0.39299706}
-      - {x: -0.20326227, y: -0.28454465}
-      - {x: -0.13236097, y: -0.35884783}
-      - {x: -0.06397536, y: -0.30227536}
-      - {x: -0.13228628, y: -0.22977166}
-      - {x: 0.36369246, y: 0.24050732}
-      - {x: 0.3648019, y: 0.38218}
-      - {x: 0.30467916, y: 0.38745672}
-      - {x: -0.22444457, y: -0.13002089}
-      - {x: -0.2837326, y: -0.06724298}
-  m_UseDelaunayMesh: 1
---- !u!50 &2348272801766792520
-Rigidbody2D:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1873771884457773354}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 4
+  m_Size: {x: 0.4375, y: 1}
+  m_EdgeRadius: 0

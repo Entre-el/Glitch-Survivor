@@ -3,7 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
-{
+{ 
+    public static EnemySpawner instance;
+    void Awake()
+    {
+        if (instance != null && instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            instance = this;
+        }
+    currentGroupCount = 0;
+    currentWaveCount = 0;
+    }
     [System.Serializable]
     public class EnemyGroup
     {
@@ -39,15 +53,11 @@ public class EnemySpawner : MonoBehaviour
     public int maxEnemiesAllowed;
     public int roundEdgeLength;
     public List<Wave> waves;
+    private bool isDone = false;
     Transform player;
-
-    void Awake()
-    {
-        currentGroupCount = 0;
-        currentWaveCount = 0;
-    }
     void Start()
     {
+        isDone = false;
         enemiesAlive = 0;
         player = GameObject.FindAnyObjectByType<PlayerMovement>().transform;
         // 游戏开始，直接启动刷怪流水线！
@@ -56,13 +66,19 @@ public class EnemySpawner : MonoBehaviour
 
     void Update()
     {
+        if(isDone)
+        {
+            if(enemiesAlive <= 0)
+            {
+                GameManager.instance.WinGame();
+            }
+        }
     }
     private IEnumerator SpawnProcess()
     {
         // 第一层：遍历所有的波次
         for (int w = 0; w < waves.Count; w++)
         {
-            currentWaveCount++;
             Wave currentWave = waves[w];
             Debug.Log($"开始生成波次：{currentWave.waveName}");
 
@@ -78,17 +94,18 @@ public class EnemySpawner : MonoBehaviour
                 }
                 // 把当前组直接传给生成函数，彻底告别 index 游标烦恼！
                 SpawnEnemyGroup(currentGroup);
-                currentGroupCount++;
 
                 // 核心魔法：代码运行到这里，会暂停组与组之间的间隔时间！
                 yield return new WaitForSeconds(groupSpawnInterval); 
+                currentGroupCount++;
             }
             currentGroupCount = 0;
             // 这一波的所有组都刷完了，暂停波与波之间的休息时间！
             yield return new WaitForSeconds(waveSpawnInterval);
+            currentWaveCount++;
         }
-
-        Debug.Log("所有波次的怪物生成完毕，玩家迎战最终 Boss！");
+        Debug.Log("所有波次的怪物生成完毕");
+        
     }
     private void SpawnEnemyGroup(EnemyGroup groupToSpawn)
     {
@@ -99,7 +116,7 @@ public class EnemySpawner : MonoBehaviour
             {
                 for (int i = 0; i < enemies.enemyCount; i++)
                 {
-                    Vector2 offset = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
+                    Vector2 offset = new Vector2(Random.Range(-3f, 3f), Random.Range(-3f, 3f));
                     Instantiate(enemies.enemyPrefab, spawnPosition + offset, Quaternion.identity);
                     enemiesAlive++;
                 }
@@ -113,6 +130,7 @@ public class EnemySpawner : MonoBehaviour
                 {
                     Vector2 randomSpawnPosition = GetRoundEnemyPosition(roundEdgeLength);
                     Instantiate(singleGroup.enemyPrefab, randomSpawnPosition, Quaternion.identity);
+                    enemiesAlive++;
                 }
             }
         }

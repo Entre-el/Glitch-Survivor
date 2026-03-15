@@ -14,6 +14,7 @@ public class PlayerStats : MonoBehaviour
     private float currentMight;
     private float currentProjectileSpeed;
     private float currentMagnet;
+    public ParticleSystem damageEffect;
     #region Current Stats Properties
     private float CurrentHealth
     {
@@ -123,16 +124,16 @@ public class PlayerStats : MonoBehaviour
     public int nextWeaponIndex = 0;
     public int nextPassiveItemIndex = 0;
     [Header("UI")]
-    public Image healthBar;
+    Slider healthBar;
     public Image expBar;
     public Text levelDisplay;
     void Awake()
     {
-        if(characterData == null && CharacterSelector.instance != null)
+        if(CharacterSelector.instance != null)
         {
         characterData = CharacterSelector.GetData();
         }
-        if(characterData == null && CharacterSelector.instance == null)
+        else if(characterData == null && CharacterSelector.instance == null)
         {
            Debug.LogWarning("Character data not assigned and CharacterSelector instance not found. Please assign characterData in the inspector or ensure CharacterSelector is set up correctly.");
         }
@@ -149,6 +150,7 @@ public class PlayerStats : MonoBehaviour
     public List<LevelRange> levelRanges;
     void Start()
     {
+        healthBar = GetComponentInChildren<Slider>();
         experienceCap = levelRanges[0].experienceCapIncrease;
         GameManager.instance.currentHealthDisplay.text = "Health: " + CurrentHealth.ToString("F0") + "/" + CurrentMaxHealth.ToString("F0");
         GameManager.instance.currentMoveSpeedDisplay.text = "Move Speed: " + CurrentMoveSpeed.ToString("F1");
@@ -198,6 +200,7 @@ public class PlayerStats : MonoBehaviour
         if(!isInvincible)
         {
             CurrentHealth -= damage;
+            if(damageEffect) Instantiate(damageEffect, transform.position, Quaternion.identity);
             UpdateHealthBar();
             isInvincible = true;
             invincibilityTimer = invincibilityDuration;
@@ -285,14 +288,14 @@ public class PlayerStats : MonoBehaviour
     {
         if(healthBar != null)
         {
-            healthBar.fillAmount = (float)CurrentHealth / CurrentMaxHealth;
+            healthBar.value = (float)CurrentHealth / (float)CurrentMaxHealth;
         }
     }
     void UpdateExpBar()
     {
         if(expBar != null)
         {
-            expBar.fillAmount = (float)experience / experienceCap;
+            expBar.fillAmount = (float)experience / (float)experienceCap;
         }
     }
     void UpdateLevelDisplay()

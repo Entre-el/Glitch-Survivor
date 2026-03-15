@@ -56,5 +56,8 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Glitch Survivor.sln"
+    "dotnet.defaultSolution": "Glitch Survivor.sln",
+    "dotrush.roslyn.projectOrSolutionFiles": [
+        "e:\\User\\zhenyE\\untiy\\projects\\Glitch Survivor\\Glitch Survivor.slnx"
+    ]
 }

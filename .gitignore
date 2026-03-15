@@ -7,6 +7,8 @@
 /[Mm]emoryCaptures/
 TextMesh Pro/
 [Ll]ibrary/
+Art/
+*.asset
 build1/
 *.csproj
 *.unityproj

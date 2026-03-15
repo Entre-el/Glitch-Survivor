@@ -1,35 +1,78 @@
-using System.Collections.Generic; // 必须引用这个，才能用 Dictionary
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class MapController : MonoBehaviour
 {
-    [Header("设置")]
-    public GameObject[] terrainChunks; // 地图块预制体数组
-    public Transform player;           // 玩家位置
-    public float chunkSize = 20f;      // 必须和你地图Prefab的实际大小一致！
-    public int chunkRadius = 1;        // 视野半径：1表示九宫格(3x3)，2表示5x5
-    public int disableRadius = 3;
-    [Header("调试信息")]
-    public Vector2 currentChunkCoord;  // 当前玩家在哪一个格子里
+    [System.Serializable]
+    public class PropData
+    {
+        public string propTag;
+        public float propWeight;
+    }
 
-    // 核心数据结构：字典
-    // Key (Vector2): 地图的“网格坐标”，比如 (1, 1)
-    // Value (GameObject): 实际生成的地图物体
-    // 作用：用来快速查找“这里有没有生成过地图”
-    private Dictionary<Vector2, GameObject> loadedChunks = new Dictionary<Vector2, GameObject>();
+    [System.Serializable]
+    public class TileBases
+    {
+        public string tag;
+        public TileBase tileBase;
+        public float spawnChance;
+        [Range(0f, 1f)]
+        public float propDensity;
+        public List<PropData> allowedProps;
+    }
+
+    private class ChunkProps
+    {
+        public List<GameObject> spawnedProps = new List<GameObject>();
+        public List<string> propTags = new List<string>();
+    }
+
+    [Header("References")]
+    public Transform player;
+    public Tilemap globalTilemap;
+
+    [Header("Map Settings")]
+    public float chunkSize = 20f;    
+    public int chunkRadius = 1;
+    public int disableRadius = 2;
+    public float noiseScale = 0.05f; 
+    public List<TileBases> commonBiomes = new();
+
+    [Header("Rare Biome Settings")]
+    public float patchNoiseScale = 0.08f;
+    [Range(0f, 1f)]
+    public float rarePatchThreshold = 0.85f;
+    public List<TileBases> rareBiomes = new();
+
+    private float commonTotalChance = 0;
+    private float rareTotalChance = 0;
+    public int biomeResolution = 2;
+    
+    private float seedX;
+    private float seedY;
+
+    [Header("Debug")]
+    public Vector2 currentChunkCoord;
+
+    private Dictionary<Vector2, ChunkProps> loadedChunks = new();
+
     void Start()
     {
-        loadedChunks.Add(new Vector2(0, 0), terrainChunks[0]);
-        // 初始生成一次
+        seedX = Random.Range(-100000f, 100000f);
+        seedY = Random.Range(-100000f, 100000f);
+
+        foreach (var tile in commonBiomes) commonTotalChance += tile.spawnChance;
+        foreach (var tile in rareBiomes) rareTotalChance += tile.spawnChance;
+
+        Vector2 playerCoord = GetChunkCoordFromVector3(player.position);
+        currentChunkCoord = playerCoord;
         UpdateChunks();
     }
 
     void Update()
     {
-        // 每帧检查玩家位置是否变化到了新的格子里
         Vector2 playerCoord = GetChunkCoordFromVector3(player.position);
-
-        // 只有当玩家跨过格子的边界时，才更新地图 (优化性能)
         if (playerCoord != currentChunkCoord)
         {
             currentChunkCoord = playerCoord;
@@ -39,62 +82,179 @@ public class MapController : MonoBehaviour
 
     void UpdateChunks()
     {
-        // 遍历周围的格子
-        // x 从 -1 到 +1，y 从 -1 到 +1 (如果 radius 是 1)
         for (int xOffset = -chunkRadius; xOffset <= chunkRadius; xOffset++)
         {
             for (int yOffset = -chunkRadius; yOffset <= chunkRadius; yOffset++)
             {
-                // 算出目标格子的坐标。比如玩家在(5,5)，偏移(-1,0)，目标就是(4,5)
-                Vector2 targetCoord = new Vector2(currentChunkCoord.x + xOffset, currentChunkCoord.y + yOffset);
-
-                // 检查：这个坐标生成过吗？
+                Vector2 targetCoord = new(currentChunkCoord.x + xOffset, currentChunkCoord.y + yOffset);
                 if (!loadedChunks.ContainsKey(targetCoord))
                 {
                     SpawnChunk(targetCoord);
                 }
-                else if(loadedChunks.ContainsKey(targetCoord))
-                {
-                    loadedChunks[targetCoord].SetActive(true);
-                }
             }
         }
-        foreach(GameObject chunk in loadedChunks.Values)
+
+        List<Vector2> chunksToRemove = new List<Vector2>();
+
+        foreach (var kvp in loadedChunks)
         {
-            if(chunk.transform.position.x < player.position.x - chunkSize * disableRadius ||
-            chunk.transform.position.x > player.position.x + chunkSize * disableRadius ||
-            chunk.transform.position.y < player.position.y - chunkSize * disableRadius ||
-            chunk.transform.position.y > player.position.y + chunkSize * disableRadius)
+            Vector2 gridCoord = kvp.Key;
+            ChunkProps chunkProps = kvp.Value;
+
+            float chunkWorldX = gridCoord.x * chunkSize;
+            float chunkWorldY = gridCoord.y * chunkSize;
+
+            if (chunkWorldX < player.position.x - chunkSize * disableRadius ||
+                chunkWorldX > player.position.x + chunkSize * disableRadius ||
+                chunkWorldY < player.position.y - chunkSize * disableRadius ||
+                chunkWorldY > player.position.y + chunkSize * disableRadius)
             {
-                chunk.SetActive(false);
+                EraseChunkTiles(gridCoord);
+
+                for (int i = 0; i < chunkProps.spawnedProps.Count; i++)
+                {
+                    GameObject propToReturn = chunkProps.spawnedProps[i];
+                    string tagToReturn = chunkProps.propTags[i];
+
+                    if (propToReturn != null)
+                    {
+                        propToReturn.transform.position = Vector3.zero;
+                        propToReturn.transform.rotation = Quaternion.identity;
+                        ObjectPoolManager.Instance.Release(tagToReturn, propToReturn);
+                    }
+                }
+
+                chunksToRemove.Add(gridCoord);
             }
+        }
+
+        foreach (Vector2 key in chunksToRemove)
+        {
+            loadedChunks.Remove(key);
         }  
     }
 
     void SpawnChunk(Vector2 gridCoord)
     {
-        // 1. 随机选一个地图块
-        int rand = Random.Range(0, terrainChunks.Length);
+        int startX = Mathf.FloorToInt(gridCoord.x * chunkSize - chunkSize / 2f);
+        int startY = Mathf.FloorToInt(gridCoord.y * chunkSize - chunkSize / 2f);
+        int size = Mathf.RoundToInt(chunkSize);
 
-        // 2. 把“网格坐标”转回“世界坐标”
-        // 比如网格 (2, 3)，大小 20 -> 世界坐标 (40, 60, 0)
-        Vector3 spawnPos = new Vector3(gridCoord.x * chunkSize, gridCoord.y * chunkSize, 0);
+        BoundsInt area = new BoundsInt(startX, startY, 0, size, size, 1);
+        TileBase[] tileArray = new TileBase[size * size];
+        ChunkProps newChunkProps = new ChunkProps();
 
-        // 3. 生成
-        GameObject newChunk = Instantiate(terrainChunks[rand], spawnPos, Quaternion.identity);
-        
-        // 4. 把新生成的地图放在一个父物体下，保持Hierarchy整洁 (可选)
-        newChunk.transform.SetParent(this.transform); 
+        for (int x = 0; x < size; x++)
+        {
+            for (int y = 0; y < size; y++)
+            {
+                int absoluteX = startX + x;
+                int absoluteY = startY + y;
 
-        // 5. 记在小本本(字典)上，防止下次重复生成
-        loadedChunks.Add(gridCoord, newChunk);
+                int snappedX = Mathf.FloorToInt((float)absoluteX / biomeResolution) * biomeResolution;
+                int snappedY = Mathf.FloorToInt((float)absoluteY / biomeResolution) * biomeResolution;
+
+                float worldX = snappedX * noiseScale + seedX;
+                float worldY = snappedY * noiseScale + seedY;
+                float baseNoise = Mathf.PerlinNoise(worldX, worldY);
+
+                float patchWorldX = snappedX * patchNoiseScale + seedX + 99999f;
+                float patchWorldY = snappedY * patchNoiseScale + seedY + 99999f;
+                float patchNoise = Mathf.PerlinNoise(patchWorldX, patchWorldY);
+
+                TileBases selectedBiome;
+
+                if (patchNoise > rarePatchThreshold && rareBiomes.Count > 0)
+                {
+                    float mappedNoise = baseNoise * rareTotalChance;
+                    float currentCumulative = 0f;
+                    selectedBiome = rareBiomes[0];
+                    
+                    foreach (var tile in rareBiomes)
+                    {
+                        currentCumulative += tile.spawnChance; 
+                        if (mappedNoise <= currentCumulative)
+                        {
+                            selectedBiome = tile;
+                            break; 
+                        }
+                    }
+                }
+                else
+                {
+                    float mappedNoise = baseNoise * commonTotalChance;
+                    float currentCumulative = 0f;
+                    selectedBiome = commonBiomes[0];
+                    
+                    foreach (var tile in commonBiomes)
+                    {
+                        currentCumulative += tile.spawnChance; 
+                        if (mappedNoise <= currentCumulative)
+                        {
+                            selectedBiome = tile;
+                            break; 
+                        }
+                    }
+                }
+
+                tileArray[x + y * size] = selectedBiome.tileBase;
+
+                if (selectedBiome.allowedProps != null && selectedBiome.allowedProps.Count > 0)
+                {
+                    if (Random.value <= selectedBiome.propDensity) 
+                    {
+                        float totalPropWeight = 0;
+                        foreach (var p in selectedBiome.allowedProps) totalPropWeight += p.propWeight;
+                        
+                        float randomPropHit = Random.value * totalPropWeight;
+                        float currentPropCumulative = 0f;
+                        string finalPropTag = selectedBiome.allowedProps[0].propTag;
+
+                        foreach (var p in selectedBiome.allowedProps)
+                        {
+                            currentPropCumulative += p.propWeight;
+                            if (randomPropHit <= currentPropCumulative)
+                            {
+                                finalPropTag = p.propTag;
+                                break;
+                            }
+                        }
+
+                        GameObject propObj = ObjectPoolManager.Instance.Get(finalPropTag);
+                        if (propObj != null)
+                        {
+                            float absoluteWorldX = startX + x + Random.Range(-0.3f, 0.3f);
+                            float absoluteWorldY = startY + y + Random.Range(-0.3f, 0.3f);
+                            
+                            propObj.transform.position = new Vector3(absoluteWorldX, absoluteWorldY, 0);
+                            
+                            newChunkProps.spawnedProps.Add(propObj);
+                            newChunkProps.propTags.Add(finalPropTag);
+                        }
+                    }
+                }
+            }
+        }
+
+        globalTilemap.SetTilesBlock(area, tileArray);
+        loadedChunks.Add(gridCoord, newChunkProps);
     }
 
-    // 辅助函数：把世界坐标 (15.5, 22.1) 转换成 网格坐标 (1, 1)
+    void EraseChunkTiles(Vector2 gridCoord)
+    {
+        int startX = Mathf.FloorToInt(gridCoord.x * chunkSize - chunkSize / 2f);
+        int startY = Mathf.FloorToInt(gridCoord.y * chunkSize - chunkSize / 2f);
+        int size = Mathf.RoundToInt(chunkSize);
+
+        BoundsInt area = new BoundsInt(startX, startY, 0, size, size, 1);
+        TileBase[] nullArray = new TileBase[size * size];
+        globalTilemap.SetTilesBlock(area, nullArray);
+    }
+
     Vector2 GetChunkCoordFromVector3(Vector3 pos)
     {
-        int x = Mathf.RoundToInt(pos.x / chunkSize);
-        int y = Mathf.RoundToInt(pos.y / chunkSize);
+        int x = Mathf.FloorToInt(pos.x / chunkSize);
+        int y = Mathf.FloorToInt(pos.y / chunkSize);
         return new Vector2(x, y);
     }
 }

@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class ProjectileWeaponBehaviour : MonoBehaviour
@@ -10,31 +9,28 @@ public class ProjectileWeaponBehaviour : MonoBehaviour
     protected float currentSpeed;
     protected float currentCooldownDuration;
     protected int currentPierce;
-        void Awake()
-        {
-            currentDamage = weaponData.Damage;
-            currentSpeed = weaponData.Speed;
-            currentCooldownDuration = weaponData.CooldownDuration;
-            currentPierce = weaponData.Pierce;
-        }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
+    void Awake()
+    {
+        currentDamage = weaponData.Damage;
+        currentSpeed = weaponData.Speed;
+        currentCooldownDuration = weaponData.CooldownDuration;
+        currentPierce = weaponData.Pierce;
+    }
+
     protected virtual void Start()
     {
         Destroy(gameObject, destroyAfterSeconds);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     public float GetCurrentDamage()
     {
-        return currentDamage *=FindAnyObjectByType<PlayerStats>().CurrentMight;
+        return currentDamage *= FindAnyObjectByType<PlayerStats>().CurrentMight;
     }
+
     public void DirectionChecker(Vector3 dir)
     {
-        direction = dir; 
+        direction = dir.normalized; 
         float dirx = direction.x;
         float diry = direction.y;
         Vector3 scale = transform.localScale;
@@ -43,13 +39,14 @@ public class ProjectileWeaponBehaviour : MonoBehaviour
         transform.localScale = scale;
         transform.rotation = Quaternion.Euler(rotation);
     }
+
     protected virtual void OnTriggerEnter2D(Collider2D col)
     {
         if (col.CompareTag("Enemy"))
         {
             EnemyStats enemy = col.GetComponent<EnemyStats>();
             ReducePierce();
-            enemy.TakeDamage(GetCurrentDamage());
+            enemy.TakeDamage(GetCurrentDamage(), enemy.transform.position);
         }
         else if(col.CompareTag("Prop"))
         {
@@ -60,6 +57,7 @@ public class ProjectileWeaponBehaviour : MonoBehaviour
             }
         }
     }
+
     void ReducePierce()
     {
         currentPierce--;

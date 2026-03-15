@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 
 public class CharacterSelector : MonoBehaviour
 {
@@ -14,7 +13,6 @@ public class CharacterSelector : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("EXTRA "+ this +" DESTROYING DUPLICATE...");
             Destroy(gameObject);
         }
     }
