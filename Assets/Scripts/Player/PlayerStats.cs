@@ -226,7 +226,7 @@ public class PlayerStats : MonoBehaviour
     public void RestoreHealth(float amount)
     {
         
-        if (CurrentHealth > CurrentMaxHealth)
+        if (CurrentHealth < CurrentMaxHealth)
         {
             CurrentHealth += amount; 
         }
