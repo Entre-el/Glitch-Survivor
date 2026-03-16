@@ -9,6 +9,7 @@ public class ProjectileWeaponBehaviour : MonoBehaviour
     protected float currentSpeed;
     protected float currentCooldownDuration;
     protected int currentPierce;
+    protected PlayerMovement pm;
 
     void Awake()
     {
@@ -25,12 +26,12 @@ public class ProjectileWeaponBehaviour : MonoBehaviour
 
     public float GetCurrentDamage()
     {
-        return currentDamage *= FindAnyObjectByType<PlayerStats>().CurrentMight;
+        return currentDamage * FindAnyObjectByType<PlayerStats>().CurrentMight;
     }
 
     public void DirectionChecker(Vector3 dir)
     {
-        direction = dir.normalized; 
+        direction = dir.normalized;
         float dirx = direction.x;
         float diry = direction.y;
         Vector3 scale = transform.localScale;

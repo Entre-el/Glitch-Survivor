@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: Knife Weapon Level 6
   m_EditorClassIdentifier: Assembly-CSharp::WeaponScriptableObject
   prefab: {fileID: 1873771884457773354, guid: 1719852060ac07949a05278ea2f690ad, type: 3}
-  damage: 25
+  damage: 15
   speed: 10
   cooldownDuration: 0.5
-  pierce: 4
+  pierce: 3
   level: 6
   nextLevelPrefab: {fileID: 0}
   name: Knife Level 2
-  description: Damage is up by 5;Cooldown Duration reduce to 0.5s
+  description: Damage is up by 3;Cooldown Duration reduce to 0.5s
   icon: {fileID: -6813189574185817458, guid: fd83c0cee7d647f438aaa104590d4fa4, type: 3}

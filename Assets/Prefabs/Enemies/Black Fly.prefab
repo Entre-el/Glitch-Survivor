@@ -13,11 +13,11 @@ GameObject:
   - component: {fileID: 2045952987023461714}
   - component: {fileID: 608866913188787242}
   - component: {fileID: -7669806749505458749}
-  - component: {fileID: -3609467244910561328}
-  - component: {fileID: -2134515630195962487}
-  - component: {fileID: -2917589995738381063}
+  - component: {fileID: 8480707205476632371}
+  - component: {fileID: 6836115940329853822}
+  - component: {fileID: 3687865055155856468}
   m_Layer: 0
-  m_Name: Red Worm
+  m_Name: Black Fly
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -33,7 +33,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -87,8 +87,8 @@ SpriteRenderer:
   m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 8490642196906846815, guid: 0efb15647c0a66a47a7ec3192aabc8ec, type: 3}
-  m_Color: {r: 1, g: 0.57075465, b: 0.57075465, a: 1}
+  m_Sprite: {fileID: -8717017754119436831, guid: 0efb15647c0a66a47a7ec3192aabc8ec, type: 3}
+  m_Color: {r: 0.21960786, g: 0.21960786, b: 0.21960786, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -107,7 +107,7 @@ Animator:
   m_GameObject: {fileID: 5707308963716222226}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: f2599ca1bdd95c949a202e0ea1e435d9, type: 2}
+  m_Controller: {fileID: 9100000, guid: 58b6d45963359a34da46d1c3da40fea4, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -143,16 +143,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92d9db15815a6b740a8796cc51381644, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyStats
-  enemyData: {fileID: 11400000, guid: 59fe7a0ab3f54b24ab56b1816e2a2871, type: 2}
+  enemyData: {fileID: 11400000, guid: 3396e021f8ad7a7498e4a73bf4c3665a, type: 2}
   currentMoveSpeed: 0
   currentHealth: 0
   currentDamage: 0
   despawnDistance: 20
   damageColor: {r: 1, g: 0, b: 0, a: 1}
-  damageFlashDuration: 0.2
-  deathFadeTime: 0.6
-  hitSFX: {fileID: 8300000, guid: cf384b82fc8c8e448bdd030e955723d0, type: 3}
---- !u!114 &-3609467244910561328
+  damageFlashDuration: 0.1
+  deathFadeTime: 1
+  hitSFX: {fileID: 8300000, guid: e55b7ba79fcba724a91cbecf5bb2a964, type: 3}
+--- !u!114 &8480707205476632371
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -167,11 +167,8 @@ MonoBehaviour:
   drops:
   - name: Gem
     itemPrefab: {fileID: 7748952014671748350, guid: 6f3de92992e77de4a94d6480f454aea3, type: 3}
-    dropRate: 60
-  - name: Coin
-    itemPrefab: {fileID: 7748952014671748350, guid: cbe603fde614eac439590fd134b31b3e, type: 3}
-    dropRate: 40
---- !u!50 &-2134515630195962487
+    dropRate: 100
+--- !u!50 &6836115940329853822
 Rigidbody2D:
   serializedVersion: 5
   m_ObjectHideFlags: 0
@@ -183,7 +180,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 2
+  m_Mass: 6
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 0
@@ -198,7 +195,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!58 &-2917589995738381063
+--- !u!58 &3687865055155856468
 CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -232,5 +229,5 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: -0.46989465}
-  m_Radius: 0.28010535
+  m_Offset: {x: 0, y: -0.20370248}
+  m_Radius: 0.21629956

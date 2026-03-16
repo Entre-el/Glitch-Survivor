@@ -3,6 +3,10 @@ using UnityEngine.EventSystems;
 
 public class VirtualJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
 {
+    public enum JoystickType { Movement, Aiming }
+    [Header("摇杆类型")]
+    public JoystickType joystickType;
+
     [Header("UI References")]
     public RectTransform backgroundRect;
     public RectTransform handleRect;
@@ -18,7 +22,13 @@ public class VirtualJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler,
     public void OnPointerDown(PointerEventData eventData)
     {
         if(InputManager.instance != null)
-            InputManager.instance.isJoystickActive = true;
+        {
+            // 根据身份，激活不同的输入通道
+            if (joystickType == JoystickType.Movement)
+                InputManager.instance.isMoveJoystickActive = true;
+            else
+                InputManager.instance.isAimJoystickActive = true;
+        }
         OnDrag(eventData);
     }
 
@@ -34,8 +44,17 @@ public class VirtualJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler,
         {
             Vector2 clampedPosition = Vector2.ClampMagnitude(localPoint, magnitudeRadius);
             handleRect.anchoredPosition = clampedPosition;
-            Vector2 normalizedInput = clampedPosition / magnitudeRadius;
-            InputManager.instance.SetMovementVector(normalizedInput);
+            
+            Vector2 normalizedInput = Vector2.zero;
+            if (magnitudeRadius > 0.001f) 
+            {
+                normalizedInput = clampedPosition / magnitudeRadius;
+            }
+            
+            if (joystickType == JoystickType.Movement)
+                InputManager.instance.SetMovementVector(normalizedInput);
+            else
+                InputManager.instance.SetAimVector(normalizedInput);
         }
     }
 
@@ -44,8 +63,15 @@ public class VirtualJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler,
         handleRect.anchoredPosition = Vector2.zero;
         if(InputManager.instance != null) 
         {
-            InputManager.instance.SetMovementVector(Vector2.zero);
-            InputManager.instance.isJoystickActive = false; 
+            if (joystickType == JoystickType.Movement)
+            {
+                InputManager.instance.SetMovementVector(Vector2.zero);
+                InputManager.instance.isMoveJoystickActive = false; 
+            }
+            else
+            {
+                InputManager.instance.isAimJoystickActive = false; 
+            }
         }
     }
 }

@@ -886,15 +886,6 @@ MonoBehaviour:
         enemyCount: 20
       isGathered: 0
       difficultyLevel: 0
-  - waveName: BossWave
-    enemyGroups:
-    - enemysList:
-      - enemyPrefab: {fileID: 5707308963716222226, guid: 8de4b3f8c5c2c7e438eb1107d447d43d, type: 3}
-        enemyCount: 3
-      - enemyPrefab: {fileID: 5707308963716222226, guid: 62be6a115b0f4ff4a9332dcaf5193bbc, type: 3}
-        enemyCount: 1
-      isGathered: 0
-      difficultyLevel: 0
 --- !u!1 &116102292
 GameObject:
   m_ObjectHideFlags: 0
@@ -5757,7 +5748,7 @@ MonoBehaviour:
     - propTag: prop11
       propWeight: 2
     - propTag: prop18
-      propWeight: 6
+      propWeight: 10
   patchNoiseScale: 0.05
   rarePatchThreshold: 0.299
   rareBiomes:
@@ -5779,7 +5770,7 @@ MonoBehaviour:
     - propTag: prop14
       propWeight: 2
     - propTag: prop15
-      propWeight: 5
+      propWeight: 3
   - tag: 3
     tileBase: {fileID: 11400000, guid: e686ab526f0c88540824caeabed026d0, type: 2}
     spawnChance: 1
@@ -5817,7 +5808,7 @@ MonoBehaviour:
     - propTag: prop12
       propWeight: 1
     - propTag: prop16
-      propWeight: 3
+      propWeight: 1
   biomeResolution: 2
   currentChunkCoord: {x: 0, y: 0}
 --- !u!4 &930514763

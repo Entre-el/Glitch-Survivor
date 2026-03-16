@@ -127,6 +127,8 @@ public class PlayerStats : MonoBehaviour
     Slider healthBar;
     public Image expBar;
     public Text levelDisplay;
+    [Header("Audio")]
+    public AudioClip deathSFX;
     void Awake()
     {
         if(CharacterSelector.instance != null)
@@ -187,7 +189,6 @@ public class PlayerStats : MonoBehaviour
                 }
             }
             experienceCap += experienceCapIncrease;
-            // 进入升级阶段：暂停游戏并刷新升级选项（武器/被动）
             GameManager.instance.StartLevelUp();
         }
     }
@@ -212,12 +213,15 @@ public class PlayerStats : MonoBehaviour
     }
     public void Kill()
     {
-        if(!GameManager.instance.isGameOver)
-        {
-            GameManager.instance.AssignLevelReachedUI(level);
-            GameManager.instance.AssignChosenWeaponUI(inventory.weaponSlotImages,inventory.passiveItemSlotImages);
-            GameManager.instance.GameOver();
-        }
+        GameManager.instance.AssignLevelReachedUI(level);
+        GameManager.instance.AssignChosenWeaponUI(inventory.weaponSlotImages,inventory.passiveItemSlotImages);
+        GameManager.instance.GameOver();
+    }
+    public void Win()
+    {
+        GameManager.instance.AssignLevelReachedUI(level);
+        GameManager.instance.AssignChosenWeaponUI(inventory.weaponSlotImages,inventory.passiveItemSlotImages);
+        GameManager.instance.WinGame();
     }
     public void RestoreHealth(float amount)
     {

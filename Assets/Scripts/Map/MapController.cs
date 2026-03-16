@@ -223,13 +223,9 @@ public class MapController : MonoBehaviour
                         GameObject propObj = ObjectPoolManager.Instance.Get(finalPropTag);
                         if (propObj != null)
                         {
-                            float absoluteWorldX = startX + x + Random.Range(-0.3f, 0.3f);
-                            float absoluteWorldY = startY + y + Random.Range(-0.3f, 0.3f);
-                            
-                            propObj.transform.position = new Vector3(absoluteWorldX, absoluteWorldY, 0);
-                            
-                            newChunkProps.spawnedProps.Add(propObj);
-                            newChunkProps.propTags.Add(finalPropTag);
+                            Vector3Int cellPos = new Vector3Int(startX + x, startY + y, 0);
+                            Vector3 cellCenterWorldPos = globalTilemap.GetCellCenterWorld(cellPos);
+                            propObj.transform.position = cellCenterWorldPos;
                         }
                     }
                 }

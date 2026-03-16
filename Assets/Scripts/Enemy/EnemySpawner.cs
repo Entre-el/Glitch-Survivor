@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 { 
+    [Header("Audio")]
+    public AudioClip finalWaveBGM;
+    public float cutInDuration = 2f;
     public static EnemySpawner instance;
     void Awake()
     {
@@ -70,6 +73,7 @@ public class EnemySpawner : MonoBehaviour
         {
             if(enemiesAlive <= 0)
             {
+                player.GetComponent<PlayerStats>().Win();
                 GameManager.instance.WinGame();
             }
         }
@@ -92,20 +96,24 @@ public class EnemySpawner : MonoBehaviour
                     // 等待直到场上怪物数量降到允许范围内
                     yield return new WaitUntil(() => enemiesAlive < maxEnemiesAllowed);
                 }
-                // 把当前组直接传给生成函数，彻底告别 index 游标烦恼！
+                // 把当前组直接传给生成函数
                 SpawnEnemyGroup(currentGroup);
 
-                // 核心魔法：代码运行到这里，会暂停组与组之间的间隔时间！
+                // 暂停组与组之间的间隔时间
                 yield return new WaitForSeconds(groupSpawnInterval); 
                 currentGroupCount++;
             }
             currentGroupCount = 0;
-            // 这一波的所有组都刷完了，暂停波与波之间的休息时间！
+            // 波与波之间的休息时间
             yield return new WaitForSeconds(waveSpawnInterval);
             currentWaveCount++;
+            if(currentWaveCount == waves.Count - 1)
+            {
+                AudioManager.instance.CrossfadeBGM(finalWaveBGM,cutInDuration);
+            }
         }
         Debug.Log("所有波次的怪物生成完毕");
-        
+        isDone = true;
     }
     private void SpawnEnemyGroup(EnemyGroup groupToSpawn)
     {

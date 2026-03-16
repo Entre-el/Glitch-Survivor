@@ -19,6 +19,8 @@ public class EnemyStats : MonoBehaviour
     public Color damageColor = new Color(1, 0, 0, 1);
     public float damageFlashDuration = 0.2f;
     public float deathFadeTime = 0.6f;
+    [Header("Audio")]
+    public AudioClip hitSFX;
     Color originalColor;
     SpriteRenderer sr;
     EnemyMovement enemyMovement;
@@ -50,6 +52,7 @@ public class EnemyStats : MonoBehaviour
     public void TakeDamage(float dmg, Vector2 sourcePosition, float knockbackForce = 5f, float knockbackDuration = 0.2f)
     {
         currentHealth -= dmg;
+        AudioManager.instance.PlayHitSFX(hitSFX);
         StartCoroutine(DamageFlash());
         if (knockbackForce > 0)
         {

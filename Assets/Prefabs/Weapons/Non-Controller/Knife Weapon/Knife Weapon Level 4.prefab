@@ -107,7 +107,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KnifeBehaviour
   weaponData: {fileID: 11400000, guid: d85d4d44d2649944cb4c242ca58befb6, type: 2}
-  destroyAfterSeconds: 3
+  destroyAfterSeconds: 1.5
 --- !u!50 &2348272801766792520
 Rigidbody2D:
   serializedVersion: 5

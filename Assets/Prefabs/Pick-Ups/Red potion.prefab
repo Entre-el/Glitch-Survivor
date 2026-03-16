@@ -107,6 +107,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HealthPotion
   healthToRestore: 100
+  healthSFX: {fileID: 8300000, guid: 64b9eb4166e1ad649943e17b15f44455, type: 3}
 --- !u!50 &7443171051198354402
 Rigidbody2D:
   serializedVersion: 5

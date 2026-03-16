@@ -8,7 +8,6 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    // 单例：用于全局访问当前局的状态与 UI
     public static GameManager instance;
     public enum GameState
     {
@@ -44,16 +43,24 @@ public class GameManager : MonoBehaviour
     public Text TimeSurvivedDisplay;
     public List<Image> chosenWeaponIcons = new(6);
     public List<Image> chosenPassiveIcons = new(6);
+    [Header("Win Display")]
+    public Image winCharacterIcon;
+    public Text winCharacterName;
+    public Text winLevelReachedDisplay;
+    public Text winTimeSurvivedDisplay;
+    public List<Image> winChosenWeaponIcons = new(6);
+    public List<Image> winChosenPassiveIcons = new(6);
     [Header("Stopwatch")]
-    // 存活时间上限（秒）
     public float timeLimit;
     float stopwatchTime;
     public Text stopwatchDisplay;
-
-
+    [Header("Music")]
+    public AudioClip winBGM;
+    public AudioClip gameOverBGM;
     public bool isGameOver = false;
     public bool isLevelingUp = false;
     public bool isWin = false;
+    public float cutInDuration = 2f;
     public GameObject playerObject;
     void Awake()
     {
@@ -122,6 +129,7 @@ public class GameManager : MonoBehaviour
             previousGameState = currentGameState;
             ChangeState(GameState.Paused);
             Time.timeScale = 0f;
+            AudioManager.instance.bgmSource.pitch = 0.5f;
             pauseScreens.SetActive(true);
             Debug.Log("Game Paused");
         }
@@ -132,6 +140,7 @@ public class GameManager : MonoBehaviour
         {
             ChangeState(previousGameState);
             Time.timeScale = 1f;
+            AudioManager.instance.bgmSource.pitch = 1f;
             DisableScreens();
             Debug.Log("Game Resumed");
         }
@@ -159,13 +168,14 @@ public class GameManager : MonoBehaviour
     }
     public void GameOver()
     {
-        // 结算时展示本局存活时间
         TimeSurvivedDisplay.text = stopwatchDisplay.text;
+        AudioManager.instance.CrossfadeBGM(gameOverBGM,cutInDuration);
         ChangeState(GameState.GameOver);
     }
     public void WinGame()
     {
         TimeSurvivedDisplay.text = stopwatchDisplay.text;
+        AudioManager.instance.CrossfadeBGM(winBGM,cutInDuration);
         ChangeState(GameState.Win);
     }
     void DisplayResults()
@@ -173,8 +183,27 @@ public class GameManager : MonoBehaviour
         resultsScreen.SetActive(true);
     }
     void DisplayWin()
-    {
-        resultsScreen.SetActive(true);
+    {   
+        if (winScreen == null || winCharacterIcon == null || chosenCharacterIcon == null || winCharacterName == null || 
+            chosenCharacterName == null || winLevelReachedDisplay == null || levelReachedDisplay == null ||
+            winTimeSurvivedDisplay == null || TimeSurvivedDisplay == null) return;
+
+        winCharacterIcon.sprite = chosenCharacterIcon.sprite;
+        winCharacterName.text = chosenCharacterName.text;
+        winLevelReachedDisplay.text = levelReachedDisplay.text;
+        winTimeSurvivedDisplay.text = TimeSurvivedDisplay.text;
+        
+        for (int i = 0; i < chosenWeaponIcons.Count && i < winChosenWeaponIcons.Count; i++)
+        {
+            if (winChosenWeaponIcons[i] != null && chosenWeaponIcons[i] != null)
+                winChosenWeaponIcons[i].sprite = chosenWeaponIcons[i].sprite;
+        }
+        for (int j = 0; j < chosenPassiveIcons.Count && j < winChosenPassiveIcons.Count; j++)
+        {
+            if (winChosenPassiveIcons[j] != null && chosenPassiveIcons[j] != null)
+                winChosenPassiveIcons[j].sprite = chosenPassiveIcons[j].sprite;
+        }
+        winScreen.SetActive(true);
     }
     public void AssignChosenCharacterUI(CharacterScriptableObject character)
     {
@@ -228,7 +257,6 @@ public class GameManager : MonoBehaviour
     }
     public void StartLevelUp()
     {
-        // 进入升级：暂停时间、打开升级界面，并让玩家刷新可选升级按钮
         ChangeState(GameState.LevelingUp);
         playerObject.SendMessage("RemoveAndApplyUpgradeOptions");
     }
@@ -260,7 +288,6 @@ IEnumerator GenerateFloatingTextCoroutine(string text, Transform target, float d
 
         textMesh.text = text;
         
-        // 【核心修复 1】：用回最稳妥的 Color 赋值，第一帧设为 1f (完全不透明)
         textMesh.color = new Color(textMesh.color.r, textMesh.color.g, textMesh.color.b, 1f);
 
         Vector3 startPosition = Vector3.zero;
@@ -278,7 +305,6 @@ IEnumerator GenerateFloatingTextCoroutine(string text, Transform target, float d
             t += Time.deltaTime;
             float progress = t / duration; 
             
-            // 【核心修复 2】：逼迫引擎每帧刷新顶点颜色！
             textMesh.color = new Color(textMesh.color.r, textMesh.color.g, textMesh.color.b, 1f - progress);
             
             textObject.transform.position = startPosition + new Vector3(0, speed * t, 0);
@@ -286,7 +312,6 @@ IEnumerator GenerateFloatingTextCoroutine(string text, Transform target, float d
             yield return null; 
         }
 
-        // 循环跑完，强行把 alpha 归零，不留任何残影！
         textMesh.color = new Color(textMesh.color.r, textMesh.color.g, textMesh.color.b, 0f);
         ObjectPoolManager.Instance.Release("DamageText", textObject);
     }

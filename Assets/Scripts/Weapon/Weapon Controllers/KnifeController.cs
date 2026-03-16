@@ -7,7 +7,8 @@ public class KnifeController : WeaponController
     public int knifeCount = 2;
     public float spawnDelay = 0.15f;
     public float spreadDistance = 0.2f;
-
+    [Header("Audio")]
+    public AudioClip knifeSFX;
     protected override void Start()
     {
         base.Start();
@@ -16,6 +17,7 @@ public class KnifeController : WeaponController
     protected override void Attack()
     {
         base.Attack();
+        AudioManager.instance.PlaySFX(knifeSFX,true);
         StartCoroutine(FireKnivesCoroutine());
     }
 

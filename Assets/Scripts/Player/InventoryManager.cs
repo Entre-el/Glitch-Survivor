@@ -46,6 +46,8 @@ public class InventoryManager : MonoBehaviour
     public List<WeaponUpgrade> weaponUpgradeOptions = new();
     public List<PassiveItemUpgrade> passiveItemUpgradeOptions = new();
     public List<UpgradeUI> upgradeOptionUIs = new();
+    [Header("Audio")]
+    public AudioClip upgradeSFX;
     private PlayerStats player;
 
     private void Start()
@@ -98,6 +100,7 @@ public class InventoryManager : MonoBehaviour
 
     public void LevelUpWeapon(int slotIndex, WeaponUpgrade targetUpgradeOption)
     {
+        AudioManager.instance.PlaySFX(upgradeSFX,false);
         WeaponController weapon = weaponSlots[slotIndex];
         if (slotIndex >= 0 && slotIndex < weaponLevels.Length)
         {
@@ -125,6 +128,7 @@ public class InventoryManager : MonoBehaviour
 
     public void LevelUpItem(int slotIndex, PassiveItemUpgrade targetUpgradeOption)
     {
+        AudioManager.instance.PlaySFX(upgradeSFX,false);
         PassiveItem passiveItem = passiveItemSlots[slotIndex];
         if (slotIndex >= 0 && slotIndex < passiveItemLevels.Length)
         {

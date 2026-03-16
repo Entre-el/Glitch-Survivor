@@ -8,7 +8,8 @@ public class AxeController : WeaponController
     public float swingDuration = 0.25f;
     public float startAngle = -45f;
     public float sweepAngle = 270f;
-
+    [Header("Audio")]
+    public AudioClip swingSFX;
     protected override void Start()
     {
         base.Start();
@@ -17,7 +18,7 @@ public class AxeController : WeaponController
     protected override void Attack() 
     {
         base.Attack();
-        
+        AudioManager.instance.PlaySFX(swingSFX,true);
         GameObject spawnedAxe = Instantiate(weaponData.Prefab);
         spawnedAxe.transform.parent = transform;
 
