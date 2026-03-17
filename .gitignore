@@ -25,3 +25,6 @@ build1/
 *.VC.db
 *.meta
 *.unitypackage
+*.apk
+Glitch Survivor_BackUpThisFolder_ButDontShipItWithYourGame/
+.utmp/
