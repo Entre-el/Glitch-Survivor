@@ -126,7 +126,7 @@ public class PlayerStats : MonoBehaviour
     [Header("UI")]
     Slider healthBar;
     public Image expBar;
-    public Text levelDisplay;
+    public Text  levelDisplay;
     [Header("Audio")]
     public AudioClip deathSFX;
     void Awake()
@@ -135,7 +135,7 @@ public class PlayerStats : MonoBehaviour
         {
         characterData = CharacterSelector.GetData();
         }
-        else if(characterData == null && CharacterSelector.instance == null)
+        else if(characterData is null && CharacterSelector.instance is null)
         {
            Debug.LogWarning("Character data not assigned and CharacterSelector instance not found. Please assign characterData in the inspector or ensure CharacterSelector is set up correctly.");
         }

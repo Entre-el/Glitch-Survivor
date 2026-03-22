@@ -59,7 +59,7 @@ public class EnemyStats : MonoBehaviour
             Vector2 dir = (Vector2)transform.position - sourcePosition;
             enemyMovement.Knockback(dir.normalized * knockbackForce, knockbackDuration);
         }
-        if (dmg > 0) GameManager.GenerateFloatingText(Mathf.FloorToInt(dmg).ToString(), transform);
+        if (dmg > 0) GameManager.GenerateDamageText(Mathf.FloorToInt(dmg), transform);
         if (currentHealth <= 0)
         {
             Kill();

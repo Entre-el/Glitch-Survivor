@@ -7,14 +7,14 @@ public class MapController : MonoBehaviour
     [System.Serializable]
     public class PropData
     {
-        public string propTag;
+        public PoolItem propItem;
         public float propWeight;
     }
 
     [System.Serializable]
     public class TileBases
     {
-        public string tag;
+        public PoolItem tileItem;
         public TileBase tileBase;
         public float spawnChance;
         [Range(0f, 1f)]
@@ -24,8 +24,13 @@ public class MapController : MonoBehaviour
 
     private class ChunkProps
     {
-        public List<GameObject> spawnedProps = new List<GameObject>();
-        public List<string> propTags = new List<string>();
+        public List<GameObject> spawnedProps;
+        public List<PoolItem> propItems;
+        public ChunkProps(int capacity)
+        {
+            spawnedProps = new List<GameObject>(capacity);
+            propItems = new List<PoolItem>(capacity);
+        }
     }
 
     [Header("References")]
@@ -53,9 +58,9 @@ public class MapController : MonoBehaviour
     private float seedY;
 
     [Header("Debug")]
-    public Vector2 currentChunkCoord;
+    public Vector2Int currentChunkCoord;
 
-    private Dictionary<Vector2, ChunkProps> loadedChunks = new();
+    private Dictionary<Vector2Int, ChunkProps> loadedChunks = new(32);
 
     void Start()
     {
@@ -66,7 +71,7 @@ public class MapController : MonoBehaviour
         foreach (var tile in rareBiomes) rareTotalChance += tile.spawnChance;
 
         Vector2 playerCoord = GetChunkCoordFromVector3(player.position);
-        currentChunkCoord = playerCoord;
+        currentChunkCoord = new Vector2Int(Mathf.FloorToInt(playerCoord.x), Mathf.FloorToInt(playerCoord.y));
         UpdateChunks();
     }
 
@@ -75,7 +80,7 @@ public class MapController : MonoBehaviour
         Vector2 playerCoord = GetChunkCoordFromVector3(player.position);
         if (playerCoord != currentChunkCoord)
         {
-            currentChunkCoord = playerCoord;
+            currentChunkCoord = new Vector2Int(Mathf.FloorToInt(playerCoord.x), Mathf.FloorToInt(playerCoord.y));
             UpdateChunks();
         }
     }
@@ -86,7 +91,7 @@ public class MapController : MonoBehaviour
         {
             for (int yOffset = -chunkRadius; yOffset <= chunkRadius; yOffset++)
             {
-                Vector2 targetCoord = new(currentChunkCoord.x + xOffset, currentChunkCoord.y + yOffset);
+                Vector2Int targetCoord = new Vector2Int(currentChunkCoord.x + xOffset, currentChunkCoord.y + yOffset);
                 if (!loadedChunks.ContainsKey(targetCoord))
                 {
                     SpawnChunk(targetCoord);
@@ -94,11 +99,11 @@ public class MapController : MonoBehaviour
             }
         }
 
-        List<Vector2> chunksToRemove = new List<Vector2>();
+        List<Vector2Int> chunksToRemove = new List<Vector2Int>();
 
         foreach (var kvp in loadedChunks)
         {
-            Vector2 gridCoord = kvp.Key;
+            Vector2Int gridCoord = kvp.Key;
             ChunkProps chunkProps = kvp.Value;
 
             float chunkWorldX = gridCoord.x * chunkSize;
@@ -114,13 +119,21 @@ public class MapController : MonoBehaviour
                 for (int i = 0; i < chunkProps.spawnedProps.Count; i++)
                 {
                     GameObject propToReturn = chunkProps.spawnedProps[i];
-                    string tagToReturn = chunkProps.propTags[i];
+                    PoolItem itemToReturn = chunkProps.propItems[i];
 
                     if (propToReturn != null)
                     {
                         propToReturn.transform.position = Vector3.zero;
                         propToReturn.transform.rotation = Quaternion.identity;
-                        ObjectPoolManager.Instance.Release(tagToReturn, propToReturn);
+                        PoolItem item = propToReturn.GetComponent<PoolItem>();
+                        if(item != null)
+                        {
+                            item.ReturnToPool();
+                        }
+                        else
+                        {
+                            Destroy(propToReturn);
+                        }
                     }
                 }
 
@@ -128,21 +141,21 @@ public class MapController : MonoBehaviour
             }
         }
 
-        foreach (Vector2 key in chunksToRemove)
+        foreach (Vector2Int key in chunksToRemove)
         {
             loadedChunks.Remove(key);
         }  
     }
 
-    void SpawnChunk(Vector2 gridCoord)
+    void SpawnChunk(Vector2Int gridCoord)
     {
         int startX = Mathf.FloorToInt(gridCoord.x * chunkSize - chunkSize / 2f);
         int startY = Mathf.FloorToInt(gridCoord.y * chunkSize - chunkSize / 2f);
         int size = Mathf.RoundToInt(chunkSize);
-
+        int estimatedPropCount = Mathf.CeilToInt(size * size * 0.2f);
         BoundsInt area = new BoundsInt(startX, startY, 0, size, size, 1);
         TileBase[] tileArray = new TileBase[size * size];
-        ChunkProps newChunkProps = new ChunkProps();
+        ChunkProps newChunkProps = new ChunkProps(estimatedPropCount);
 
         for (int x = 0; x < size; x++)
         {
@@ -169,7 +182,6 @@ public class MapController : MonoBehaviour
                     float mappedNoise = baseNoise * rareTotalChance;
                     float currentCumulative = 0f;
                     selectedBiome = rareBiomes[0];
-                    
                     foreach (var tile in rareBiomes)
                     {
                         currentCumulative += tile.spawnChance; 
@@ -208,24 +220,26 @@ public class MapController : MonoBehaviour
                         
                         float randomPropHit = Random.value * totalPropWeight;
                         float currentPropCumulative = 0f;
-                        string finalPropTag = selectedBiome.allowedProps[0].propTag;
+                        PoolItem finalPropItem = selectedBiome.allowedProps[0].propItem;
 
                         foreach (var p in selectedBiome.allowedProps)
                         {
                             currentPropCumulative += p.propWeight;
                             if (randomPropHit <= currentPropCumulative)
                             {
-                                finalPropTag = p.propTag;
+                                finalPropItem = p.propItem;
                                 break;
                             }
                         }
 
-                        GameObject propObj = ObjectPoolManager.Instance.Get(finalPropTag);
+                        GameObject propObj = ObjectPoolManager.Instance.Get(finalPropItem.gameObject);
                         if (propObj != null)
                         {
                             Vector3Int cellPos = new Vector3Int(startX + x, startY + y, 0);
                             Vector3 cellCenterWorldPos = globalTilemap.GetCellCenterWorld(cellPos);
                             propObj.transform.position = cellCenterWorldPos;
+                            newChunkProps.spawnedProps.Add(propObj);
+                            newChunkProps.propItems.Add(finalPropItem);
                         }
                     }
                 }
@@ -236,7 +250,7 @@ public class MapController : MonoBehaviour
         loadedChunks.Add(gridCoord, newChunkProps);
     }
 
-    void EraseChunkTiles(Vector2 gridCoord)
+    void EraseChunkTiles(Vector2Int gridCoord)
     {
         int startX = Mathf.FloorToInt(gridCoord.x * chunkSize - chunkSize / 2f);
         int startY = Mathf.FloorToInt(gridCoord.y * chunkSize - chunkSize / 2f);
@@ -247,10 +261,10 @@ public class MapController : MonoBehaviour
         globalTilemap.SetTilesBlock(area, nullArray);
     }
 
-    Vector2 GetChunkCoordFromVector3(Vector3 pos)
+    Vector2Int GetChunkCoordFromVector3(Vector3 pos)
     {
         int x = Mathf.FloorToInt(pos.x / chunkSize);
         int y = Mathf.FloorToInt(pos.y / chunkSize);
-        return new Vector2(x, y);
+        return new Vector2Int(x, y);
     }
 }

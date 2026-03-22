@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class AudioManager : MonoBehaviour
@@ -14,6 +15,7 @@ public class AudioManager : MonoBehaviour
     [Header("打击限流设置")]
     public float hitSoundCooldown = 0.05f; 
     private float lastHitTime;
+    private Dictionary<AudioClip, float> sfxCooldowns = new(32);
 
     [Header("拾取连击设置")]
     public float comboResetTime = 0.5f;
@@ -22,22 +24,25 @@ public class AudioManager : MonoBehaviour
 
     private void Awake()
     {
-        if (instance == null)
+        if (instance is null)
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
         }
-        else Destroy(gameObject);
+        else
+        {
+            Destroy(gameObject);
+        }
     }
     public void PlaySFX(AudioClip clip, bool randomizePitch = true)
     {
-        if (clip == null) return;
+        if (!clip) return;
         sfxSource.pitch = randomizePitch ? Random.Range(0.9f, 1.1f) : 1f;
         sfxSource.PlayOneShot(clip);
     }
     public void PlayBGM(AudioClip clip)
     {
-        if (clip == null || bgmSource.clip == clip) return; // 如果正在播这首，就不管它
+        if (!clip || bgmSource.clip == clip) return; // 如果正在播这首，就不管它
         bgmSource.clip = clip;
         bgmSource.loop = true;
         bgmSource.volume = 1f; // 确保音量是满的
@@ -94,15 +99,15 @@ public class AudioManager : MonoBehaviour
     }
     public void PlayHitSFX(AudioClip clip)
     {
-        if (clip == null) return;
-        if (Time.time - lastHitTime < hitSoundCooldown) return;
-        lastHitTime = Time.time;
+        if (!clip) return;
+        if (sfxCooldowns.TryGetValue(clip, out float lastTmieplayed) && Time.time - lastTmieplayed < hitSoundCooldown) return;
+        sfxCooldowns[clip] = Time.time;
         PlaySFX(clip, true); 
     }
 
     public void PlayPickupSFX(AudioClip clip)
     {
-        if (clip == null) return;
+        if (!clip) return;
 
         if (Time.time - lastPickupTime > comboResetTime)
         {

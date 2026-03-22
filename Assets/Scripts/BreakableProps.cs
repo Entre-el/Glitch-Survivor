@@ -14,12 +14,12 @@ public class BreakableProps : MonoBehaviour
     void Start()
     {
         sr = GetComponent<SpriteRenderer>();
-        if(sr == null)
+        if(sr is null)
         {
             sr = GetComponentInChildren<SpriteRenderer>();
-            if(sr == null)
+            if(sr is null)
             {
-                Debug.LogError("SpriteRenderer not found on " + gameObject.name);
+                Debug.LogError($"SpriteRenderer not found on {gameObject.name}");
             }
             else originalColor = sr.color;
         }

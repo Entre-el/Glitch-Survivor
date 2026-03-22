@@ -6,7 +6,7 @@ public class CharacterSelector : MonoBehaviour
     public CharacterScriptableObject charaterData;
     void Awake()
     {
-        if (instance == null)
+        if (instance is null)
         {
             instance = this;
             DontDestroyOnLoad(gameObject);

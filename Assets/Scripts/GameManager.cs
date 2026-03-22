@@ -38,22 +38,22 @@ public class GameManager : MonoBehaviour
     public Text currentMagnetDisplay;
     [Header("Results Display")]
     public Image chosenCharacterIcon;
-    public Text chosenCharacterName;
-    public Text levelReachedDisplay;
-    public Text TimeSurvivedDisplay;
+    public Text  chosenCharacterName;
+    public Text  levelReachedDisplay;
+    public Text  TimeSurvivedDisplay;
     public List<Image> chosenWeaponIcons = new(6);
     public List<Image> chosenPassiveIcons = new(6);
     [Header("Win Display")]
     public Image winCharacterIcon;
-    public Text winCharacterName;
-    public Text winLevelReachedDisplay;
-    public Text winTimeSurvivedDisplay;
+    public Text  winCharacterName;
+    public Text  winLevelReachedDisplay;
+    public Text  winTimeSurvivedDisplay;
     public List<Image> winChosenWeaponIcons = new(6);
     public List<Image> winChosenPassiveIcons = new(6);
     [Header("Stopwatch")]
     public float timeLimit;
     float stopwatchTime;
-    public Text stopwatchDisplay;
+    public Text  stopwatchDisplay;
     [Header("Music")]
     public AudioClip winBGM;
     public AudioClip gameOverBGM;
@@ -64,13 +64,13 @@ public class GameManager : MonoBehaviour
     public GameObject playerObject;
     void Awake()
     {
-        if (instance == null)
+        if (instance is null)
         {
             instance = this;
         }
         else
         {
-            Debug.LogWarning("Multiple instances of GameManager detected. Destroying duplicate.");
+            Debug.LogWarning($"Multiple instances of GameManager detected. Destroying duplicate.");
             Destroy(gameObject);
         }
         DisableScreens();
@@ -91,7 +91,7 @@ public class GameManager : MonoBehaviour
                 {
                     isGameOver = true;
                     Time.timeScale = 0f;
-                    Debug.Log("Game Over");
+                    Debug.Log($"Game Over");
                     DisplayResults();
                 }
                 break;
@@ -100,7 +100,7 @@ public class GameManager : MonoBehaviour
                 {
                     isWin = true;
                     Time.timeScale = 0f;
-                    Debug.Log("Win");
+                    Debug.Log($"Win");
                     DisplayWin();
                 }
                 break;
@@ -110,7 +110,7 @@ public class GameManager : MonoBehaviour
                     isLevelingUp = true;
                     Time.timeScale = 0f;
                     levelUpScreen.SetActive(true);
-                    Debug.Log("Level Up!");
+                    Debug.Log($"Level Up!");
                 }
                 break;
             default:
@@ -131,7 +131,7 @@ public class GameManager : MonoBehaviour
             Time.timeScale = 0f;
             AudioManager.instance.bgmSource.pitch = 0.5f;
             pauseScreens.SetActive(true);
-            Debug.Log("Game Paused");
+            Debug.Log($"Game Paused");
         }
     }
     public void ResumeGame()
@@ -142,7 +142,7 @@ public class GameManager : MonoBehaviour
             Time.timeScale = 1f;
             AudioManager.instance.bgmSource.pitch = 1f;
             DisableScreens();
-            Debug.Log("Game Resumed");
+            Debug.Log($"Game Resumed");
         }
     }
     void CheckForPauseAndResume()
@@ -184,9 +184,9 @@ public class GameManager : MonoBehaviour
     }
     void DisplayWin()
     {   
-        if (winScreen == null || winCharacterIcon == null || chosenCharacterIcon == null || winCharacterName == null || 
-            chosenCharacterName == null || winLevelReachedDisplay == null || levelReachedDisplay == null ||
-            winTimeSurvivedDisplay == null || TimeSurvivedDisplay == null) return;
+        if (winScreen is null || winCharacterIcon is null || chosenCharacterIcon is null || winCharacterName is null || 
+            chosenCharacterName is null || winLevelReachedDisplay is null || levelReachedDisplay is null ||
+            winTimeSurvivedDisplay is null || TimeSurvivedDisplay is null) return;
 
         winCharacterIcon.sprite = chosenCharacterIcon.sprite;
         winCharacterName.text = chosenCharacterName.text;
@@ -218,7 +218,7 @@ public class GameManager : MonoBehaviour
     {
         if (chosenWeaponIconsData.Count != chosenWeaponIcons.Count || chosenPassiveIconsData.Count != chosenPassiveIcons.Count)
         {
-            Debug.LogWarning("Mismatch in the number of weapon/passive icons provided.");
+            Debug.LogWarning($"Mismatch in the number of weapon/passive icons provided.");
             return;
         }
         for (int i = 0; i < chosenWeaponIcons.Count; i++)
@@ -267,26 +267,34 @@ public class GameManager : MonoBehaviour
         levelUpScreen.SetActive(false);
         ChangeState(GameState.Playing);
     }
-    public static void GenerateFloatingText(string text, Transform target, float duration = 1f, float speed = 1f)
+    public static void GenerateDamageText(int damage, Transform target, float duration = 1f, float speed = 1f)
     {
         if (!instance.referenceCamera) instance.referenceCamera = Camera.main;
         
-        instance.StartCoroutine(instance.GenerateFloatingTextCoroutine(text, target, duration, speed));
+        instance.StartCoroutine(instance.GenerateDamageTextCoroutine(damage, target, duration, speed));
     }
 
-IEnumerator GenerateFloatingTextCoroutine(string text, Transform target, float duration, float speed)
+IEnumerator GenerateDamageTextCoroutine(int damage, Transform target, float duration, float speed)
     {
-        GameObject textObject = ObjectPoolManager.Instance.Get("DamageText");
-        
+        GameObject textObject = ObjectPoolManager.Instance.Get(damageTextCanvas.gameObject);
+          
         TextMeshPro textMesh = textObject.GetComponent<TextMeshPro>();
-        if(textMesh == null)
+        if(textMesh is null)
         {
-            Debug.LogError("DamageText prefab 缺少 TextMeshPro 组件！");
-            ObjectPoolManager.Instance.Release("DamageText", textObject);
+            Debug.LogError($"DamageText prefab 缺少 TextMeshPro 组件！");
+            PoolItem item = textObject.GetComponent<PoolItem>();
+            if(item is not null)
+            {
+                item.ReturnToPool();
+            }
+            else
+            {
+                Destroy(textObject);
+            }
             yield break;
         }
 
-        textMesh.text = text;
+        textMesh.SetText("{0}", damage);
         
         textMesh.color = new Color(textMesh.color.r, textMesh.color.g, textMesh.color.b, 1f);
 
@@ -313,6 +321,6 @@ IEnumerator GenerateFloatingTextCoroutine(string text, Transform target, float d
         }
 
         textMesh.color = new Color(textMesh.color.r, textMesh.color.g, textMesh.color.b, 0f);
-        ObjectPoolManager.Instance.Release("DamageText", textObject);
+        
     }
 }

@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class EnemySpawner : MonoBehaviour
 { 
@@ -27,8 +29,8 @@ public class EnemySpawner : MonoBehaviour
         [System.Serializable]
         public class Enemies
         {
-                public GameObject enemyPrefab;
-                public int enemyCount;
+            public GameObject enemyPrefab;
+            public int enemyCount;
         }
         public List<Enemies> enemysList;
         public bool isGathered;
@@ -112,32 +114,35 @@ public class EnemySpawner : MonoBehaviour
                 AudioManager.instance.CrossfadeBGM(finalWaveBGM,cutInDuration);
             }
         }
-        Debug.Log("所有波次的怪物生成完毕");
+        Debug.Log($"所有波次的怪物生成完毕");
         isDone = true;
     }
-    private void SpawnEnemyGroup(EnemyGroup groupToSpawn)
+    private void SpawnEnemyGroup(EnemyGroup group)
     {
-        if (groupToSpawn.isGathered)
+        if (group.isGathered)
         {
             Vector2 spawnPosition = GetRoundEnemyPosition(roundEdgeLength);
-            foreach (var enemies in groupToSpawn.enemysList)
+            foreach (var enemies in group.enemysList)
             {
                 for (int i = 0; i < enemies.enemyCount; i++)
                 {
-                    Vector2 offset = new Vector2(Random.Range(-3f, 3f), Random.Range(-3f, 3f));
-                    Instantiate(enemies.enemyPrefab, spawnPosition + offset, Quaternion.identity);
+                    GameObject enemy = ObjectPoolManager.Instance.Get(enemies.enemyPrefab, spawnPosition);
+                    enemy.transform.position = spawnPosition+new Vector2(Random.Range(-3f, 3f), Random.Range(-3f, 3f));
+                    enemy.SetActive(true);
                     enemiesAlive++;
                 }
             }
         }
         else
         {
-            foreach (var singleGroup in groupToSpawn.enemysList)
+            foreach (var singleGroup in group.enemysList)
             {
                 for (int i = 0; i < singleGroup.enemyCount; i++)
                 {
                     Vector2 randomSpawnPosition = GetRoundEnemyPosition(roundEdgeLength);
-                    Instantiate(singleGroup.enemyPrefab, randomSpawnPosition, Quaternion.identity);
+                    GameObject enemy = ObjectPoolManager.Instance.Get(singleGroup.enemyPrefab, randomSpawnPosition+new Vector2(Random.Range(-3f, 3f), Random.Range(-3f, 3f)), Quaternion.identity);
+                    enemy.transform.position = randomSpawnPosition+new Vector2(Random.Range(-3f, 3f), Random.Range(-3f, 3f));
+                    enemy.SetActive(true);
                     enemiesAlive++;
                 }
             }

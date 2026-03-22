@@ -53,7 +53,7 @@ public class VirtualJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler,
         if (RectTransformUtility.ScreenPointToLocalPointInRectangle(backgroundRect, eventData.position, cam, out localPoint))
         {
             // 1. UI 视觉层：限制小圆圈的物理移动范围不超过大圆圈
-            Vector2 clampedPosition = Vector2.ClampMagnitude(localPoint, magnitudeRadius);
+            Vector2 clampedPosition = Vector2.ClampMagnitude(localPoint,magnitudeRadius);
             handleRect.anchoredPosition = clampedPosition;
             
             // 2. 逻辑输出层：计算带宽容度的向量

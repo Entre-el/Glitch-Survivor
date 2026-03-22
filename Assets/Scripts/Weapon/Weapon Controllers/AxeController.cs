@@ -19,7 +19,7 @@ public class AxeController : WeaponController
     {
         base.Attack();
         AudioManager.instance.PlaySFX(swingSFX,true);
-        GameObject spawnedAxe = Instantiate(weaponData.Prefab);
+        GameObject spawnedAxe = ObjectPoolManager.Instance.Get(prefab);
         spawnedAxe.transform.parent = transform;
 
         int facingMultiplier = pm.lastMoveVector.x < 0 ? -1 : 1;

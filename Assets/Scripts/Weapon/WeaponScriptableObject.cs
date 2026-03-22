@@ -3,8 +3,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "WeaponScriptableObject", menuName = "ScriptableObjects/Weapon")]
 public class WeaponScriptableObject : ScriptableObject
 {
-    [SerializeField] GameObject prefab;
-    public GameObject Prefab { get => prefab; private set => prefab = value; }
     [SerializeField] float damage;
     public float Damage { get => damage; private set => damage = value; }
     [SerializeField] float speed;
@@ -15,10 +13,8 @@ public class WeaponScriptableObject : ScriptableObject
     public int Pierce { get => pierce; private set => pierce = value; }
     [SerializeField] int level;
     public int Level { get => level; private set => level = value; }
-    [SerializeField] GameObject nextLevelPrefab;
-    public GameObject NextLevelPrefab { get => nextLevelPrefab; private set => nextLevelPrefab = value; }
-    [SerializeField] new string name;
-    public string Name { get => name; private set => name = value; }
+    [SerializeField] PoolItem nextLevelPrefab;
+    public PoolItem NextLevelPrefab { get => nextLevelPrefab; private set => nextLevelPrefab = value; }
     [SerializeField] string description;
     public string Description { get => description; private set => description = value; }
     [SerializeField] Sprite icon;

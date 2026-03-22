@@ -74,7 +74,7 @@ public class InventoryManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Invalid weapon slot index: " + slotIndex);
+            Debug.LogError($"Invalid weapon slot index: {slotIndex}");
         }
     }
 
@@ -94,7 +94,7 @@ public class InventoryManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Invalid passive item slot index: " + slotIndex);
+            Debug.LogError($"Invalid passive item slot index: {slotIndex}");
         }
     }
 
@@ -106,15 +106,22 @@ public class InventoryManager : MonoBehaviour
         {
             if(!weapon.weaponData.NextLevelPrefab)
             {
-                Debug.LogWarning("Weapon at slot " + slotIndex + " is already at max level.");
+                Debug.LogWarning($"Weapon at slot {slotIndex} is already at max level.");
                 return;
             }
-            GameObject upgradedWeapon = Instantiate(weapon.weaponData.NextLevelPrefab, transform.position, Quaternion.identity);
-            upgradedWeapon.transform.SetParent(transform);
+            GameObject upgradedWeapon = ObjectPoolManager.Instance.Get(weapon.weaponData.NextLevelPrefab.gameObject);
             AddWeapon(slotIndex, upgradedWeapon.GetComponent<WeaponController>());
-            Destroy(weapon.gameObject);
-            weaponLevels[slotIndex] = upgradedWeapon.GetComponent<WeaponController>().weaponData.Level;
+            PoolItem item = weapon.gameObject.GetComponent<PoolItem>();
+            if(item)
+            {
+                item.ReturnToPool();
+            }
+            else
+            {
+                Destroy(weapon.gameObject);
+            }
             targetUpgradeOption.weaponData = upgradedWeapon.GetComponent<WeaponController>().weaponData;
+            weaponLevels[slotIndex] = targetUpgradeOption.weaponData.Level;
             if(GameManager.instance != null && GameManager.instance.isLevelingUp)
             {
                 GameManager.instance.EndLevelUp();
@@ -122,7 +129,7 @@ public class InventoryManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Invalid weapon slot index: " + slotIndex);
+            Debug.LogError($"Invalid weapon slot index: {slotIndex}");
         }
     }
 
@@ -132,15 +139,23 @@ public class InventoryManager : MonoBehaviour
         PassiveItem passiveItem = passiveItemSlots[slotIndex];
         if (slotIndex >= 0 && slotIndex < passiveItemLevels.Length)
         {
-            if(!passiveItem.passiveItemData.NextLevelPrefab)
+            if(string.IsNullOrEmpty(passiveItem.passiveItemData.NextLevelPrefab.gameObject.name))
             {
-                Debug.LogWarning("Passive item at slot " + slotIndex + " is already at max level.");
+                Debug.LogWarning($"Passive item at slot {slotIndex} is already at max level.");
                 return;
             }
-            GameObject upgradedPassiveItem = Instantiate(passiveItem.passiveItemData.NextLevelPrefab, transform.position, Quaternion.identity);
+            GameObject upgradedPassiveItem = ObjectPoolManager.Instance.Get(passiveItem.passiveItemData.NextLevelPrefab.gameObject);
             upgradedPassiveItem.transform.SetParent(transform);
             AddPassiveItem(slotIndex, upgradedPassiveItem.GetComponent<PassiveItem>());
-            Destroy(passiveItem.gameObject);
+            PoolItem item = passiveItem.gameObject.GetComponent<PoolItem>();
+            if(item is not null)
+            {
+                item.ReturnToPool();
+            }
+            else
+            {
+                Destroy(passiveItem.gameObject);
+            }
             passiveItemLevels[slotIndex] = upgradedPassiveItem.GetComponent<PassiveItem>().passiveItemData.Level;
             targetUpgradeOption.passiveItemData = upgradedPassiveItem.GetComponent<PassiveItem>().passiveItemData;
             if(GameManager.instance != null && GameManager.instance.isLevelingUp)
@@ -150,7 +165,7 @@ public class InventoryManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Invalid passive item slot index: " + slotIndex);
+                Debug.LogError($"Invalid passive item slot index: {slotIndex}");
         }
     }
 
@@ -188,7 +203,7 @@ public class InventoryManager : MonoBehaviour
         WeaponUpgrade chosenUpgrade = availablePool[randomIndex];
         availablePool.RemoveAt(randomIndex);
 
-        if (chosenUpgrade == null) return;
+        if (chosenUpgrade is null) return;
 
         bool isNewWeapon = true;
 
@@ -197,9 +212,9 @@ public class InventoryManager : MonoBehaviour
             if(weaponSlots[i] != null && weaponSlots[i].weaponData == chosenUpgrade.weaponData)
             {
                 isNewWeapon = false;
-                if(!chosenUpgrade.weaponData.NextLevelPrefab)
+                if(chosenUpgrade.weaponData.NextLevelPrefab is null)
                 {
-                    Debug.LogWarning("Weapon " + chosenUpgrade.weaponData.Name + " is already at max level.");
+                    Debug.LogWarning($"Weapon {chosenUpgrade.weaponData.NextLevelPrefab.gameObject.name} is already at max level.");
                     uiNode.root.SetActive(false);
                     return;
                 }
@@ -207,8 +222,8 @@ public class InventoryManager : MonoBehaviour
                 int slotIndex = i;
                 uiNode.root.SetActive(true);
                 uiNode.upgradeButton.onClick.AddListener(() => LevelUpWeapon(slotIndex, chosenUpgrade));
-                var nextWeaponData = chosenUpgrade.weaponData.NextLevelPrefab.GetComponent<WeaponController>().weaponData;
-                BindDataToUI(uiNode, nextWeaponData.Name, nextWeaponData.Description, nextWeaponData.Icon);
+                var nextWeaponData = ObjectPoolManager.Instance.Get(chosenUpgrade.weaponData.NextLevelPrefab.gameObject).GetComponent<WeaponController>().weaponData;
+                BindDataToUI(uiNode, nextWeaponData.name, nextWeaponData.Description, nextWeaponData.Icon);
                 break;
             }
         }
@@ -217,7 +232,7 @@ public class InventoryManager : MonoBehaviour
         {
             uiNode.root.SetActive(true);
             uiNode.upgradeButton.onClick.AddListener(() => player.SpawnWeapon(chosenUpgrade.initialWeapon));
-            BindDataToUI(uiNode, chosenUpgrade.weaponData.Name, chosenUpgrade.weaponData.Description, chosenUpgrade.weaponData.Icon);
+            BindDataToUI(uiNode, chosenUpgrade.weaponData.name, chosenUpgrade.weaponData.Description, chosenUpgrade.weaponData.Icon);
         }
     }
 
@@ -227,7 +242,7 @@ public class InventoryManager : MonoBehaviour
         PassiveItemUpgrade chosenUpgrade = availablePool[randomIndex];
         availablePool.RemoveAt(randomIndex);
 
-        if (chosenUpgrade == null) return;
+        if (chosenUpgrade is null) return;
 
         bool isNewItem = true;
 
@@ -236,17 +251,17 @@ public class InventoryManager : MonoBehaviour
             if(passiveItemSlots[i] != null && passiveItemSlots[i].passiveItemData == chosenUpgrade.passiveItemData)
             {
                 isNewItem = false;
-                if(!chosenUpgrade.passiveItemData.NextLevelPrefab)
+                if(chosenUpgrade.passiveItemData.NextLevelPrefab is null)
                 {
                     uiNode.root.SetActive(false);
-                    Debug.LogWarning("Passive item " + chosenUpgrade.passiveItemData.Name + " is already at max level.");
+                    Debug.LogWarning($"Passive item {chosenUpgrade.passiveItemData.NextLevelPrefab.gameObject.name} is already at max level.");
                     return;
                 }
                 int slotIndex = i;
                 uiNode.root.SetActive(true);
                 uiNode.upgradeButton.onClick.AddListener(() => LevelUpItem(slotIndex, chosenUpgrade));
-                var nextItemData = chosenUpgrade.passiveItemData.NextLevelPrefab.GetComponent<PassiveItem>().passiveItemData;
-                BindDataToUI(uiNode, nextItemData.Name, nextItemData.Description, nextItemData.Icon);
+                var nextItemData = ObjectPoolManager.Instance.Get(chosenUpgrade.passiveItemData.NextLevelPrefab.gameObject).GetComponent<PassiveItem>().passiveItemData;
+                BindDataToUI(uiNode, nextItemData.name, nextItemData.Description, nextItemData.Icon);
                 break;
             }
         }
@@ -255,7 +270,7 @@ public class InventoryManager : MonoBehaviour
         {
             uiNode.root.SetActive(true);
             uiNode.upgradeButton.onClick.AddListener(() => player.SpawnPassiveItem(chosenUpgrade.initialPassiveItem));
-            BindDataToUI(uiNode, chosenUpgrade.passiveItemData.Name, chosenUpgrade.passiveItemData.Description, chosenUpgrade.passiveItemData.Icon);
+            BindDataToUI(uiNode, chosenUpgrade.passiveItemData.name, chosenUpgrade.passiveItemData.Description, chosenUpgrade.passiveItemData.Icon);
         }
     }
 
