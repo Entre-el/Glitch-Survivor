@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6941641842534156644}
   - component: {fileID: 755612637157623505}
+  - component: {fileID: -3668683388285124107}
   m_Layer: 0
   m_Name: Spinach Level 4
   m_TagString: Untagged
@@ -45,3 +46,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpinachPassiveItem
   passiveItemData: {fileID: 11400000, guid: e44688456e1e6f049a81d2a86b476eed, type: 2}
+--- !u!114 &-3668683388285124107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6551824973799637516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee78aef8b835e6c4ab8f77a912b35a32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PoolItem
+  defaultCapacity: 1
+  maxSize: 10

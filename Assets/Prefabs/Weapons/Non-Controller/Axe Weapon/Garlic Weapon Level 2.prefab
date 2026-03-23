@@ -139,6 +139,7 @@ GameObject:
   - component: {fileID: 9050150640366159138}
   - component: {fileID: -7532804830110575144}
   - component: {fileID: 2111239925125296208}
+  - component: {fileID: -3952783831922778891}
   m_Layer: 0
   m_Name: Garlic Weapon Level 2
   m_TagString: Untagged
@@ -291,3 +292,17 @@ PolygonCollider2D:
       - {x: 0.58008194, y: 0.025413513}
       - {x: 0.5533886, y: 0.81185913}
   m_UseDelaunayMesh: 1
+--- !u!114 &-3952783831922778891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8627147615011920374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee78aef8b835e6c4ab8f77a912b35a32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PoolItem
+  defaultCapacity: 1
+  maxSize: 10

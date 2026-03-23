@@ -434,10 +434,10 @@ MonoBehaviour:
       - m_Target: {fileID: 952603198}
         m_TargetAssemblyTypeName: SceneController, Assembly-CSharp
         m_MethodName: SceneChange
-        m_Mode: 5
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 11400000, guid: 57f979f14c51be74093562afbeb5342a, type: 2}
+          m_ObjectArgumentAssemblyTypeName: SceneSO, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: Game
@@ -662,9 +662,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e1dcc91535049c4f8c2b07efb5f62ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneController
-  buttonSFX: {fileID: 8300000, guid: ec3f9e3b3f0c0d04ba4b653f0a5e1f8e, type: 3}
-  sceneBGM: {fileID: 8300000, guid: dce374dbd3c2bed40b2b2de68e608448, type: 3}
-  cutInDuration: 2
+  loadingScreen: {fileID: 0}
+  loadingSlider: {fileID: 0}
+  loadingText: {fileID: 0}
 --- !u!1 &970041286
 GameObject:
   m_ObjectHideFlags: 0
@@ -901,10 +901,10 @@ MonoBehaviour:
       - m_Target: {fileID: 952603198}
         m_TargetAssemblyTypeName: SceneController, Assembly-CSharp
         m_MethodName: SceneChange
-        m_Mode: 5
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 11400000, guid: 57f979f14c51be74093562afbeb5342a, type: 2}
+          m_ObjectArgumentAssemblyTypeName: SceneSO, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: Game

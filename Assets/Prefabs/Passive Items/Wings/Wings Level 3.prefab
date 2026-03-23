@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5274029942181335772}
   - component: {fileID: 7113109999875749142}
+  - component: {fileID: -8680127303298810153}
   m_Layer: 0
   m_Name: Wings Level 3
   m_TagString: Untagged
@@ -45,3 +46,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WingsPassiveItem
   passiveItemData: {fileID: 11400000, guid: e2250f3e4c568a84f8858f6a286f1703, type: 2}
+--- !u!114 &-8680127303298810153
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6855995082373714696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee78aef8b835e6c4ab8f77a912b35a32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PoolItem
+  defaultCapacity: 1
+  maxSize: 10

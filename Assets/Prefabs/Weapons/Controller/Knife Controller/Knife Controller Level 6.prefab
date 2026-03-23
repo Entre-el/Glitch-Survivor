@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7435543532506133100}
   - component: {fileID: 2572097506447437378}
+  - component: {fileID: 5348276762168688577}
   m_Layer: 0
   m_Name: Knife Controller Level 6
   m_TagString: Untagged
@@ -47,3 +48,21 @@ MonoBehaviour:
   prefab: {fileID: 1873771884457773354, guid: 1719852060ac07949a05278ea2f690ad, type: 3}
   currentCooldown: 0
   weaponData: {fileID: 11400000, guid: e31341cf4d212a341b8ddfea9b7f5c36, type: 2}
+  knifeCount: 2
+  spawnDelay: 0.15
+  spreadDistance: 0.2
+  knifeSFX: {fileID: 0}
+--- !u!114 &5348276762168688577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5471823024443172348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee78aef8b835e6c4ab8f77a912b35a32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PoolItem
+  defaultCapacity: 1
+  maxSize: 10

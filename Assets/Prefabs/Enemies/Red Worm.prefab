@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: -3609467244910561328}
   - component: {fileID: -2134515630195962487}
   - component: {fileID: -2917589995738381063}
+  - component: {fileID: 4577366823690139128}
   m_Layer: 0
   m_Name: Red Worm
   m_TagString: Enemy
@@ -234,3 +235,17 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: -0.46989465}
   m_Radius: 0.28010535
+--- !u!114 &4577366823690139128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5707308963716222226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee78aef8b835e6c4ab8f77a912b35a32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PoolItem
+  defaultCapacity: 50
+  maxSize: 200

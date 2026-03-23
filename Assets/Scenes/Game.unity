@@ -742,156 +742,156 @@ MonoBehaviour:
   - waveName: Wave1
     enemyGroups:
     - enemysList:
-      - enemyTag: W
+      - enemyPrefab: {fileID: 1468309060539859647, guid: 4775da15f28597d4cad237b99ee09eea, type: 3}
         enemyCount: 3
       isGathered: 1
       difficultyLevel: 0
     - enemysList:
-      - enemyTag: 
+      - enemyPrefab: {fileID: 1468309060539859647, guid: 4775da15f28597d4cad237b99ee09eea, type: 3}
         enemyCount: 5
       isGathered: 1
       difficultyLevel: 0
     - enemysList:
-      - enemyTag: 
+      - enemyPrefab: {fileID: 1468309060539859647, guid: 4775da15f28597d4cad237b99ee09eea, type: 3}
         enemyCount: 10
       isGathered: 0
       difficultyLevel: 0
   - waveName: Wave2
     enemyGroups:
     - enemysList:
-      - enemyTag: 
+      - enemyPrefab: {fileID: 1468309060539859647, guid: 4775da15f28597d4cad237b99ee09eea, type: 3}
         enemyCount: 15
-      - enemyTag: 
+      - enemyPrefab: {fileID: 5707308963716222226, guid: e2bb2ba1d4edfa349b87a37112492177, type: 3}
         enemyCount: 1
       isGathered: 0
       difficultyLevel: 0
     - enemysList:
-      - enemyTag: 
+      - enemyPrefab: {fileID: 0}
         enemyCount: 20
-      - enemyTag: 
+      - enemyPrefab: {fileID: 0}
         enemyCount: 1
       isGathered: 0
       difficultyLevel: 0
     - enemysList:
-      - enemyTag: 
+      - enemyPrefab: {fileID: 0}
         enemyCount: 3
-      - enemyTag: 
+      - enemyPrefab: {fileID: 0}
         enemyCount: 1
       isGathered: 0
       difficultyLevel: 0
   - waveName: Wave3
     enemyGroups:
     - enemysList:
-      - enemyTag: 
+      - enemyPrefab: {fileID: 0}
         enemyCount: 5
-      - enemyTag: 
+      - enemyPrefab: {fileID: 0}
         enemyCount: 20
-      - enemyTag: 
+      - enemyPrefab: {fileID: 0}
         enemyCount: 1
       isGathered: 1
       difficultyLevel: 0
     - enemysList:
-      - enemyTag: 
+      - enemyPrefab: {fileID: 0}
         enemyCount: 1
-      - enemyTag: 
+      - enemyPrefab: {fileID: 0}
         enemyCount: 10
       isGathered: 0
       difficultyLevel: 0
     - enemysList:
-      - enemyTag: 
+      - enemyPrefab: {fileID: 0}
         enemyCount: 2
-      - enemyTag: 
+      - enemyPrefab: {fileID: 0}
         enemyCount: 5
-      - enemyTag: 
+      - enemyPrefab: {fileID: 0}
         enemyCount: 10
       isGathered: 1
       difficultyLevel: 0
     - enemysList:
-      - enemyTag: 
+      - enemyPrefab: {fileID: 0}
         enemyCount: 3
-      - enemyTag: 
+      - enemyPrefab: {fileID: 0}
         enemyCount: 15
       isGathered: 1
       difficultyLevel: 0
   - waveName: Wave4
     enemyGroups:
     - enemysList:
-      - enemyTag: 
+      - enemyPrefab: {fileID: 0}
         enemyCount: 20
-      - enemyTag: 
+      - enemyPrefab: {fileID: 0}
         enemyCount: 5
       isGathered: 1
       difficultyLevel: 0
     - enemysList:
-      - enemyTag: 
+      - enemyPrefab: {fileID: 0}
         enemyCount: 2
       isGathered: 1
       difficultyLevel: 0
     - enemysList:
-      - enemyTag: 
+      - enemyPrefab: {fileID: 0}
         enemyCount: 1
-      - enemyTag: 
+      - enemyPrefab: {fileID: 0}
         enemyCount: 3
       isGathered: 1
       difficultyLevel: 0
   - waveName: Wave5
     enemyGroups:
     - enemysList:
-      - enemyTag: 
+      - enemyPrefab: {fileID: 0}
         enemyCount: 1
-      - enemyTag: 
+      - enemyPrefab: {fileID: 0}
         enemyCount: 5
       isGathered: 1
       difficultyLevel: 0
     - enemysList:
-      - enemyTag: 
+      - enemyPrefab: {fileID: 0}
         enemyCount: 3
-      - enemyTag: 
+      - enemyPrefab: {fileID: 0}
         enemyCount: 3
-      - enemyTag: 
+      - enemyPrefab: {fileID: 0}
         enemyCount: 20
       isGathered: 1
       difficultyLevel: 0
     - enemysList:
-      - enemyTag: 
+      - enemyPrefab: {fileID: 0}
         enemyCount: 10
-      - enemyTag: 
+      - enemyPrefab: {fileID: 0}
         enemyCount: 5
-      - enemyTag: 
+      - enemyPrefab: {fileID: 0}
         enemyCount: 20
       isGathered: 1
       difficultyLevel: 0
   - waveName: Wave6
     enemyGroups:
     - enemysList:
-      - enemyTag: 
+      - enemyPrefab: {fileID: 0}
         enemyCount: 10
-      - enemyTag: 
+      - enemyPrefab: {fileID: 0}
         enemyCount: 10
       isGathered: 1
       difficultyLevel: 0
     - enemysList:
-      - enemyTag: 
+      - enemyPrefab: {fileID: 0}
         enemyCount: 20
-      - enemyTag: 
+      - enemyPrefab: {fileID: 0}
         enemyCount: 5
-      - enemyTag: 
+      - enemyPrefab: {fileID: 0}
         enemyCount: 30
       isGathered: 1
       difficultyLevel: 0
     - enemysList:
-      - enemyTag: 
+      - enemyPrefab: {fileID: 0}
         enemyCount: 10
-      - enemyTag: 
+      - enemyPrefab: {fileID: 0}
         enemyCount: 20
       isGathered: 0
       difficultyLevel: 0
   - waveName: BossWave
     enemyGroups:
     - enemysList:
-      - enemyTag: 
+      - enemyPrefab: {fileID: 0}
         enemyCount: 3
-      - enemyTag: 
+      - enemyPrefab: {fileID: 0}
         enemyCount: 1
       isGathered: 0
       difficultyLevel: 0
@@ -5747,90 +5747,90 @@ MonoBehaviour:
   disableRadius: 30
   noiseScale: 0.05
   commonBiomes:
-  - tag: 1
+  - tileItem: {fileID: 4153453623258630634, guid: 8124ac8d48530194e818e46f822d6723, type: 3}
     tileBase: {fileID: 11400000, guid: 0114f3836dbb35341aac9b3a5e3f8247, type: 2}
     spawnChance: 1
     propDensity: 0.001
     allowedProps:
-    - propTag: prop0
+    - propItem: {fileID: -8193202167970217452, guid: 8b0e3247b07cb9a47a51e3a6eeac141a, type: 3}
       propWeight: 1
-    - propTag: prop1
+    - propItem: {fileID: -4148935994648048822, guid: e2672df99f9522c43aca837b1ea319db, type: 3}
       propWeight: 1
-    - propTag: prop2
+    - propItem: {fileID: -3771094277561278089, guid: 30f6b6e51f117f642b0ee46983cc2ee0, type: 3}
       propWeight: 1
-    - propTag: prop3
+    - propItem: {fileID: -3172499506309679609, guid: 6edb312d2944a134d8535bc7521fed59, type: 3}
       propWeight: 1
-    - propTag: prop6
+    - propItem: {fileID: 3245307145199669640, guid: a92d654a6effa2b4fba1c5ad68333b62, type: 3}
       propWeight: 6
-    - propTag: prop7
+    - propItem: {fileID: 8624628157114577570, guid: 3770f982043b96044a9df3a8064aed51, type: 3}
       propWeight: 3
-    - propTag: prop8
+    - propItem: {fileID: -924139419310012423, guid: 457cec1c990cfc34c8ada1565a1d6b29, type: 3}
       propWeight: 6
-    - propTag: prop9
+    - propItem: {fileID: -4046080760805150536, guid: a01ac85f29767c6439a9a633addce461, type: 3}
       propWeight: 3
-    - propTag: prop11
+    - propItem: {fileID: -8381292132098180653, guid: e75dae7b6c154be4c9d91d596efa628b, type: 3}
       propWeight: 2
-    - propTag: prop18
+    - propItem: {fileID: 1773344009560299770, guid: 601d59a0e58104046903a00aae7bad92, type: 3}
       propWeight: 6
   patchNoiseScale: 0.1
   rarePatchThreshold: 0.334
   rareBiomes:
-  - tag: 2
+  - tileItem: {fileID: -4611625110639228202, guid: 06157e8880c8ee749919b3f2a627dbd8, type: 3}
     tileBase: {fileID: 11400000, guid: 280adee3dcd52dc4f930c9509fc9272f, type: 2}
     spawnChance: 1
     propDensity: 0.02
     allowedProps:
-    - propTag: prop0
+    - propItem: {fileID: -4148935994648048822, guid: e2672df99f9522c43aca837b1ea319db, type: 3}
       propWeight: 1
-    - propTag: prop1
+    - propItem: {fileID: -8193202167970217452, guid: 8b0e3247b07cb9a47a51e3a6eeac141a, type: 3}
       propWeight: 1
-    - propTag: prop2
+    - propItem: {fileID: -3771094277561278089, guid: 30f6b6e51f117f642b0ee46983cc2ee0, type: 3}
       propWeight: 1
-    - propTag: prop3
+    - propItem: {fileID: -3172499506309679609, guid: 6edb312d2944a134d8535bc7521fed59, type: 3}
       propWeight: 1
-    - propTag: prop4
+    - propItem: {fileID: -5075375654687884075, guid: ab700aa8544483346a9ae51110354ea9, type: 3}
       propWeight: 3
-    - propTag: prop14
+    - propItem: {fileID: -7360161564239851115, guid: a7c6c147f498dea48b07370b3fb0b5a1, type: 3}
       propWeight: 2
-    - propTag: prop15
+    - propItem: {fileID: -3508114621784678113, guid: 28aeb13e949d4654eb0ae760d7ce343d, type: 3}
       propWeight: 5
-  - tag: 3
+  - tileItem: {fileID: -5005945772990844606, guid: 2d7b6a24c6e67c141b0915dee5bdc1ac, type: 3}
     tileBase: {fileID: 11400000, guid: e686ab526f0c88540824caeabed026d0, type: 2}
     spawnChance: 1
     propDensity: 0.02
     allowedProps:
-    - propTag: prop0
+    - propItem: {fileID: -4148935994648048822, guid: e2672df99f9522c43aca837b1ea319db, type: 3}
       propWeight: 1
-    - propTag: prop1
+    - propItem: {fileID: -8193202167970217452, guid: 8b0e3247b07cb9a47a51e3a6eeac141a, type: 3}
       propWeight: 1
-    - propTag: prop2
+    - propItem: {fileID: -3771094277561278089, guid: 30f6b6e51f117f642b0ee46983cc2ee0, type: 3}
       propWeight: 1
-    - propTag: prop3
+    - propItem: {fileID: -3172499506309679609, guid: 6edb312d2944a134d8535bc7521fed59, type: 3}
       propWeight: 1
-    - propTag: prop10
+    - propItem: {fileID: 7332924995719860354, guid: 26e14ab6e0896994696864bb3e001231, type: 3}
       propWeight: 6
-    - propTag: prop13
+    - propItem: {fileID: -6219713729403553725, guid: f938974f4a7d7f6478dbcc269a6e3951, type: 3}
       propWeight: 2
-    - propTag: prop17
+    - propItem: {fileID: 5190753947922517996, guid: 490e1e2659626374a8dc93805660a60b, type: 3}
       propWeight: 2
-  - tag: 4
+  - tileItem: {fileID: -1165681332759996732, guid: 203d3c6387a38c94dbbea760d1686515, type: 3}
     tileBase: {fileID: 11400000, guid: 4e2cec90ed7a9244e8ae13014fbbdfc2, type: 2}
     spawnChance: 1
     propDensity: 0.02
     allowedProps:
-    - propTag: prop0
+    - propItem: {fileID: -4148935994648048822, guid: e2672df99f9522c43aca837b1ea319db, type: 3}
       propWeight: 1
-    - propTag: prop1
+    - propItem: {fileID: -8193202167970217452, guid: 8b0e3247b07cb9a47a51e3a6eeac141a, type: 3}
       propWeight: 1
-    - propTag: prop2
+    - propItem: {fileID: -3771094277561278089, guid: 30f6b6e51f117f642b0ee46983cc2ee0, type: 3}
       propWeight: 1
-    - propTag: prop3
+    - propItem: {fileID: -3172499506309679609, guid: 6edb312d2944a134d8535bc7521fed59, type: 3}
       propWeight: 1
-    - propTag: prop4
+    - propItem: {fileID: 6225464111935786722, guid: 6936485e6340f924c9110cd1169d107b, type: 3}
       propWeight: 1
-    - propTag: prop12
+    - propItem: {fileID: 1923838213835105668, guid: b8f97f74e36efd64faad854b858f7247, type: 3}
       propWeight: 1
-    - propTag: prop16
+    - propItem: {fileID: 1941350638448801811, guid: 9c90e4a5c0cc4064da333fa810f116f6, type: 3}
       propWeight: 3
   biomeResolution: 2
   currentChunkCoord: {x: 0, y: 0}

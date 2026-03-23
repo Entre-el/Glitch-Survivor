@@ -31,8 +31,7 @@ public class KnifeController : WeaponController
             float offsetMultiplier = (i - (knifeCount - 1) / 2f); 
             Vector3 spawnOffset = perpendicular * (offsetMultiplier * spreadDistance);
 
-            GameObject spawnedKnife = ObjectPoolManager.Instance.Get(prefab);
-            spawnedKnife.transform.position = transform.position + spawnOffset;
+            GameObject spawnedKnife = ObjectPoolManager.Instance.Get(prefab,transform.position + spawnOffset,Quaternion.Euler(0,0,-90));
             spawnedKnife.GetComponent<KnifeBehaviour>().DirectionChecker(pm.lastMoveVector);
             yield return new WaitForSeconds(spawnDelay);
         }

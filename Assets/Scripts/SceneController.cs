@@ -34,7 +34,7 @@ public class SceneController : MonoBehaviour
     private IEnumerator HardcoreLoadSequence(SceneSO sceneData)
     {
         loadingScreen.SetActive(true);
-        
+        loadingSlider.value = 0f;
         // 准备一个安全的取词器（防呆设计：防止策划在 SO 里少填了文字导致数组越界报错）
         string GetLog(int index, string fallback) 
         {
@@ -48,43 +48,29 @@ public class SceneController : MonoBehaviour
 
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneData.sceneName);
         asyncLoad.allowSceneActivation = false; 
-
-        // 【阶段 1】：后台底层场景加载
+        loadingSlider.value = 0.1f;
         loadingText.SetText(GetLog(0, "正在读取底层场景资产..."));
         while (asyncLoad.progress < 0.9f) 
         { 
             yield return null; 
         }
-
-        // 【阶段 2】：分配对象池内存
+        loadingSlider.value = 0.2f;
         loadingText.SetText(GetLog(1, "正在预分配对象池内存区块..."));
         yield return null; // 极其关键：必须等一帧，让上面的 UI 文字真正在屏幕上渲染出来！
-        
+        loadingSlider.value = 0.3f;
         // 开始执行产生巨大运算量的代码
         if (sceneData.requiredItems != null && sceneData.requiredItems.Length > 0)
         {
             ObjectPoolManager.Instance.InitializePools(sceneData.requiredItems.Select(p => p.gameObject).ToArray());
         }
-        
-        // 【阶段 3】：大地图与寻路网格构建
-        loadingText.SetText(GetLog(2, "构建程序化大地图与碰撞体..."));
-        yield return null; // 再次让出控制权，刷新 UI
-        
-        // TODO: MapController.Instance.GenerateMap();
-        // TODO: AStarPathfinder.Instance.Scan();
-
-        // 【阶段 4】：无情清扫战场
-        loadingText.SetText(GetLog(3, "执行强制 GC 内存碎片回收..."));
+        loadingSlider.value = 0.9f;
+        loadingText.SetText(GetLog(2, "执行强制 GC 内存碎片回收..."));
         yield return null; 
         System.GC.Collect();
-
-        // ==========================================
-        // 序列执行完毕
-        // ==========================================
-
+        loadingSlider.value = 1f;
         loadingText.SetText(GetLog(4, "系统重组完毕。进入实战。"));
         yield return new WaitForSeconds(0.15f); // 故意停留极其短暂的瞬间，营造一种“系统跑得太快了”的错觉
-        
+        AudioManager.instance.CrossfadeBGM(sceneData.sceneBGM,sceneData.cutInDuration);
         asyncLoad.allowSceneActivation = true;
     }
 }
