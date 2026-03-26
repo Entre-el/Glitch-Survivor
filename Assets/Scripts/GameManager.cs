@@ -1,14 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-
-public class GameManager : MonoBehaviour
-{
-    public static GameManager instance;
     public enum GameState
     {
         Playing,
@@ -17,12 +11,15 @@ public class GameManager : MonoBehaviour
         Win,
         LevelingUp
     }
+public class GameManager : MonoBehaviour
+{
+    public static GameManager instance;
     public GameState currentGameState;
     public GameState previousGameState;
     [Header("Damage Text Settings")]
     public Canvas damageTextCanvas;
+    public GameObject textObject;
     public float textFrontSize;
-    public TMP_FontAsset textFont;
     public Camera referenceCamera;
     [Header("Screens")]
     public GameObject pauseScreens;
@@ -67,13 +64,19 @@ public class GameManager : MonoBehaviour
         if (instance is null)
         {
             instance = this;
+            EventCenter.AddListener(EventDefine.OnGameStart, OnGameStart);
+            EventCenter.AddListener(EventDefine.OnGameOver, OnGameOver);
+            EventCenter.AddListener(EventDefine.OnGameWin, OnGameWin);
+            EventCenter.AddListener(EventDefine.OnGamePause, OnGamePause);
+            EventCenter.AddListener(EventDefine.OnGameResume, OnGameResume);
+            EventCenter.AddListener(EventDefine.OnGameRestart, OnGameRestart);
+            EventCenter.AddListener(EventDefine.OnGameQuit, OnGameQuit);
         }
         else
         {
             Debug.LogWarning($"Multiple instances of GameManager detected. Destroying duplicate.");
             Destroy(gameObject);
         }
-        DisableScreens();
     }
     void Update()
     {
@@ -141,7 +144,6 @@ public class GameManager : MonoBehaviour
             ChangeState(previousGameState);
             Time.timeScale = 1f;
             AudioManager.instance.bgmSource.pitch = 1f;
-            DisableScreens();
             Debug.Log($"Game Resumed");
         }
     }
@@ -159,51 +161,33 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-    void DisableScreens()
-    {
-        pauseScreens.SetActive(false);
-        resultsScreen.SetActive(false);
-        levelUpScreen.SetActive(false);
-        winScreen.SetActive(false);
-    }
-    public void GameOver()
+    public void OnGameOver()
     {
         TimeSurvivedDisplay.text = stopwatchDisplay.text;
-        AudioManager.instance.CrossfadeBGM(gameOverBGM,cutInDuration);
+        AudioManager.instance.CrossfadeBGM("GameOver",cutInDuration);
         ChangeState(GameState.GameOver);
     }
-    public void WinGame()
+    public void OnWinGame()
     {
         TimeSurvivedDisplay.text = stopwatchDisplay.text;
-        AudioManager.instance.CrossfadeBGM(winBGM,cutInDuration);
+        AudioManager.instance.CrossfadeBGM("GameWin",cutInDuration);
         ChangeState(GameState.Win);
     }
-    void DisplayResults()
+    public void OnGamePause()
+    {
+        ChangeState(GameState.Paused);
+    }
+    public void OnGameResume()
+    {
+        ChangeState(GameState.Playing);
+    }
+    public void OnGameRestart()
     {
         resultsScreen.SetActive(true);
     }
     void DisplayWin()
     {   
-        if (winScreen is null || winCharacterIcon is null || chosenCharacterIcon is null || winCharacterName is null || 
-            chosenCharacterName is null || winLevelReachedDisplay is null || levelReachedDisplay is null ||
-            winTimeSurvivedDisplay is null || TimeSurvivedDisplay is null) return;
-
-        winCharacterIcon.sprite = chosenCharacterIcon.sprite;
-        winCharacterName.text = chosenCharacterName.text;
-        winLevelReachedDisplay.text = levelReachedDisplay.text;
-        winTimeSurvivedDisplay.text = TimeSurvivedDisplay.text;
-        
-        for (int i = 0; i < chosenWeaponIcons.Count && i < winChosenWeaponIcons.Count; i++)
-        {
-            if (winChosenWeaponIcons[i] != null && chosenWeaponIcons[i] != null)
-                winChosenWeaponIcons[i].sprite = chosenWeaponIcons[i].sprite;
-        }
-        for (int j = 0; j < chosenPassiveIcons.Count && j < winChosenPassiveIcons.Count; j++)
-        {
-            if (winChosenPassiveIcons[j] != null && chosenPassiveIcons[j] != null)
-                winChosenPassiveIcons[j].sprite = chosenPassiveIcons[j].sprite;
-        }
-        winScreen.SetActive(true);
+        WinScreen.SetActive(true);
     }
     public void AssignChosenCharacterUI(CharacterScriptableObject character)
     {
@@ -276,8 +260,11 @@ public class GameManager : MonoBehaviour
 
 IEnumerator GenerateDamageTextCoroutine(int damage, Transform target, float duration, float speed)
     {
-        GameObject textObject = ObjectPoolManager.Instance.Get(damageTextCanvas.gameObject);
-          
+        if (!damageTextCanvas || !textObject)
+        {
+            Debug.LogError($"DamageTextCanvas or textObject is not assigned!");
+            yield break;
+        }
         TextMeshPro textMesh = textObject.GetComponent<TextMeshPro>();
         if(textMesh is null)
         {
@@ -322,5 +309,14 @@ IEnumerator GenerateDamageTextCoroutine(int damage, Transform target, float dura
 
         textMesh.color = new Color(textMesh.color.r, textMesh.color.g, textMesh.color.b, 0f);
         
+    }
+    public void QuitGame()
+    {
+        EventCenter.Broadcast(EventDefine.OnGameQuit);
+        #if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+        #else
+        Application.Quit();
+        #endif
     }
 }

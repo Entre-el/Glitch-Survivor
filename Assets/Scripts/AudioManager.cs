@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager instance { get; private set; }
@@ -40,8 +39,9 @@ public class AudioManager : MonoBehaviour
         sfxSource.pitch = randomizePitch ? Random.Range(0.9f, 1.1f) : 1f;
         sfxSource.PlayOneShot(clip);
     }
-    public void PlayBGM(AudioClip clip)
+    public void PlayBGM(string clipName)
     {
+        AudioClip clip = GetClipByName(clipName);
         if (!clip || bgmSource.clip == clip) return; // 如果正在播这首，就不管它
         bgmSource.clip = clip;
         bgmSource.loop = true;
@@ -66,8 +66,9 @@ public class AudioManager : MonoBehaviour
         bgmSource.Stop();
         bgmSource.volume = startVolume;
     }
-    public void CrossfadeBGM(AudioClip newClip, float fadeDuration = 2.0f)
+    public void CrossfadeBGM(string newClipName, float fadeDuration = 2.0f)
     {
+        AudioClip newClip = GetClipByName(newClipName);
         if (bgmSource.clip == newClip) return;
         StartCoroutine(CrossfadeCoroutine(newClip, fadeDuration));
     }
@@ -117,5 +118,16 @@ public class AudioManager : MonoBehaviour
         pickupSource.PlayOneShot(clip);
         currentPickupPitch = Mathf.Min(currentPickupPitch + 0.05f, 2.0f);
         lastPickupTime = Time.time;
+    }
+    public AudioClip GetClipByName(string clipName)
+    {
+        if(string.IsNullOrEmpty(clipName)) return null;
+        AudioClip clip = Resources.Load<AudioClip>($"BGM/{clipName}.mp3");
+        if(clip == null)
+        {
+            Debug.LogError($"AudioClip {clipName} not found");
+            return null;
+        }
+        return clip;
     }
 }

@@ -684,6 +684,107 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &71484811
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 71484815}
+  - component: {fileID: 71484814}
+  - component: {fileID: 71484813}
+  - component: {fileID: 71484812}
+  m_Layer: 5
+  m_Name: DmgCanvas
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &71484812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 71484811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.GraphicRaycaster
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+--- !u!114 &71484813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 71484811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.CanvasScaler
+  m_UiScaleMode: 0
+  m_ReferencePixelsPerUnit: 100
+  m_ScaleFactor: 1
+  m_ReferenceResolution: {x: 800, y: 600}
+  m_ScreenMatchMode: 0
+  m_MatchWidthOrHeight: 0
+  m_PhysicalUnit: 3
+  m_FallbackScreenDPI: 96
+  m_DefaultSpriteDPI: 96
+  m_DynamicPixelsPerUnit: 1
+  m_PresetInfoIsWorld: 0
+--- !u!223 &71484814
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 71484811}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 0
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
+--- !u!224 &71484815
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 71484811}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0, y: 0}
 --- !u!1 &87711287
 GameObject:
   m_ObjectHideFlags: 0
@@ -747,154 +848,80 @@ MonoBehaviour:
       isGathered: 1
       difficultyLevel: 0
     - enemysList:
-      - enemyPrefab: {fileID: 1468309060539859647, guid: 4775da15f28597d4cad237b99ee09eea, type: 3}
+      - enemyPrefab: {fileID: 5707308963716222226, guid: a58676795aeb74f4f864528b69736e8c, type: 3}
         enemyCount: 5
       isGathered: 1
       difficultyLevel: 0
     - enemysList:
-      - enemyPrefab: {fileID: 1468309060539859647, guid: 4775da15f28597d4cad237b99ee09eea, type: 3}
+      - enemyPrefab: {fileID: 5707308963716222226, guid: e2bb2ba1d4edfa349b87a37112492177, type: 3}
         enemyCount: 10
       isGathered: 0
       difficultyLevel: 0
   - waveName: Wave2
     enemyGroups:
     - enemysList:
-      - enemyPrefab: {fileID: 1468309060539859647, guid: 4775da15f28597d4cad237b99ee09eea, type: 3}
+      - enemyPrefab: {fileID: 5707308963716222226, guid: 18815829f9768864b96f88a9418c6149, type: 3}
         enemyCount: 15
-      - enemyPrefab: {fileID: 5707308963716222226, guid: e2bb2ba1d4edfa349b87a37112492177, type: 3}
+      - enemyPrefab: {fileID: 5707308963716222226, guid: 8ee3b6ffa2f038241bee8113f407dd9a, type: 3}
         enemyCount: 1
       isGathered: 0
       difficultyLevel: 0
     - enemysList:
-      - enemyPrefab: {fileID: 0}
+      - enemyPrefab: {fileID: 5707308963716222226, guid: 48469104c8c6c11458756c0ff05ac9f6, type: 3}
         enemyCount: 20
-      - enemyPrefab: {fileID: 0}
+      - enemyPrefab: {fileID: 5707308963716222226, guid: 8de4b3f8c5c2c7e438eb1107d447d43d, type: 3}
+        enemyCount: 1
+      - enemyPrefab: {fileID: 5707308963716222226, guid: 62be6a115b0f4ff4a9332dcaf5193bbc, type: 3}
         enemyCount: 1
       isGathered: 0
       difficultyLevel: 0
-    - enemysList:
-      - enemyPrefab: {fileID: 0}
-        enemyCount: 3
-      - enemyPrefab: {fileID: 0}
-        enemyCount: 1
-      isGathered: 0
-      difficultyLevel: 0
-  - waveName: Wave3
-    enemyGroups:
-    - enemysList:
-      - enemyPrefab: {fileID: 0}
-        enemyCount: 5
-      - enemyPrefab: {fileID: 0}
-        enemyCount: 20
-      - enemyPrefab: {fileID: 0}
-        enemyCount: 1
-      isGathered: 1
-      difficultyLevel: 0
-    - enemysList:
-      - enemyPrefab: {fileID: 0}
-        enemyCount: 1
-      - enemyPrefab: {fileID: 0}
-        enemyCount: 10
-      isGathered: 0
-      difficultyLevel: 0
-    - enemysList:
-      - enemyPrefab: {fileID: 0}
-        enemyCount: 2
-      - enemyPrefab: {fileID: 0}
-        enemyCount: 5
-      - enemyPrefab: {fileID: 0}
-        enemyCount: 10
-      isGathered: 1
-      difficultyLevel: 0
-    - enemysList:
-      - enemyPrefab: {fileID: 0}
-        enemyCount: 3
-      - enemyPrefab: {fileID: 0}
-        enemyCount: 15
-      isGathered: 1
-      difficultyLevel: 0
-  - waveName: Wave4
-    enemyGroups:
-    - enemysList:
-      - enemyPrefab: {fileID: 0}
-        enemyCount: 20
-      - enemyPrefab: {fileID: 0}
-        enemyCount: 5
-      isGathered: 1
-      difficultyLevel: 0
-    - enemysList:
-      - enemyPrefab: {fileID: 0}
-        enemyCount: 2
-      isGathered: 1
-      difficultyLevel: 0
-    - enemysList:
-      - enemyPrefab: {fileID: 0}
-        enemyCount: 1
-      - enemyPrefab: {fileID: 0}
-        enemyCount: 3
-      isGathered: 1
-      difficultyLevel: 0
-  - waveName: Wave5
-    enemyGroups:
-    - enemysList:
-      - enemyPrefab: {fileID: 0}
-        enemyCount: 1
-      - enemyPrefab: {fileID: 0}
-        enemyCount: 5
-      isGathered: 1
-      difficultyLevel: 0
-    - enemysList:
-      - enemyPrefab: {fileID: 0}
-        enemyCount: 3
-      - enemyPrefab: {fileID: 0}
-        enemyCount: 3
-      - enemyPrefab: {fileID: 0}
-        enemyCount: 20
-      isGathered: 1
-      difficultyLevel: 0
-    - enemysList:
-      - enemyPrefab: {fileID: 0}
-        enemyCount: 10
-      - enemyPrefab: {fileID: 0}
-        enemyCount: 5
-      - enemyPrefab: {fileID: 0}
-        enemyCount: 20
-      isGathered: 1
-      difficultyLevel: 0
-  - waveName: Wave6
-    enemyGroups:
-    - enemysList:
-      - enemyPrefab: {fileID: 0}
-        enemyCount: 10
-      - enemyPrefab: {fileID: 0}
-        enemyCount: 10
-      isGathered: 1
-      difficultyLevel: 0
-    - enemysList:
-      - enemyPrefab: {fileID: 0}
-        enemyCount: 20
-      - enemyPrefab: {fileID: 0}
-        enemyCount: 5
-      - enemyPrefab: {fileID: 0}
-        enemyCount: 30
-      isGathered: 1
-      difficultyLevel: 0
-    - enemysList:
-      - enemyPrefab: {fileID: 0}
-        enemyCount: 10
-      - enemyPrefab: {fileID: 0}
-        enemyCount: 20
-      isGathered: 0
-      difficultyLevel: 0
-  - waveName: BossWave
-    enemyGroups:
-    - enemysList:
-      - enemyPrefab: {fileID: 0}
-        enemyCount: 3
-      - enemyPrefab: {fileID: 0}
-        enemyCount: 1
-      isGathered: 0
-      difficultyLevel: 0
+--- !u!1 &115627933
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 115627935}
+  - component: {fileID: 115627934}
+  m_Layer: 0
+  m_Name: SceneController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &115627934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 115627933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e1dcc91535049c4f8c2b07efb5f62ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SceneController
+  loadingScreen: {fileID: 0}
+  loadingSlider: {fileID: 0}
+  loadingText: {fileID: 0}
+--- !u!4 &115627935
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 115627933}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &116102292
 GameObject:
   m_ObjectHideFlags: 0
@@ -11217,9 +11244,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   currentGameState: 0
   previousGameState: 0
-  damageTextCanvas: {fileID: 360269418}
+  damageTextCanvas: {fileID: 71484814}
+  textObject: {fileID: 5043350069779382485, guid: 9f7ab3d5ec16f9e46b3d83e7b8b37757, type: 3}
   textFrontSize: 20
-  textFont: {fileID: 11400000, guid: d600d4aba5def6347b48dff10f6937f1, type: 2}
   referenceCamera: {fileID: 519420031}
   pauseScreens: {fileID: 584142075}
   resultsScreen: {fileID: 742423756}
@@ -11685,7 +11712,7 @@ Transform:
   m_GameObject: {fileID: 1743202005}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10.81244, y: -11.0814, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -13586,3 +13613,5 @@ SceneRoots:
   - {fileID: 386783621}
   - {fileID: 1530993309}
   - {fileID: 1743202009}
+  - {fileID: 115627935}
+  - {fileID: 71484815}

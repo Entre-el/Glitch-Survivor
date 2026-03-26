@@ -60,6 +60,7 @@ public class EnemySpawner : MonoBehaviour
     public List<Wave> waves;
     private bool isDone = false;
     Transform player;
+    PlayerStats playerStats;
     void Start()
     {
         isDone = false;
@@ -67,6 +68,7 @@ public class EnemySpawner : MonoBehaviour
         player = GameObject.FindAnyObjectByType<PlayerMovement>().transform;
         // 游戏开始，直接启动刷怪流水线！
         StartCoroutine(SpawnProcess());
+        playerStats = player.GetComponent<PlayerStats>();
     }
 
     void Update()
@@ -75,7 +77,7 @@ public class EnemySpawner : MonoBehaviour
         {
             if(enemiesAlive <= 0)
             {
-                player.GetComponent<PlayerStats>().Win();
+                playerStats.Win();
                 GameManager.instance.WinGame();
             }
         }

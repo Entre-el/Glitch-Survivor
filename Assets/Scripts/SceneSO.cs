@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 [CreateAssetMenu(fileName = "NewLevelData", menuName = "GameConfig/Scene Data")]
 public class SceneSO : ScriptableObject
 {
@@ -13,8 +14,8 @@ public class SceneSO : ScriptableObject
 
     [Header("本关底层依赖")]
     public PoolItem[] requiredItems; // 把上一课的对象池配置也整合进来！
+    public string[] requiredPanelNames;
     [Header("Audio")]
-    public AudioClip sceneBGM;
+    public string sceneBGM;
     public float cutInDuration = 2f;
-
 }
