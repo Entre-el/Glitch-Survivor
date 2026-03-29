@@ -9,7 +9,7 @@ public class BasePanel : MonoBehaviour
     {
         if (!hasInit)
         {
-            UIManger.instance.RegisterPanel(this);
+            UIManger.Instance.RegisterPanel(this);
             OnInit();
             hasInit = true;
         }

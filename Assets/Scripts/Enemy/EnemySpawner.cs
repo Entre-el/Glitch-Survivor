@@ -9,16 +9,16 @@ public class EnemySpawner : MonoBehaviour
     [Header("Audio")]
     public AudioClip finalWaveBGM;
     public float cutInDuration = 2f;
-    public static EnemySpawner instance;
+    public static EnemySpawner Instance;
     void Awake()
     {
-        if (instance != null && instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(this.gameObject);
         }
         else
         {
-            instance = this;
+            Instance = this;
         }
     currentGroupCount = 0;
     currentWaveCount = 0;
@@ -78,7 +78,6 @@ public class EnemySpawner : MonoBehaviour
             if(enemiesAlive <= 0)
             {
                 playerStats.Win();
-                GameManager.instance.WinGame();
             }
         }
     }
@@ -113,7 +112,7 @@ public class EnemySpawner : MonoBehaviour
             currentWaveCount++;
             if(currentWaveCount == waves.Count - 1)
             {
-                AudioManager.instance.CrossfadeBGM(finalWaveBGM,cutInDuration);
+                EventCenter.Broadcast(EventDefine.OnBossDied);
             }
         }
         Debug.Log($"所有波次的怪物生成完毕");

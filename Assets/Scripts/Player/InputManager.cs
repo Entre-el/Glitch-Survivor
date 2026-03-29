@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
-    public static InputManager instance { get; private set; }
+    public static InputManager Instance { get; private set; }
     
     [Header("移动数据 (左摇杆/键盘)")]
     public Vector2 movementVector { get; private set; }
@@ -15,7 +15,7 @@ public class InputManager : MonoBehaviour
 
     private void Awake()
     {
-        if(instance is null) instance = this;
+        if(Instance is null) Instance = this;
         else Destroy(gameObject);
     }
 

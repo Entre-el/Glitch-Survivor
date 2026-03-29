@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CharacterScriptableObject : ScriptableObject
+public class CharacterSO : ScriptableObject
 {
     [SerializeField]
     Sprite icon;

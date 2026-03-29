@@ -11,7 +11,7 @@ public class HealthPotion : PickUp, ICollectible
         if (player != null)
         {
             player.RestoreHealth(healthToRestore);
-            AudioManager.instance.PlaySFX(healthSFX,false);
+            AudioManager.Instance.PlaySFX(healthSFX,false);
             Destroy(gameObject);
         }
     }

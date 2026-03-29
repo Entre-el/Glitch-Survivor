@@ -11,7 +11,7 @@ public class ExpericenceGem : PickUp, ICollectible
         if (player != null)
         {
             player.IncreaseExperience(experienceGranted);
-            AudioManager.instance.PlayPickupSFX(experienceSFX);
+            AudioManager.Instance.PlayPickupSFX(experienceSFX);
             Destroy(gameObject); 
         }
     }

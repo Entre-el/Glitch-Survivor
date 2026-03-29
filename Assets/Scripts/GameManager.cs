@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -13,7 +14,7 @@ using UnityEngine.UI;
     }
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance;
+    public static GameManager Instance;
     public GameState currentGameState;
     public GameState previousGameState;
     [Header("Damage Text Settings")]
@@ -61,66 +62,28 @@ public class GameManager : MonoBehaviour
     public GameObject playerObject;
     void Awake()
     {
-        if (instance is null)
+        if (Instance is null)
         {
-            instance = this;
-            EventCenter.AddListener(EventDefine.OnGameStart, OnGameStart);
-            EventCenter.AddListener(EventDefine.OnGameOver, OnGameOver);
-            EventCenter.AddListener(EventDefine.OnGameWin, OnGameWin);
-            EventCenter.AddListener(EventDefine.OnGamePause, OnGamePause);
-            EventCenter.AddListener(EventDefine.OnGameResume, OnGameResume);
-            EventCenter.AddListener(EventDefine.OnGameRestart, OnGameRestart);
-            EventCenter.AddListener(EventDefine.OnGameQuit, OnGameQuit);
+            Instance = this;
+            EventCenter.AddListener(EventDefine.OnPlayerDied, OnPlayerDied);
         }
         else
         {
-            Debug.LogWarning($"Multiple instances of GameManager detected. Destroying duplicate.");
+            Debug.LogWarning($"Multiple Instances of GameManager detected. Destroying duplicate.");
             Destroy(gameObject);
         }
     }
-    void Update()
+
+    private void OnPlayerDied()
     {
-        switch (currentGameState)
-        {
-            case GameState.Playing:
-                CheckForPauseAndResume();
-                UpdateStopwatch();
-                break;
-            case GameState.Paused:
-                CheckForPauseAndResume();
-                break;
-            case GameState.GameOver:
-                if (!isGameOver)
-                {
-                    isGameOver = true;
-                    Time.timeScale = 0f;
-                    Debug.Log($"Game Over");
-                    DisplayResults();
-                }
-                break;
-            case GameState.Win:
-                if (!isWin)
-                {
-                    isWin = true;
-                    Time.timeScale = 0f;
-                    Debug.Log($"Win");
-                    DisplayWin();
-                }
-                break;
-            case GameState.LevelingUp:
-                if (!isLevelingUp)
-                {
-                    isLevelingUp = true;
-                    Time.timeScale = 0f;
-                    levelUpScreen.SetActive(true);
-                    Debug.Log($"Level Up!");
-                }
-                break;
-            default:
-                Time.timeScale = 1f;
-                break;
-        }
+        SaveBattleData();
+        EventCenter.Broadcast(EventDefine.OnGameOver);
     }
+    private void SaveBattleData()
+    {
+        
+    }
+
     public void ChangeState(GameState newState)
     {
         currentGameState = newState;
@@ -132,7 +95,7 @@ public class GameManager : MonoBehaviour
             previousGameState = currentGameState;
             ChangeState(GameState.Paused);
             Time.timeScale = 0f;
-            AudioManager.instance.bgmSource.pitch = 0.5f;
+            AudioManager.Instance.bgmSource.pitch = 0.5f;
             pauseScreens.SetActive(true);
             Debug.Log($"Game Paused");
         }
@@ -143,7 +106,7 @@ public class GameManager : MonoBehaviour
         {
             ChangeState(previousGameState);
             Time.timeScale = 1f;
-            AudioManager.instance.bgmSource.pitch = 1f;
+            AudioManager.Instance.bgmSource.pitch = 1f;
             Debug.Log($"Game Resumed");
         }
     }
@@ -164,13 +127,13 @@ public class GameManager : MonoBehaviour
     public void OnGameOver()
     {
         TimeSurvivedDisplay.text = stopwatchDisplay.text;
-        AudioManager.instance.CrossfadeBGM("GameOver",cutInDuration);
+        AudioManager.Instance.CrossfadeBGM("GameOver",cutInDuration);
         ChangeState(GameState.GameOver);
     }
     public void OnWinGame()
     {
         TimeSurvivedDisplay.text = stopwatchDisplay.text;
-        AudioManager.instance.CrossfadeBGM("GameWin",cutInDuration);
+        AudioManager.Instance.CrossfadeBGM("GameWin",cutInDuration);
         ChangeState(GameState.Win);
     }
     public void OnGamePause()
@@ -181,15 +144,7 @@ public class GameManager : MonoBehaviour
     {
         ChangeState(GameState.Playing);
     }
-    public void OnGameRestart()
-    {
-        resultsScreen.SetActive(true);
-    }
-    void DisplayWin()
-    {   
-        WinScreen.SetActive(true);
-    }
-    public void AssignChosenCharacterUI(CharacterScriptableObject character)
+    public void AssignChosenCharacterUI(CharacterSO character)
     {
         chosenCharacterIcon.sprite = character.Icon;
         chosenCharacterName.text = character.Name;
@@ -253,9 +208,9 @@ public class GameManager : MonoBehaviour
     }
     public static void GenerateDamageText(int damage, Transform target, float duration = 1f, float speed = 1f)
     {
-        if (!instance.referenceCamera) instance.referenceCamera = Camera.main;
+        if (!Instance.referenceCamera) Instance.referenceCamera = Camera.main;
         
-        instance.StartCoroutine(instance.GenerateDamageTextCoroutine(damage, target, duration, speed));
+        Instance.StartCoroutine(Instance.GenerateDamageTextCoroutine(damage, target, duration, speed));
     }
 
 IEnumerator GenerateDamageTextCoroutine(int damage, Transform target, float duration, float speed)

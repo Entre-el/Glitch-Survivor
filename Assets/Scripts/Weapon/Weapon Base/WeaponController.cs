@@ -8,7 +8,7 @@ public class WeaponController : MonoBehaviour
     public GameObject prefab;
     public float currentCooldown;
     protected PlayerMovement pm;
-    public WeaponScriptableObject weaponData;
+    public WeaponSO weaponData;
 
     protected virtual void Start()
     {

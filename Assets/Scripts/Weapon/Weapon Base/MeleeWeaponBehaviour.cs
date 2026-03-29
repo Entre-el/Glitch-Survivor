@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class MeleeWeaponBehaviour : MonoBehaviour
 {
-    public WeaponScriptableObject weaponData;
+    public WeaponSO weaponData;
     public float destroyAfterSeconds;
     protected float currentDamage;
     protected float currentCooldownDuration;

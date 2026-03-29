@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System;
 public class UIManger : MonoBehaviour
 {
-    public static UIManger instance;
+    public static UIManger Instance;
     private Dictionary<Type, BasePanel> panelDictionary = new (20);
     private Stack<BasePanel> panelStack = new (20);
     public void Awake()
     {
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
             DontDestroyOnLoad(gameObject);
         }
     }

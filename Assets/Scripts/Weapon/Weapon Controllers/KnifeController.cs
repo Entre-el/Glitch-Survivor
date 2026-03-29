@@ -17,7 +17,7 @@ public class KnifeController : WeaponController
     protected override void Attack()
     {
         base.Attack();
-        AudioManager.instance.PlaySFX(knifeSFX,true);
+        AudioManager.Instance.PlaySFX(knifeSFX,true);
         StartCoroutine(FireKnivesCoroutine());
     }
 

@@ -34,7 +34,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        if(GameManager.instance.isGameOver) return;
+        if(GameManager.Instance.isGameOver) return;
         InputManagement();
         AimManagement();
     }
@@ -46,7 +46,7 @@ public class PlayerMovement : MonoBehaviour
 
     void InputManagement()
     {
-        moveDir = InputManager.instance != null ? InputManager.instance.movementVector : Vector2.zero;
+        moveDir = InputManager.Instance != null ? InputManager.Instance.movementVector : Vector2.zero;
 
         if (moveDir != Vector2.zero)
         {
@@ -61,7 +61,7 @@ public class PlayerMovement : MonoBehaviour
         Vector2 finalAimDirection = Vector2.right; // 默认朝右
 
         // 1. 获取输入方向
-        if (InputManager.instance.isUsingMouseToAim)
+        if (InputManager.Instance.isUsingMouseToAim)
         {
             Vector3 playerScreenPos = mainCam.WorldToScreenPoint(transform.position);
             Vector3 mousePos = Input.mousePosition;
@@ -69,7 +69,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            finalAimDirection = InputManager.instance.aimVector;
+            finalAimDirection = InputManager.Instance.aimVector;
         }
 
         // 2. 处理旋转与准星位置
@@ -86,7 +86,7 @@ public class PlayerMovement : MonoBehaviour
             }
 
             // 处理准星的空间坐标
-            if (InputManager.instance.isUsingMouseToAim)
+            if (InputManager.Instance.isUsingMouseToAim)
             {
                 // 鼠标模式：将屏幕的像素坐标转化为物理世界的绝对坐标
                 Vector3 mouseWorldPos = mainCam.ScreenToWorldPoint(Input.mousePosition);

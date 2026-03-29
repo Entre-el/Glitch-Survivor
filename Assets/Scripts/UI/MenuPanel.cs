@@ -23,7 +23,7 @@ public class MenuPanel : BasePanel
     }
     private void OnExitButtonClick()
     {
-        GameManager.instance.QuitGame();
+        GameManager.Instance.QuitGame();
     }
     private void OnInstructionButtonClick()
     {

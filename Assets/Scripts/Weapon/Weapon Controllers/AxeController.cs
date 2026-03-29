@@ -18,7 +18,7 @@ public class AxeController : WeaponController
     protected override void Attack() 
     {
         base.Attack();
-        AudioManager.instance.PlaySFX(swingSFX,true);
+        AudioManager.Instance.PlaySFX(swingSFX,true);
         GameObject spawnedAxe = ObjectPoolManager.Instance.Get(prefab);
         spawnedAxe.transform.parent = transform;
 

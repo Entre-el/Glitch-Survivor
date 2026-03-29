@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 public class AudioManager : MonoBehaviour
 {
-    public static AudioManager instance { get; private set; }
+    public static AudioManager Instance { get; private set; }
 
    [Header("音源通道")]
     public AudioSource bgmSource;
@@ -23,9 +23,9 @@ public class AudioManager : MonoBehaviour
 
     private void Awake()
     {
-        if (instance is null)
+        if (Instance is null)
         {
-            instance = this;
+            Instance = this;
             DontDestroyOnLoad(gameObject);
         }
         else

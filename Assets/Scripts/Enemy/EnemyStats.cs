@@ -52,7 +52,7 @@ public class EnemyStats : MonoBehaviour
     public void TakeDamage(float dmg, Vector2 sourcePosition, float knockbackForce = 5f, float knockbackDuration = 0.2f)
     {
         currentHealth -= dmg;
-        AudioManager.instance.PlayHitSFX(hitSFX);
+        AudioManager.Instance.PlayHitSFX(hitSFX);
         StartCoroutine(DamageFlash());
         if (knockbackForce > 0)
         {
@@ -78,7 +78,7 @@ public class EnemyStats : MonoBehaviour
         isDead = true;
         GetComponent<DropRateManager>().DropItem();
         StartCoroutine(KillFade());
-        EnemySpawner.instance.OnEnemyKilled();
+        EnemySpawner.Instance.OnEnemyKilled();
     }
     private void OnCollisionStay2D(Collision2D collision)
     {

@@ -5,13 +5,13 @@ using System.Linq;
 
 public class SceneController : MonoBehaviour
 {
-    public static SceneController instance;
+    public static SceneController Instance;
     private AsyncOperation asyncLoad;
     void Awake()
     {
-        if (instance is null)
+        if (Instance is null)
         {
-            instance = this;
+            Instance = this;
             DontDestroyOnLoad(gameObject);
             EventCenter.AddListener<SceneSO>(EventDefine.OnRequestSceneChange, OnReceiveSceneChangeRequest);
         }
@@ -32,7 +32,7 @@ public class SceneController : MonoBehaviour
 
     private IEnumerator HardcoreLoadSequence(SceneSO sceneData)
     {
-        UIManger.instance.ShowPanel<LoadingPanel>();
+        UIManger.Instance.ShowPanel<LoadingPanel>();
         yield return null;
         EventCenter.Broadcast(EventDefine.OnLoadingStart, sceneData);
 
@@ -47,12 +47,17 @@ public class SceneController : MonoBehaviour
         
         EventCenter.AddListener<SceneSO>(EventDefine.OnLoadingScreenFinished, OnSceneLoadingPerformanceFinished);
     }
+    private void HandleGameOverSequence()
+    {
+        AudioManager.Instance.PlayBGM(SceneBGM.GameOver.ToString());
+        // UIManger.Instance.ShowPanel<GameOverPanel>();
+    }
     private void OnSceneLoadingPerformanceFinished(SceneSO sceneData)
     {  
         EventCenter.RemoveListener<SceneSO>(EventDefine.OnLoadingScreenFinished,OnSceneLoadingPerformanceFinished);
         asyncLoad.allowSceneActivation = true;
-        AudioManager.instance.CrossfadeBGM(sceneData.sceneBGM,sceneData.cutInDuration);
-        UIManger.instance.HidePanel<LoadingPanel>();
+        AudioManager.Instance.CrossfadeBGM(sceneData.sceneBGM,sceneData.cutInDuration);
+        UIManger.Instance.HidePanel<LoadingPanel>();
     }
 }
 public enum SceneBGM

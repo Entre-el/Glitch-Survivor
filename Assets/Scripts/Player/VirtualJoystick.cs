@@ -28,12 +28,12 @@ public class VirtualJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler,
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if(InputManager.instance != null)
+        if(InputManager.Instance != null)
         {
             if (joystickType == JoystickType.Movement)
-                InputManager.instance.isMoveJoystickActive = true;
+                InputManager.Instance.isMoveJoystickActive = true;
             else
-                InputManager.instance.isAimJoystickActive = true;
+                InputManager.Instance.isAimJoystickActive = true;
         }
         
         // 按下的瞬间立刻执行一次拖拽逻辑，实现“点哪里小圆圈瞬间飞过去”
@@ -80,9 +80,9 @@ public class VirtualJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler,
             
             // 3. 分发给大管家
             if (joystickType == JoystickType.Movement)
-                InputManager.instance.SetMovementVector(normalizedInput);
+                InputManager.Instance.SetMovementVector(normalizedInput);
             else
-                InputManager.instance.SetAimVector(normalizedInput);
+                InputManager.Instance.SetAimVector(normalizedInput);
         }
     }
 
@@ -91,16 +91,16 @@ public class VirtualJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler,
         // 抬手时小圆圈回正
         handleRect.anchoredPosition = Vector2.zero;
         
-        if(InputManager.instance != null) 
+        if(InputManager.Instance != null) 
         {
             if (joystickType == JoystickType.Movement)
             {
-                InputManager.instance.SetMovementVector(Vector2.zero);
-                InputManager.instance.isMoveJoystickActive = false; 
+                InputManager.Instance.SetMovementVector(Vector2.zero);
+                InputManager.Instance.isMoveJoystickActive = false; 
             }
             else
             {
-                InputManager.instance.isAimJoystickActive = false; 
+                InputManager.Instance.isAimJoystickActive = false; 
             }
         }
     }

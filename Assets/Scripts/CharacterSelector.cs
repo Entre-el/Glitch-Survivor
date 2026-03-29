@@ -2,13 +2,13 @@ using UnityEngine;
 
 public class CharacterSelector : MonoBehaviour
 {
-    public static CharacterSelector instance;
-    public CharacterScriptableObject charaterData;
+    public static CharacterSelector Instance;
+    public CharacterSO charaterData;
     void Awake()
     {
-        if (instance is null)
+        if (Instance is null)
         {
-            instance = this;
+            Instance = this;
             DontDestroyOnLoad(gameObject);
         }
         else
@@ -16,17 +16,17 @@ public class CharacterSelector : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    public static CharacterScriptableObject GetData()
+    public static CharacterSO GetData()
     {
-        return instance.charaterData;
+        return Instance.charaterData;
     }
-    public void SelectCharater(CharacterScriptableObject character)
+    public void SelectCharater(CharacterSO character)
     {
         charaterData = character;
     }
     public void DestroySingleton()
     {
-        instance = null;
+        Instance = null;
         Destroy(gameObject);
     }
 }

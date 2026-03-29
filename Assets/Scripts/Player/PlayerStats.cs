@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class PlayerStats : MonoBehaviour
 {
-    public CharacterScriptableObject characterData;
+    public CharacterSO characterData;
     private float currentHealth;
     private float currentMaxHealth;
     private float currentMoveSpeed;
@@ -22,9 +22,9 @@ public class PlayerStats : MonoBehaviour
         set { if(currentHealth != value)
             {
                 currentHealth = value;
-                if(GameManager.instance != null)
+                if(GameManager.Instance != null)
                 {
-                    GameManager.instance.currentHealthDisplay.text = "Health: " + currentHealth.ToString("F0");
+                    GameManager.Instance.currentHealthDisplay.text = "Health: " + currentHealth.ToString("F0");
                 }
             }
         }
@@ -35,9 +35,9 @@ public class PlayerStats : MonoBehaviour
         set { if(currentMaxHealth != value)
             {
                 currentMaxHealth = value;
-                if(GameManager.instance != null)
+                if(GameManager.Instance != null)
                 {
-                    GameManager.instance.currentHealthDisplay.text = "Health: " + currentHealth.ToString("F0") + "/" + currentMaxHealth.ToString("F0");
+                    GameManager.Instance.currentHealthDisplay.text = "Health: " + currentHealth.ToString("F0") + "/" + currentMaxHealth.ToString("F0");
                 }
             }
         }
@@ -48,9 +48,9 @@ public class PlayerStats : MonoBehaviour
         set { if(currentMoveSpeed != value)
             {
                 currentMoveSpeed = value;
-                if(GameManager.instance != null)
+                if(GameManager.Instance != null)
                 {
-                    GameManager.instance.currentMoveSpeedDisplay.text = "Move Speed: " + currentMoveSpeed.ToString("F1");
+                    GameManager.Instance.currentMoveSpeedDisplay.text = "Move Speed: " + currentMoveSpeed.ToString("F1");
                 }
             }
         }
@@ -61,9 +61,9 @@ public class PlayerStats : MonoBehaviour
         set { if(currentRecovery != value)
             {
                 currentRecovery = value;
-                if(GameManager.instance != null)
+                if(GameManager.Instance != null)
                 {
-                    GameManager.instance.currentRecoveryDisplay.text = "Recovery: " + currentRecovery.ToString("F1");
+                    GameManager.Instance.currentRecoveryDisplay.text = "Recovery: " + currentRecovery.ToString("F1");
                 }
             }
         }
@@ -74,9 +74,9 @@ public class PlayerStats : MonoBehaviour
         set { if(currentMight != value)
             {
                 currentMight = value;
-                if(GameManager.instance != null)
+                if(GameManager.Instance != null)
                 {
-                    GameManager.instance.currentMightDisplay.text = "Might: " + currentMight.ToString("F1");
+                    GameManager.Instance.currentMightDisplay.text = "Might: " + currentMight.ToString("F1");
                 }
             }
         }
@@ -87,9 +87,9 @@ public class PlayerStats : MonoBehaviour
         set { if(currentProjectileSpeed != value)
             {
                 currentProjectileSpeed = value;
-                if(GameManager.instance != null)
+                if(GameManager.Instance != null)
                 {
-                    GameManager.instance.currentProjectileSpeedDisplay.text = "Projectile Speed: " + currentProjectileSpeed.ToString("F1");
+                    GameManager.Instance.currentProjectileSpeedDisplay.text = "Projectile Speed: " + currentProjectileSpeed.ToString("F1");
                 }
             }
         }
@@ -100,9 +100,9 @@ public class PlayerStats : MonoBehaviour
         set { if(currentMagnet != value)
             {
                 currentMagnet = value;
-                if(GameManager.instance != null)
+                if(GameManager.Instance != null)
                 {
-                    GameManager.instance.currentMagnetDisplay.text = "Magnet: " + currentMagnet.ToString("F1");
+                    GameManager.Instance.currentMagnetDisplay.text = "Magnet: " + currentMagnet.ToString("F1");
                 }
             }
         }
@@ -118,7 +118,7 @@ public class PlayerStats : MonoBehaviour
     {
         public int startLevel;
         public int endLevel;
-        public int experienceCapIncrease;
+        public int experienceCap;
     } 
     InventoryManager inventory;
     public int nextWeaponIndex = 0;
@@ -131,13 +131,13 @@ public class PlayerStats : MonoBehaviour
     public AudioClip deathSFX;
     void Awake()
     {
-        if(CharacterSelector.instance != null)
+        if(CharacterSelector.Instance != null)
         {
         characterData = CharacterSelector.GetData();
         }
-        else if(characterData is null && CharacterSelector.instance is null)
+        else if(characterData is null && CharacterSelector.Instance is null)
         {
-           Debug.LogWarning("Character data not assigned and CharacterSelector instance not found. Please assign characterData in the inspector or ensure CharacterSelector is set up correctly.");
+           Debug.LogWarning("Character data not assigned and CharacterSelector Instance not found. Please assign characterData in the inspector or ensure CharacterSelector is set up correctly.");
         }
         CurrentHealth = characterData.MaxHealth;
         CurrentMaxHealth = characterData.MaxHealth;
@@ -153,14 +153,14 @@ public class PlayerStats : MonoBehaviour
     void Start()
     {
         healthBar = GetComponentInChildren<Slider>();
-        experienceCap = levelRanges[0].experienceCapIncrease;
-        GameManager.instance.currentHealthDisplay.text = "Health: " + CurrentHealth.ToString("F0") + "/" + CurrentMaxHealth.ToString("F0");
-        GameManager.instance.currentMoveSpeedDisplay.text = "Move Speed: " + CurrentMoveSpeed.ToString("F1");
-        GameManager.instance.currentRecoveryDisplay.text = "Recovery: " + CurrentRecovery.ToString("F1");
-        GameManager.instance.currentMightDisplay.text = "Might: " + CurrentMight.ToString("F1");
-        GameManager.instance.currentProjectileSpeedDisplay.text = "Projectile Speed: " + CurrentProjectileSpeed.ToString("F1");
-        GameManager.instance.currentMagnetDisplay.text = "Magnet: " + CurrentMagnet.ToString("F1");
-        GameManager.instance.AssignChosenCharacterUI(characterData);
+        experienceCap = levelRanges[0].experienceCap;
+        GameManager.Instance.currentHealthDisplay.text = "Health: " + CurrentHealth.ToString("F0") + "/" + CurrentMaxHealth.ToString("F0");
+        GameManager.Instance.currentMoveSpeedDisplay.text = "Move Speed: " + CurrentMoveSpeed.ToString("F1");
+        GameManager.Instance.currentRecoveryDisplay.text = "Recovery: " + CurrentRecovery.ToString("F1");
+        GameManager.Instance.currentMightDisplay.text = "Might: " + CurrentMight.ToString("F1");
+        GameManager.Instance.currentProjectileSpeedDisplay.text = "Projectile Speed: " + CurrentProjectileSpeed.ToString("F1");
+        GameManager.Instance.currentMagnetDisplay.text = "Magnet: " + CurrentMagnet.ToString("F1");
+        GameManager.Instance.AssignChosenCharacterUI(characterData);
         UpdateHealthBar();
         UpdateExpBar();
         UpdateLevelDisplay();
@@ -168,29 +168,21 @@ public class PlayerStats : MonoBehaviour
     public void IncreaseExperience(int amount)
     {
         experience += amount;
-        UpdateExpBar();
-        LevelUpChecker();
-    }
-    void LevelUpChecker()
-    {
         while (experience >= experienceCap)
         {
             experience -= experienceCap;
-            UpdateExpBar();
+            EventCenter.Broadcast(EventDefine.OnLevelUp);
             level++;
-            UpdateLevelDisplay();
-            int experienceCapIncrease = 0;
             foreach (LevelRange range in levelRanges)
             {
                 if (level >= range.startLevel && level <= range.endLevel)
                 {
-                    experienceCapIncrease = range.experienceCapIncrease;
+                    experienceCap = range.experienceCap;
                     break;
                 }
             }
-            experienceCap += experienceCapIncrease;
-            GameManager.instance.StartLevelUp();
         }
+        EventCenter.Broadcast(EventDefine.OnExpChanged, experience);
     }
     [Header("I-Frames")]
     public float invincibilityDuration;
@@ -213,15 +205,13 @@ public class PlayerStats : MonoBehaviour
     }
     public void Kill()
     {
-        GameManager.instance.AssignLevelReachedUI(level);
-        GameManager.instance.AssignChosenWeaponUI(inventory.weaponSlotImages,inventory.passiveItemSlotImages);
-        GameManager.instance.GameOver();
+        GameManager.Instance.AssignLevelReachedUI(level);
+        EventCenter.Broadcast(EventDefine.OnPlayerDied);
     }
     public void Win()
     {
-        GameManager.instance.AssignLevelReachedUI(level);
-        GameManager.instance.AssignChosenWeaponUI(inventory.weaponSlotImages,inventory.passiveItemSlotImages);
-        GameManager.instance.WinGame();
+        GameManager.Instance.AssignLevelReachedUI(level);
+        EventCenter.Broadcast(EventDefine.OnGameWin);
     }
     public void RestoreHealth(float amount)
     {
@@ -258,35 +248,22 @@ public class PlayerStats : MonoBehaviour
     }
     public void SpawnWeapon(GameObject weapon)
     {
-        if(nextWeaponIndex >= inventory.weaponSlots.Count - 1)
-        {
-            Debug.LogWarning("Maximum weapon slots reached. Cannot add more weapons.");
-            return;
-        }   
+       
         GameObject newWeapon = Instantiate(weapon, transform.position, Quaternion.identity);
         newWeapon.transform.SetParent(transform);
         inventory = GetComponent<InventoryManager>();
         if (inventory != null)
-        {
-            inventory.AddWeapon(nextWeaponIndex, newWeapon.GetComponent<WeaponController>());            
+        {    
             nextWeaponIndex++;
         }
     }
         public void SpawnPassiveItem(GameObject passiveItem)
     {
-        if(nextPassiveItemIndex >= inventory.passiveItemSlots.Count - 1)
-        {
-            Debug.LogWarning("Maximum passiveItem slots reached. Cannot add more passiveItems.");
-            return;
-        }   
+        
         GameObject newPassiveItem = Instantiate(passiveItem, transform.position, Quaternion.identity);
         newPassiveItem.transform.SetParent(transform);
         inventory = GetComponent<InventoryManager>();
-        if (inventory != null)
-        {
-            inventory.AddPassiveItem(nextPassiveItemIndex, newPassiveItem.GetComponent<PassiveItem>());            
-            nextPassiveItemIndex++;
-        }
+       
     }
     void UpdateHealthBar()
     {
