@@ -6,6 +6,8 @@ using Random = UnityEngine.Random;
 
 public class EnemySpawner : MonoBehaviour
 { 
+    [SerializeField]
+    private  TransformAnchorSO playerAnchor;
     [Header("Audio")]
     public AudioClip finalWaveBGM;
     public float cutInDuration = 2f;
@@ -59,16 +61,13 @@ public class EnemySpawner : MonoBehaviour
     public int roundEdgeLength;
     public List<Wave> waves;
     private bool isDone = false;
-    Transform player;
-    PlayerStats playerStats;
     void Start()
     {
         isDone = false;
         enemiesAlive = 0;
-        player = GameObject.FindAnyObjectByType<PlayerMovement>().transform;
+        
         // 游戏开始，直接启动刷怪流水线！
         StartCoroutine(SpawnProcess());
-        playerStats = player.GetComponent<PlayerStats>();
     }
 
     void Update()
@@ -77,7 +76,7 @@ public class EnemySpawner : MonoBehaviour
         {
             if(enemiesAlive <= 0)
             {
-                playerStats.Win();
+                EventCenter.Broadcast(EventDefine.OnGameWin);
             }
         }
     }
@@ -157,16 +156,16 @@ public class EnemySpawner : MonoBehaviour
         switch (edge)
         {
         case 0:
-            spawnPosition = new Vector2(player.position.x + edgeLength*randomPos, player.position.y + edgeLength);
+            spawnPosition = new Vector2(playerAnchor.Value.position.x + edgeLength*randomPos, playerAnchor.Value.position.y + edgeLength);
             break;
         case 1:
-            spawnPosition = new Vector2(player.position.x + edgeLength*randomPos, player.position.y - edgeLength);
+            spawnPosition = new Vector2(playerAnchor.Value.position.x + edgeLength*randomPos, playerAnchor.Value.position.y - edgeLength);
             break;
         case 2:
-            spawnPosition = new Vector2(player.position.x + edgeLength, player.position.y + edgeLength*randomPos);
+            spawnPosition = new Vector2(playerAnchor.Value.position.x + edgeLength, playerAnchor.Value.position.y + edgeLength*randomPos);
             break;
         case 3:
-            spawnPosition = new Vector2(player.position.x - edgeLength, player.position.y + edgeLength*randomPos);
+            spawnPosition = new Vector2(playerAnchor.Value.position.x - edgeLength, playerAnchor.Value.position.y + edgeLength*randomPos);
             break;
         default:
             throw new System.Exception($"Unexpected edge value: {edge}");

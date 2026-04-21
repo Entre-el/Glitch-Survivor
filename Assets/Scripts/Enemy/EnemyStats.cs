@@ -5,7 +5,6 @@ using UnityEngine;
 [RequireComponent(typeof(EnemyMovement))]
 public class EnemyStats : MonoBehaviour
 {
-    private PlayerMovement player = null;
     private Transform playerTransform;
     public EnemyScriptableObject enemyData;
     [HideInInspector]
@@ -26,8 +25,6 @@ public class EnemyStats : MonoBehaviour
     EnemyMovement enemyMovement;
     void Start()
     {
-            player = GameObject.FindAnyObjectByType<PlayerMovement>();
-            playerTransform = player.transform;
         sr = GetComponent<SpriteRenderer>();
         originalColor = sr.color;
         enemyMovement = GetComponent<EnemyMovement>();
@@ -40,14 +37,11 @@ public class EnemyStats : MonoBehaviour
     }
     void Update()
     {
-        if (player != null)
-        {
             float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
             if (distanceToPlayer > despawnDistance)
             {
                 ReturnEnemy();
             }
-        }
     }
     public void TakeDamage(float dmg, Vector2 sourcePosition, float knockbackForce = 5f, float knockbackDuration = 0.2f)
     {
@@ -84,8 +78,6 @@ public class EnemyStats : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            PlayerStats player = collision.gameObject.GetComponent<PlayerStats>();
-            player.TakeDamage(currentDamage);
         }
     }
     private void ReturnEnemy()

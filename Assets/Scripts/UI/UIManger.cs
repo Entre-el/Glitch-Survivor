@@ -13,13 +13,33 @@ public class UIManger : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
         }
+        BasePanel[] panels = GetComponentsInChildren<BasePanel>(true);
+        foreach (var panel in panels)
+        {
+            RegisterPanel(panel);
+            if (!panel.gameObject.activeSelf)
+            {
+                panel.gameObject.SetActive(true);
+            }
+            panel.OnHide();
+        }
     }
     public void RegisterPanel(BasePanel panel)
     {
         Type panelType = panel.GetType();
         if (!panelDictionary.ContainsKey(panelType))
         {
+            panel.OnInit();
             panelDictionary.Add(panelType, panel);
+        }
+    }
+    public void UnregisterPanel(BasePanel panel)
+    {
+        Type panelType = panel.GetType();
+        if (panelDictionary.ContainsKey(panelType))
+        {
+            panel.OnHide();
+            panelDictionary.Remove(panelType);
         }
     }
     public void ShowPanel<T>() where T : BasePanel
@@ -55,5 +75,18 @@ public class UIManger : MonoBehaviour
             BasePanel topPanel = panelStack.Pop();
             topPanel.OnHide();
         }
+    }
+    public T GetPanel<T>() where T : BasePanel
+    {
+        Type type = typeof(T);
+        if (panelDictionary.TryGetValue(type, out var panel))
+        {
+            return panel as T;
+        }
+        else
+        {
+            Debug.LogError($"UI架构严重异常：尝试获取未注册的面板 {type.Name}");
+        }
+        return null;
     }
 }

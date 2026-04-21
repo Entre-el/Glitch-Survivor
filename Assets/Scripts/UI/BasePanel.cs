@@ -5,21 +5,15 @@ public class BasePanel : MonoBehaviour
     [SerializeField]
     protected CanvasGroup canvasGroup;
     protected bool hasInit = false;
-    public virtual void Awake()
-    {
-        if (!hasInit)
-        {
-            UIManger.Instance.RegisterPanel(this);
-            OnInit();
-            hasInit = true;
-        }
-    }
     public virtual void OnInit() 
     { 
+        if (!hasInit)
+        return;
         if (canvasGroup == null)
         {
             canvasGroup = GetComponent<CanvasGroup>();
         }
+        hasInit = true;
     }
     public virtual void OnShow() 
     { 

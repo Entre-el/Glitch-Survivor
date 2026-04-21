@@ -6,7 +6,7 @@ public class LevelUpPanel : BasePanel
     public VerticalLayoutGroup upgradeOptionsLayoutGroup;
     public GameObject upgradeOptions;
     private ScriptableObject weaponOrItemData;
-    public void OnShow()
+    public override void OnShow()
     {
         base.OnShow();
         GameObject newOption = ObjectPoolManager.Instance.Get(upgradeOptions);

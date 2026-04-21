@@ -3,7 +3,7 @@ using UnityEngine;
 public class CharacterSelector : MonoBehaviour
 {
     public static CharacterSelector Instance;
-    public CharacterSO charaterData;
+    public CharacterBaseStatsSO charaterData;
     void Awake()
     {
         if (Instance is null)
@@ -16,11 +16,11 @@ public class CharacterSelector : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    public static CharacterSO GetData()
+    public static CharacterBaseStatsSO GetData()
     {
         return Instance.charaterData;
     }
-    public void SelectCharater(CharacterSO character)
+    public void SelectCharater(CharacterBaseStatsSO character)
     {
         charaterData = character;
     }

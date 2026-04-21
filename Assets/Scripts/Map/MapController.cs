@@ -34,7 +34,7 @@ public class MapController : MonoBehaviour
     }
 
     [Header("References")]
-    public Transform player;
+    public TransformAnchorSO playerAnchor;
     public Tilemap globalTilemap;
 
     [Header("Map Settings")]
@@ -64,20 +64,34 @@ public class MapController : MonoBehaviour
 
     void Start()
     {
+        // 注册事件 (如果是由外部 GameManager 统一调度的)
+        EventCenter.AddListener(EventDefine.OnMapPrepareRequst, InitializePool);
+        
         seedX = Random.Range(-100000f, 100000f);
         seedY = Random.Range(-100000f, 100000f);
 
         foreach (var tile in commonBiomes) commonTotalChance += tile.spawnChance;
         foreach (var tile in rareBiomes) rareTotalChance += tile.spawnChance;
 
-        Vector2 playerCoord = GetChunkCoordFromVector3(player.position);
+        // 如果你希望地图一加载就自己把池子建好，可以直接在这里调用：
+        // InitializePool(); 
+
+        Vector2 playerCoord = GetChunkCoordFromVector3(playerAnchor.Value.position);
         currentChunkCoord = new Vector2Int(Mathf.FloorToInt(playerCoord.x), Mathf.FloorToInt(playerCoord.y));
         UpdateChunks();
     }
 
+    // 🛡️ 架构铁律：有注册就必须有注销！
+    private void OnDestroy()
+    {
+        EventCenter.RemoveListener(EventDefine.OnMapPrepareRequst, InitializePool);
+    }
+
     void Update()
     {
-        Vector2 playerCoord = GetChunkCoordFromVector3(player.position);
+        if (playerAnchor == null || playerAnchor.Value == null) return; // 防御性判断
+
+        Vector2 playerCoord = GetChunkCoordFromVector3(playerAnchor.Value.position);
         if (playerCoord != currentChunkCoord)
         {
             currentChunkCoord = new Vector2Int(Mathf.FloorToInt(playerCoord.x), Mathf.FloorToInt(playerCoord.y));
@@ -85,7 +99,44 @@ public class MapController : MonoBehaviour
         }
     }
 
-    void UpdateChunks()
+    private void InitializePool()
+    {
+        foreach (var tile in commonBiomes)
+        {
+            // 修复：必须传入 GameObject 参数
+            if (tile.tileItem != null) 
+                ObjectPoolManager.Instance.RegisterPool(tile.tileItem.gameObject);
+            
+            if (tile.allowedProps != null)
+            {
+                foreach (var prop in tile.allowedProps)
+                {
+                    // 修复：方法名是 RegisterPool，并且传入 gameObject
+                    if (prop.propItem != null) 
+                        ObjectPoolManager.Instance.RegisterPool(prop.propItem.gameObject);
+                }
+            }
+        }
+
+        foreach (var tile in rareBiomes)
+        {
+            // 修复：同上
+            if (tile.tileItem != null) 
+                ObjectPoolManager.Instance.RegisterPool(tile.tileItem.gameObject);
+            
+            if (tile.allowedProps != null)
+            {
+                foreach (var prop in tile.allowedProps)
+                {
+                    // 修复：同上
+                    if (prop.propItem != null) 
+                        ObjectPoolManager.Instance.RegisterPool(prop.propItem.gameObject);
+                }
+            }
+        }
+    }
+
+    private void UpdateChunks()
     {
         for (int xOffset = -chunkRadius; xOffset <= chunkRadius; xOffset++)
         {
@@ -109,31 +160,26 @@ public class MapController : MonoBehaviour
             float chunkWorldX = gridCoord.x * chunkSize;
             float chunkWorldY = gridCoord.y * chunkSize;
 
-            if (chunkWorldX < player.position.x - chunkSize * disableRadius ||
-                chunkWorldX > player.position.x + chunkSize * disableRadius ||
-                chunkWorldY < player.position.y - chunkSize * disableRadius ||
-                chunkWorldY > player.position.y + chunkSize * disableRadius)
+            if (chunkWorldX < playerAnchor.Value.position.x - chunkSize * disableRadius ||
+                chunkWorldX > playerAnchor.Value.position.x + chunkSize * disableRadius ||
+                chunkWorldY < playerAnchor.Value.position.y - chunkSize * disableRadius ||
+                chunkWorldY > playerAnchor.Value.position.y + chunkSize * disableRadius)
             {
                 EraseChunkTiles(gridCoord);
 
                 for (int i = 0; i < chunkProps.spawnedProps.Count; i++)
                 {
                     GameObject propToReturn = chunkProps.spawnedProps[i];
-                    PoolItem itemToReturn = chunkProps.propItems[i];
 
-                    if (propToReturn != null)
+                    if (propToReturn.TryGetComponent(out PoolItem item))
                     {
-                        propToReturn.transform.position = Vector3.zero;
-                        propToReturn.transform.rotation = Quaternion.identity;
-                        PoolItem item = propToReturn.GetComponent<PoolItem>();
-                        if(item != null)
-                        {
-                            item.ReturnToPool();
-                        }
-                        else
-                        {
-                            Destroy(propToReturn);
-                        }
+                        propToReturn.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
+                        // 优雅地自我回收
+                        item.ReturnToPool();
+                    }
+                    else
+                    {
+                        Destroy(propToReturn);
                     }
                 }
 
@@ -232,14 +278,18 @@ public class MapController : MonoBehaviour
                             }
                         }
 
-                        GameObject propObj = ObjectPoolManager.Instance.Get(finalPropItem.gameObject);
-                        if (propObj != null)
+                        // 加入了上一轮讨论的防御性判断
+                        if (finalPropItem != null && ObjectPoolManager.Instance != null)
                         {
-                            Vector3Int cellPos = new Vector3Int(startX + x, startY + y, 0);
-                            Vector3 cellCenterWorldPos = globalTilemap.GetCellCenterWorld(cellPos);
-                            propObj.transform.position = cellCenterWorldPos;
-                            newChunkProps.spawnedProps.Add(propObj);
-                            newChunkProps.propItems.Add(finalPropItem);
+                            GameObject propObj = ObjectPoolManager.Instance.Get(finalPropItem.gameObject);
+                            if (propObj != null)
+                            {
+                                Vector3Int cellPos = new Vector3Int(startX + x, startY + y, 0);
+                                Vector3 cellCenterWorldPos = globalTilemap.GetCellCenterWorld(cellPos);
+                                propObj.transform.position = cellCenterWorldPos;
+                                newChunkProps.spawnedProps.Add(propObj);
+                                newChunkProps.propItems.Add(finalPropItem);
+                            }
                         }
                     }
                 }

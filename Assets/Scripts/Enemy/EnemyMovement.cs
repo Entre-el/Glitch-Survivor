@@ -3,10 +3,9 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class EnemyMovement : MonoBehaviour
 {
-    EnemyStats enemy; 
-    PlayerMovement player;
-    Transform playerTransform;
-    
+    EnemyCore enemyCore; 
+    Transform targetTransform;
+    public TransformAnchorSO TargetAnchor; // 通过 Inspector 赋值
     Rigidbody2D rb;
 
     Vector2 knockbackVelocity;
@@ -14,24 +13,27 @@ public class EnemyMovement : MonoBehaviour
 
     void Start()
     {
-        enemy = GetComponent<EnemyStats>();
+        TryGetComponent<EnemyCore>(out enemyCore); // 获取 EnemyCore 组件
         rb = GetComponent<Rigidbody2D>(); // 获取刚体
-        
-        player = GameObject.FindAnyObjectByType<PlayerMovement>();
-        if(player != null) playerTransform = player.transform;
+        if(enemyCore == null)
+        {
+            Debug.LogError("EnemyCore is not set");
+            return;
+        }
+        targetTransform = enemyCore.TargetAnchor.Value;
     }
 
     void Update()
     {
-        if (playerTransform != null && knockbackDuration <= 0)
+        if (targetTransform != null && knockbackDuration <= 0)
         {
-            if(transform.position.x > playerTransform.position.x + 0.2f)
+            if(transform.position.x > targetTransform.position.x + 0.2f)
             {
                 Vector3 currentScale = transform.localScale;
                 currentScale.x = -Mathf.Abs(currentScale.x);
                 transform.localScale = currentScale;
             }
-            else if(transform.position.x < playerTransform.position.x - 0.2f)
+            else if(transform.position.x < targetTransform.position.x - 0.2f)
             {
                 Vector3 currentScale = transform.localScale;
                 currentScale.x = Mathf.Abs(currentScale.x);
@@ -48,11 +50,11 @@ public class EnemyMovement : MonoBehaviour
             
             knockbackDuration -= Time.fixedDeltaTime; 
         }
-        else if(playerTransform != null)
+        else if(targetTransform != null)
         {
-            Vector2 direction = (playerTransform.position - transform.position).normalized;
+            Vector2 direction = (targetTransform.position - transform.position).normalized;
                     
-            rb.linearVelocity = direction * enemy.currentMoveSpeed;
+            rb.linearVelocity = direction * enemyCore.Stats.currentMoveSpeed;
         }
         else
         {

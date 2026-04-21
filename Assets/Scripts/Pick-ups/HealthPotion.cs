@@ -7,10 +7,10 @@ public class HealthPotion : PickUp, ICollectible
     public AudioClip healthSFX;
     public void Collect()
     {
-        PlayerStats player = FindAnyObjectByType<PlayerStats>();
-        if (player != null)
+        PlayerCore playerCore = FindAnyObjectByType<PlayerCore>();
+        if (playerCore != null)
         {
-            player.RestoreHealth(healthToRestore);
+            playerCore.Health.Heal(healthToRestore);
             AudioManager.Instance.PlaySFX(healthSFX,false);
             Destroy(gameObject);
         }

@@ -12,12 +12,12 @@ GameObject:
   - component: {fileID: 7346391044726901504}
   - component: {fileID: 2248197678782210930}
   - component: {fileID: 8010982931208037484}
-  - component: {fileID: 3191808167052194975}
   - component: {fileID: 9089434373631991755}
   - component: {fileID: -4955286092036992286}
   - component: {fileID: 5909048657419954976}
   - component: {fileID: -2552951400986435823}
-  m_Layer: 0
+  - component: {fileID: -8768048889988928321}
+  m_Layer: 7
   m_Name: Worm
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -132,27 +132,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f56e663a5d83826438cc5600935b48e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMovement
---- !u!114 &3191808167052194975
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1468309060539859647}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 92d9db15815a6b740a8796cc51381644, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyStats
-  enemyData: {fileID: 11400000, guid: df191bbbb56e4da4382e1b13a9b6dfe2, type: 2}
-  currentMoveSpeed: 0
-  currentHealth: 0
-  currentDamage: 0
-  despawnDistance: 20
-  damageColor: {r: 1, g: 0, b: 0, a: 1}
-  damageFlashDuration: 0.2
-  deathFadeTime: 0.6
-  hitSFX: {fileID: 8300000, guid: cf384b82fc8c8e448bdd030e955723d0, type: 3}
+  TargetAnchor: {fileID: 11400000, guid: 2db80b6fbf58fb7469ef6bdd73569147, type: 2}
 --- !u!114 &9089434373631991755
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -246,3 +226,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PoolItem
   defaultCapacity: 50
   maxSize: 200
+--- !u!114 &-8768048889988928321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1468309060539859647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddb37009cac51cc4fac7b6ddf4f82ead, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
+  currentHealth: 20

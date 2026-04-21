@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class WeaponOrItemSO : ScriptableObject
 {
-    [SerializeField] string name;
+    [SerializeField] new string name;
     public string Name { get => name; private set => name = value; }
     [SerializeField] WeaponOrItemType type;
     public WeaponOrItemType Type { get => type; private set => type = value; }
