@@ -1,7 +1,7 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "EnemyScriptableObject", menuName = "ScriptableObjects/Enemy")]
-public class EnemyScriptableObject : ScriptableObject
+[CreateAssetMenu(fileName = "EnemyStatSO", menuName = "ScriptableObjects/Enemy")]
+public class EnemyStatSO : ScriptableObject
 {
     [SerializeField]
     string poolTag;

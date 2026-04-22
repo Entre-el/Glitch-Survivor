@@ -1,9 +1,9 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class EnemyMovement : MonoBehaviour
+public class EnemyLocomotion : MonoBehaviour
 {
-    EnemyCore enemyCore; 
+    EnemyBrain enemyCore; 
     Transform targetTransform;
     public TransformAnchorSO TargetAnchor; // 通过 Inspector 赋值
     Rigidbody2D rb;
@@ -13,11 +13,11 @@ public class EnemyMovement : MonoBehaviour
 
     void Start()
     {
-        TryGetComponent<EnemyCore>(out enemyCore); // 获取 EnemyCore 组件
+        TryGetComponent<EnemyBrain>(out enemyCore); // 获取 EnemyBrain 组件
         rb = GetComponent<Rigidbody2D>(); // 获取刚体
         if(enemyCore == null)
         {
-            Debug.LogError("EnemyCore is not set");
+            Debug.LogError("EnemyBrain is not set");
             return;
         }
         targetTransform = enemyCore.TargetAnchor.Value;

@@ -41,7 +41,10 @@ public class PlayerCore : MonoBehaviour
         Experience.Initialize(this);
         Visuals.Initialize(this);
         if (weaponBrain != null)
-            weaponBrain.Initialize(this);
+        {
+        weaponBrain.Initialize(this);
+        InventoryManager.Instance.BindActiveWeapon(weaponBrain); // 🌟 连接背包系统和武器系统的桥梁
+        }
     }
 
     public void OnEnable()

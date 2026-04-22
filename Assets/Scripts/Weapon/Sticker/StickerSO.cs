@@ -7,19 +7,37 @@ public enum StickerSlotType
     Fire,   // 开火槽（如：多重投射、散射）
     Pierce, // 穿透槽（如：穿透后分裂、弹射）
     Crit,   // 暴击槽（如：暴击引发冰爆、吸血）
-    Fade    // 消失槽（如：消失时留下毒素区域、爆炸）
+    Fade,   // 消失槽（如：消失时留下毒素区域、爆炸）
+    Any
 }
 
 // 2. 贴纸数据资产基类 (ScriptableObject)
 public abstract class StickerSO : ScriptableObject
 {
-    [Header("贴纸基础信息")]
+    [Header("UI 展示数据")]
     public string stickerName;
-    public List<string> description = new(4);
     public Sprite icon;
-    
-    // 留给子类实现：当贴纸被装备时，提供哪些数值修饰？
-    // 比如：返回一组 StatModifier 列表
+
+    [Header("UI 槽位限制")]
+    public StickerSlotType compatibleSlot = StickerSlotType.Any;
+
+    // 🌟 新增：四个槽位的独立描述
+    [Header("多槽位效果描述")]
+    [TextArea] public string fireDescription;
+    [TextArea] public string pierceDescription;
+    [TextArea] public string critDescription;
+    [TextArea] public string fadeDescription;
+    public string GetDescriptionForSlot(StickerSlotType slot)
+    {
+          return slot switch
+          {
+               StickerSlotType.Fire => fireDescription,
+               StickerSlotType.Pierce => pierceDescription,
+               StickerSlotType.Crit => critDescription,
+               StickerSlotType.Fade => fadeDescription,
+               _ => "",
+          };
+     }
     public virtual StatModifier[] GetStatModifiers() { return new StatModifier[0]; }
 
     // 四大生命周期 Hook 虚方法 (由 DamageResolver 判官在对应时机回调)

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 [CreateAssetMenu(fileName = "NewLevelData", menuName = "GameConfig/Scene Data")]
 public class SceneSO : ScriptableObject
 {
@@ -13,7 +14,7 @@ public class SceneSO : ScriptableObject
     public string[] loadingLogTexts; // 比如：["正在分配史莱姆内存...", "正在生成毒液陷阱..."]
 
     [Header("本关底层依赖")]
-    public PoolItem[] requiredItems; // 把上一课的对象池配置也整合进来！
+    public List<PoolItem> requiredItems = new(10); // 把上一课的对象池配置也整合进来！
     public string[] requiredPanelNames;
     [Header("Audio")]
     public string sceneBGM;

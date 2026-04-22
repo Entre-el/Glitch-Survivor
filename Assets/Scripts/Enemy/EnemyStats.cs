@@ -2,11 +2,11 @@ using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(SpriteRenderer))]
-[RequireComponent(typeof(EnemyMovement))]
+[RequireComponent(typeof(EnemyLocomotion))]
 public class EnemyStats : MonoBehaviour
 {
     private Transform playerTransform;
-    public EnemyScriptableObject enemyData;
+    public EnemyStatSO enemyData;
     [HideInInspector]
     public float currentMoveSpeed;
     [HideInInspector]
@@ -22,12 +22,12 @@ public class EnemyStats : MonoBehaviour
     public AudioClip hitSFX;
     Color originalColor;
     SpriteRenderer sr;
-    EnemyMovement enemyMovement;
+    EnemyLocomotion enemyMovement;
     void Start()
     {
         sr = GetComponent<SpriteRenderer>();
         originalColor = sr.color;
-        enemyMovement = GetComponent<EnemyMovement>();
+        enemyMovement = GetComponent<EnemyLocomotion>();
     }
     void Awake()
     {

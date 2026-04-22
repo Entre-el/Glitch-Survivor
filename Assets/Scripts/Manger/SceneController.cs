@@ -58,7 +58,7 @@ public class SceneController : MonoBehaviour
         // 5. 阶段三：引擎加载完毕，开始业务加载（对象池）
         loadingUI.UpdateProgress(0.85f, "正在预分配对象池内存区块...");
         yield return null; // 缓冲一帧让文字刷出来
-        if (sceneData.requiredItems != null && sceneData.requiredItems.Length > 0)
+        if (sceneData.requiredItems != null && sceneData.requiredItems.Count > 0)
         {
             ObjectPoolManager.Instance.InitializePools(sceneData.requiredItems.Select(p => p.gameObject).ToArray());
         }

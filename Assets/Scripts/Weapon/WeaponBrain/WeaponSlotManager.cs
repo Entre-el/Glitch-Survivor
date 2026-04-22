@@ -9,6 +9,12 @@ public class SubWeaponContext
     public StickerSO CritSticker;
     public StickerSO FadeSticker;
 }
+[System.Serializable]
+public class StickerEquipData
+{
+    public StickerSO Sticker;
+    public float RotationAngle; // 🌟 记录玩家设定的旋转角度
+}
 
 [System.Serializable]
 public class WeaponSlotManager
