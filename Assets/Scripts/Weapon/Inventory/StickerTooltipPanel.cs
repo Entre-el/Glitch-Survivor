@@ -11,7 +11,7 @@ public class StickerTooltipPanel : BasePanel
     public TextMeshProUGUI descText;
     public RectTransform rectTransform;
 
-    public Vector2 offset = new Vector2(50f, -50f); 
+    public Vector2 offset = new(50f, -50f); 
 
     public override void OnInit()
     {
@@ -21,7 +21,7 @@ public class StickerTooltipPanel : BasePanel
     }
 
     // 🌟 核心修改：加入可为空的 StickerSlotType 参数
-    public void ShowTooltip(StickerSO sticker, StickerSlotType? hoveredSlot = null)
+    public void OnShow(StickerSO sticker, StickerSlotType? hoveredSlot = null)
     {
         if (!hasInit) OnInit();
 
@@ -40,7 +40,7 @@ public class StickerTooltipPanel : BasePanel
             else
             {
                 // 重点突出当前槽位效果
-                descText.text = $"<color=#FFD700><b>【{hoveredSlot.Value} 效果】</b></color>\n{specificDesc}";
+                descText.text = $"<b>【{hoveredSlot.Value} 效果】</b></color>\n{specificDesc}";
             }
         }
         // 状态 B：在地上，或者悬空拖拽中（显示全部）
@@ -66,7 +66,6 @@ public class StickerTooltipPanel : BasePanel
         OnShow(); 
     }
 
-    public void HideTooltip() { OnHide(); }
     private void Update()
     {
         // 🌟 通过判断 Alpha 值来决定是否需要跟随鼠标，避免了 activeSelf 的开销

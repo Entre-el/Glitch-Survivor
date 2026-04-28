@@ -51,7 +51,7 @@ public class BubbleGunBrain : WeaponBrain
                 {
                     // 如果有开火贴纸（比如葡萄贴纸），把发射坐标、快照、方向全部交给它！
                     // 接下来怎么分裂、怎么发射，由贴纸里的代码说了算。
-                    payload.FireSticker.OnFireSlot(emitter, payload, finalDirection);
+                    payload.FireSticker.OnFireSlot(payload, emitter, finalDirection);
                 }
                 else
                 {

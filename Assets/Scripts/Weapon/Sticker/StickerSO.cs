@@ -27,6 +27,10 @@ public abstract class StickerSO : ScriptableObject
     [TextArea] public string pierceDescription;
     [TextArea] public string critDescription;
     [TextArea] public string fadeDescription;
+    [Header("涉及子弹及Buff")]
+    public GameObject bulletPrefab; // 贴纸可能涉及的子弹预制体（如分裂后生成的子弹）
+    public GameObject puddlePrefab;  // 贴纸可能涉及的区域预制体（如消失后生成的毒 puddle）
+    public List<EnemyBuffSO> appliedBuffs; // 贴纸可能附带的敌人 Buff 列表
     public string GetDescriptionForSlot(StickerSlotType slot)
     {
           return slot switch
@@ -41,28 +45,34 @@ public abstract class StickerSO : ScriptableObject
     public virtual StatModifier[] GetStatModifiers() { return new StatModifier[0]; }
 
     // 四大生命周期 Hook 虚方法 (由 DamageResolver 判官在对应时机回调)
-    public virtual void OnFireSlot(Transform emitter, CombatPayload payload, Vector2 direction) { }
-    public virtual void OnPierceSlot(GameObject target, Vector3 hitPoint, CombatPayload payload, Vector2 direction) { }
-    public virtual void OnCritSlot(GameObject target, Vector3 hitPoint, CombatPayload payload) { }
-    public virtual void OnFadeSlot(Vector3 fadePoint, CombatPayload payload) { }
-}
-
-// 3. 战斗载荷/快照 (纯数据结构体，极为轻量)
-public struct CombatPayload
-{
-    public float FinalDamage;
-    public float CritChance;
-    public float CritMultiplier;      // 🌟 新增：暴击伤害倍率
-    public int PierceCount;           // 🌟 新增：向下取整后的穿透次数
-    public float ProjectileSpeedMult; // 🌟 新增：弹速倍率（子弹生成时读取）
-    public float KnockbackForce;      // 击退力
-    public float BulletScale;
-
-    // 四大插槽贴纸
-    public StickerSO FireSticker;
-    public StickerSO PierceSticker;
-    public StickerSO CritSticker;
-    public StickerSO FadeSticker;
-
-    public GameObject SourceEntity; 
+    public virtual void OnFireSlot(CombatPayload payload,Transform emitter,  Vector2 direction) { }
+    public virtual void OnPierceSlot(CombatPayload payload,GameObject target, Vector3 hitPoint ,Vector2 direction) { }
+    public virtual void OnCritSlot(CombatPayload payload,GameObject target, Vector3 hitPoint) { }
+    public virtual void OnFadeSlot(CombatPayload payload, Vector3 fadePoint) { }
+    protected void SplitBullets(CombatPayload basePayload, Vector3 spawnPos, Vector2 baseDirection, int splitCount, float splitAngle, float damageMult, float scaleMult, GameObject ignoredTarget = null)
+    {
+        CombatPayload newPayload = basePayload;
+        newPayload.FinalDamage = basePayload.FinalDamage * damageMult;
+        
+        // 🌟 核心：子弹尺寸也要随之缩小！
+        newPayload.BulletScale = basePayload.BulletScale * scaleMult;
+        
+        newPayload.PierceCount = Mathf.Max(0, basePayload.PierceCount - 1);
+        if (newPayload.PierceCount <= 0) newPayload.PierceSticker = null; 
+        for(int i = 0; i <= splitCount; i++)
+        {
+            float angleOffset = -splitAngle + i * (splitAngle / splitCount - 1);
+            Vector2 dir = Quaternion.Euler(0, 0, angleOffset) * baseDirection;
+            SpawnBullet(newPayload, spawnPos, dir, ignoredTarget);
+        }
+    }
+    protected void SpawnBullet(CombatPayload payload, Vector3 pos, Vector2 dir,GameObject ignoredTarget)
+    {
+        GameObject bullet = ObjectPoolManager.Instance.Get(bulletPrefab, pos, Quaternion.identity);
+        if (bullet != null && bullet.TryGetComponent<ProjectileBase>(out var proj))
+        {
+            // 🌟 完美注入
+            proj.Initialize(payload, dir, ignoredTarget);
+        }
+    }
 }

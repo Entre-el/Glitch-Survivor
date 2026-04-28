@@ -1,22 +1,18 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "EnemyStatSO", menuName = "ScriptableObjects/Enemy")]
+[CreateAssetMenu(fileName = "EnemyStatSO", menuName = "SO/EnemyStatSO")]
 public class EnemyStatSO : ScriptableObject
 {
     [SerializeField]
-    string poolTag;
-    public string PoolTag { get => PoolTag; private set => PoolTag = value; }
-    public int defaultCapacity = 50;
-    public int DefaultCapacity { get => defaultCapacity; private set => defaultCapacity = value; }
-    public int maxSize = 200;
-    public int MaxSize { get => maxSize; private set => maxSize = value; }
-    [SerializeField]
-    float moveSpeed;
+    private float moveSpeed = 3f;
     public float MoveSpeed { get => moveSpeed; private set => moveSpeed = value; }
     [SerializeField]
-    float maxHealth;
-    public float MaxHealth { get => maxHealth; private set => maxHealth = value; }
+    private int maxHealth = 10;
+    public int MaxHealth { get => maxHealth; private set => maxHealth = value; }
     [SerializeField]
-    float damage;
+    private float damage;
     public float Damage { get => damage; private set => damage = value; }
+    [SerializeField]
+    private int denfense;
+    public int Denfense { get => denfense; private set => denfense = value; }
 }

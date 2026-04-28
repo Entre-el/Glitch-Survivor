@@ -41,7 +41,7 @@ public class ProjectileBase : PoolItem
     {
         if (payload.FadeSticker != null)
         {
-            payload.FadeSticker.OnFadeSlot(transform.position, payload);
+            payload.FadeSticker.OnFadeSlot(payload, transform.position);
         }
         ReturnToPool();
     }
@@ -59,9 +59,6 @@ public class ProjectileBase : PoolItem
             if (payload.PierceCount > 0)
             {
                 payload.PierceCount--;
-                
-                // 🌟 进阶优化：既然我穿透了这个敌人，为了防止我因为速度慢，下一帧又碰到他
-                // 我们直接把这个敌人也加入忽略名单！
                 ignoredTarget = collision.gameObject; 
             }
             else

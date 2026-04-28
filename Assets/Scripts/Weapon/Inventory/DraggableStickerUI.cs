@@ -1,150 +1,185 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
-public class DraggableStickerUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+// 🌟 新增：IPointerEnterHandler, IPointerExitHandler 接口用于处理地上贴纸的鼠标悬停
+[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(CanvasGroup))]
+[RequireComponent(typeof(RectTransform))]
+[RequireComponent(typeof(Image))]
+public class DraggableStickerUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
 {
-    public StickerSO myStickerData;
+
+    [Header("数据")]
+    public float rotationLerpSpeed = 15f;
+    private StickerSO myData;
+    private Vector2 lastMousePosition;
+    private Vector2 throwVelocity;
+    private Rigidbody2D rb;
     private RectTransform rectTransform;
     private CanvasGroup canvasGroup;
-    
-    private WeaponSlotUI currentHoveredSlot;
-    private Coroutine movementCoroutine;
+    private Image myImage;
 
-    // 记录它的散落归宿，如果没装上，就回这里
-    private Vector2 scatterPosition;
-    private float scatterRotationZ;
+    private bool isDragging = false;
 
     private void Awake()
     {
+        rb = GetComponent<Rigidbody2D>();
         rectTransform = GetComponent<RectTransform>();
+        myImage = GetComponent<Image>();
         canvasGroup = GetComponent<CanvasGroup>();
     }
 
-    // 由 Panel 调用，初始化数据和落点
-    public void Initialize(StickerSO data, Vector2 targetLocalPos, float targetRotZ)
+    public void Initialize(StickerSO data)
     {
-        myStickerData = data;
-        scatterPosition = targetLocalPos;
-        scatterRotationZ = targetRotZ;
-        
-        // 可选：在这里播放一个从屏幕外飞入到散落点的初始化动画
-        MoveToPosition(scatterPosition, scatterRotationZ, 0.5f);
+        myData = data;
+        if (myImage != null) myImage.sprite = data.icon;
     }
 
+    private void Update()
+    {
+        if (isDragging)
+        {
+            float currentZ = rectTransform.eulerAngles.z;
+            float targetZ = 0f;
+            float newZ = Mathf.LerpAngle(currentZ, targetZ, Time.unscaledDeltaTime * rotationLerpSpeed);
+            rectTransform.rotation = Quaternion.Euler(0, 0, newZ);
+        }
+    }
+
+    // 🌟 新增：鼠标放在地上未安装的贴纸上时，显示全属性
     public void OnPointerEnter(PointerEventData eventData)
     {
-        // 鼠标放上去（未拖拽）：显示全部效果
-        StickerTooltipPanel.Instance.ShowTooltip(myStickerData);
+        if (!isDragging && StickerTooltipPanel.Instance != null)
+        {
+            StickerTooltipPanel.Instance.OnShow(myData, null);
+        }
     }
 
+    // 🌟 新增：鼠标挪开时隐藏
     public void OnPointerExit(PointerEventData eventData)
     {
-        // 如果没有在拖拽，移开鼠标就隐藏
-        if (movementCoroutine == null && currentHoveredSlot == null)
-            StickerTooltipPanel.Instance.HideTooltip();
+        if (!isDragging && StickerTooltipPanel.Instance != null)
+        {
+            StickerTooltipPanel.Instance.OnHide();
+        }
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (movementCoroutine != null) StopCoroutine(movementCoroutine);
-        transform.SetAsLastSibling();
-        rectTransform.localRotation = Quaternion.identity;
-        canvasGroup.blocksRaycasts = false; 
+        isDragging = true; 
+        rb.bodyType = RigidbodyType2D.Kinematic;
+        rb.linearVelocity = Vector2.zero;
+        rb.angularVelocity = 0f;
 
-        // 🌟 刚被抓起来的时候，保持显示全部效果
-        StickerTooltipPanel.Instance.ShowTooltip(myStickerData);
+        canvasGroup.blocksRaycasts = false;
+        transform.SetAsLastSibling();
+
+        lastMousePosition = eventData.position;
+
+        // 拖起来的瞬间，确保显示全属性 Tooltip
+        if (StickerTooltipPanel.Instance != null)
+        {
+            StickerTooltipPanel.Instance.OnShow(myData, null);
+        }
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        rectTransform.position = Input.mousePosition;
-
-        List<RaycastResult> results = new List<RaycastResult>();
-        EventSystem.current.RaycastAll(eventData, results);
-
-        WeaponSlotUI foundSlot = null;
-        foreach (var result in results)
+        // 1. 移动贴纸坐标
+        if (RectTransformUtility.ScreenPointToWorldPointInRectangle(
+            rectTransform, 
+            eventData.position, 
+            eventData.pressEventCamera, 
+            out Vector3 worldPoint))
         {
-            if (result.gameObject.TryGetComponent(out foundSlot)) break;
+            rectTransform.position = worldPoint;
         }
 
-        // 状态发生了变化（进入新槽位，或者离开了槽位）
-        if (foundSlot != currentHoveredSlot)
+        if (Time.unscaledDeltaTime > 0)
         {
-            if (currentHoveredSlot != null) 
+            throwVelocity = (eventData.position - lastMousePosition) / Time.unscaledDeltaTime;
+        }
+        lastMousePosition = eventData.position;
+
+        // 🌟 2. 核心动态切换逻辑：拖拽中实时发射射线探测
+        if (StickerTooltipPanel.Instance != null)
+        {
+            WeaponSlotUI targetSlot = DetectSlotUnderMouse(eventData);
+            if (targetSlot != null)
             {
-                currentHoveredSlot.SetHighlight(false);
-            }
-            
-            if (foundSlot != null)
-            {
-                // 如果类型兼容，亮起光圈，并只显示该槽位的描述！
-                if (myStickerData.compatibleSlot == StickerSlotType.Any || myStickerData.compatibleSlot == foundSlot.mySlotType)
-                {
-                    foundSlot.SetHighlight(true);
-                    StickerTooltipPanel.Instance.ShowTooltip(myStickerData, foundSlot.mySlotType);
-                }
+                // 悬停在槽位上了！只显示对应槽位的属性
+                StickerTooltipPanel.Instance.OnShow(myData, targetSlot.mySlotType);
             }
             else
             {
-                // 🌟 从槽位上挪开了（悬空了），恢复显示全部描述！
-                StickerTooltipPanel.Instance.ShowTooltip(myStickerData);
+                // 挪出槽位了，或者在半空中，恢复显示全部属性
+                StickerTooltipPanel.Instance.OnShow(myData, null);
             }
-            
-            currentHoveredSlot = foundSlot;
         }
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        canvasGroup.blocksRaycasts = true; // 恢复射线阻挡
-        StickerTooltipPanel.Instance.HideTooltip(); // 拖拽结束，必定隐藏气泡
+        isDragging = false; 
+        canvasGroup.blocksRaycasts = true;
 
-        if (currentHoveredSlot != null)
+        // 松手时，隐藏 Tooltip
+        if (StickerTooltipPanel.Instance != null)
         {
-            currentHoveredSlot.SetHighlight(false);
-            bool success = InventoryManager.Instance.TryEquipSticker(myStickerData, currentHoveredSlot.mySlotType);
-            
-            if (success) 
+            StickerTooltipPanel.Instance.OnHide();
+        }
+
+        WeaponSlotUI targetSlot = DetectSlotUnderMouse(eventData);
+
+        if (targetSlot != null)
+        {
+            StickerSO existingSticker = targetSlot.GetCurrentSticker(); 
+
+            if (existingSticker != null)
             {
-                currentHoveredSlot.UpdateVisual(myStickerData);
-                // 装备成功，销毁散落区的自己
+                StickerInventoryPanel panel = UIManager.Instance.GetPanel<StickerInventoryPanel>();
+                if (panel != null && panel.gameObject.activeInHierarchy)
+                {
+                    InventoryManager.Instance.UnequipSticker(targetSlot.mySlotType);
+                    Vector2 slotScreenPos = RectTransformUtility.WorldToScreenPoint(eventData.pressEventCamera, targetSlot.transform.position);
+                    panel.SpawnStickerAtMouse(existingSticker, slotScreenPos, eventData.pressEventCamera);
+                }
+            }
+
+            bool success = InventoryManager.Instance.TryEquipSticker(myData, targetSlot.mySlotType);
+            if (success)
+            {
+                targetSlot.UpdateVisual(myData);
+                
+                // 贴纸被成功装入，由于要销毁自身，为了防止 Tooltip 卡在屏幕上，再保险隐藏一次
+                if (StickerTooltipPanel.Instance != null) StickerTooltipPanel.Instance.OnHide();
+                
                 Destroy(gameObject); 
-                return;
+                return; 
+            }
+            else
+            {
+                Debug.LogWarning($"⚠️ 装配失败：这枚贴纸不能放进 [{targetSlot.mySlotType}] 槽位！");
             }
         }
-        
-        // 🌟 如果没有对准槽位，或者安装失败：弹回地面，并恢复之前的散落旋转角度！
-        MoveToPosition(scatterPosition, scatterRotationZ, 0.3f);
-        currentHoveredSlot = null;
+
+        rb.bodyType = RigidbodyType2D.Dynamic; 
+        rb.linearVelocity = throwVelocity * 0.02f; 
+        rb.angularVelocity = Random.Range(-100f, 100f); 
     }
 
-    // 自定义的平滑移动与旋转协程（替代 DOTween）
-    private void MoveToPosition(Vector2 targetLocalPos, float targetRotZ, float duration)
+    private WeaponSlotUI DetectSlotUnderMouse(PointerEventData eventData)
     {
-        if (movementCoroutine != null) StopCoroutine(movementCoroutine);
-        movementCoroutine = StartCoroutine(LerpTransformRoutine(targetLocalPos, targetRotZ, duration));
-    }
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, results);
 
-    private IEnumerator LerpTransformRoutine(Vector2 targetPos, float targetRot, float time)
-    {
-        Vector2 startPos = rectTransform.localPosition;
-        Quaternion startRot = rectTransform.localRotation;
-        Quaternion endRot = Quaternion.Euler(0, 0, targetRot);
-        
-        float t = 0;
-        while (t < 1)
+        foreach (var result in results)
         {
-            t += Time.deltaTime / time;
-            // 使用 SmoothStep 增加动画的呼吸感和物理缓冲感
-            float smoothT = Mathf.SmoothStep(0, 1, t); 
-            
-            rectTransform.localPosition = Vector2.Lerp(startPos, targetPos, smoothT);
-            rectTransform.localRotation = Quaternion.Lerp(startRot, endRot, smoothT);
-            yield return null;
+            WeaponSlotUI slot = result.gameObject.GetComponentInParent<WeaponSlotUI>();
+            if (slot != null) return slot; 
         }
+        return null; 
     }
 }

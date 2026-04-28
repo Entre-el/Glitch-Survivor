@@ -9,59 +9,27 @@ public class GrapeStickerSO : StickerSO
     public float splitAngle = 20f;       // 分裂角度
 
     // 🍇 1. 开火槽：分裂为两个 0.6 倍伤害、0.8 倍大小的子弹
-    public override void OnFireSlot(Transform emitter, CombatPayload payload, Vector2 direction)
+    public override void OnFireSlot(CombatPayload payload, Transform emitter, Vector2 direction)
     {
-        SplitBullets(emitter.position, payload, direction, 0.6f, 0.9f);
+        SplitBullets(payload, emitter.position, direction, 2, 20f, 0.6f, 0.9f);
     }
 
     // 🍇 2. 穿透槽：穿透时分裂为两个 0.5 倍伤害、0.7 倍大小的子弹
-    public override void OnPierceSlot(GameObject target, Vector3 hitPoint, CombatPayload payload, Vector2 direction)
+    public override void OnPierceSlot(CombatPayload payload, GameObject target, Vector3 hitPoint, Vector2 direction)
     {
-        SplitBullets(hitPoint, payload, direction, 0.5f, 0.8f, target);
+        SplitBullets(payload, hitPoint, direction, 2, 20f, 0.5f, 0.8f, target.gameObject);
     }
-
-    // 🌟 修改通用分裂逻辑，接收 ignoredTarget
-    // 🌟 修改通用分裂逻辑，增加一个 scaleMult 参数（尺寸缩小倍率）
-    private void SplitBullets(Vector3 spawnPos, CombatPayload basePayload, Vector2 baseDirection, float damageMult, float scaleMult, GameObject ignoredTarget = null)
-    {
-        Vector2 dir1 = Quaternion.Euler(0, 0, splitAngle) * baseDirection;
-        Vector2 dir2 = Quaternion.Euler(0, 0, -splitAngle) * baseDirection;
-
-        CombatPayload newPayload = basePayload;
-        newPayload.FinalDamage = basePayload.FinalDamage * damageMult;
-        
-        // 🌟 核心：子弹尺寸也要随之缩小！
-        newPayload.BulletScale = basePayload.BulletScale * scaleMult;
-        
-        newPayload.PierceCount = Mathf.Max(0, basePayload.PierceCount - 1);
-        if (newPayload.PierceCount <= 0) newPayload.PierceSticker = null; 
-
-        SpawnBullet(spawnPos, newPayload, dir1, ignoredTarget);
-        SpawnBullet(spawnPos, newPayload, dir2, ignoredTarget);
-    }
-
-    // 🌟 修改生成逻辑，注入 ignoredTarget
-    private void SpawnBullet(Vector3 pos, CombatPayload payload, Vector2 dir, GameObject ignoredTarget)
-    {
-        GameObject bullet = ObjectPoolManager.Instance.Get(grapeBulletPrefab, pos, Quaternion.identity);
-        if (bullet != null && bullet.TryGetComponent<ProjectileBase>(out var proj))
-        {
-            // 🌟 完美注入
-            proj.Initialize(payload, dir, ignoredTarget);
-        }
-    }
+    
     // 🍇 3. 暴击槽：附加醉酒效果
-    public override void OnCritSlot(GameObject target, Vector3 hitPoint, CombatPayload payload)
+    public override void OnCritSlot( CombatPayload payload, GameObject target, Vector3 hitPoint)
     {
-        if (target.TryGetComponent<EnemyHealth>(out var enemyHealth))
+        if (target.TryGetComponent<EnemyCore>(out EnemyCore enemyCore))
         {
-            // 给怪物挂上醉酒状态
-            enemyHealth.AddDrunkStack();
+            enemyCore.AddBuff(new DrunkBuff(appliedBuffs[0],enemyCore)); // 直接应用醉酒状态，持续 2 秒
         }
-    }
-
+    } 
 // 🍇 4. 消失槽：留下一滩葡萄酒
-    public override void OnFadeSlot(Vector3 fadePoint, CombatPayload payload)
+    public override void OnFadeSlot(CombatPayload payload,Vector3 fadePoint)
     {
         if (winePuddlePrefab != null)
         {
@@ -75,5 +43,11 @@ public class GrapeStickerSO : StickerSO
                 puddle.transform.localScale = new Vector3( puddle.transform.localScale.x*payload.BulletScale, puddle.transform.localScale.y* payload.BulletScale, 1f);
             }
         }
+    }
+    private void AddDrunkStack(EnemyCore core)
+    {         
+        // 给怪物添加一层醉酒状态，持续 2 秒
+        // 你可以在 EnemyBuffSO 中定义一个 DrunkBuffSO，设置好持续时间和效果（如降低移动速度、攻击频率等）
+        // 然后在这里实例化这个 Buff，并添加到怪物身上
     }
 }

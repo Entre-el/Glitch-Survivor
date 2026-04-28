@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 4216348373322899192}
   - component: {fileID: 4338777003903218646}
   - component: {fileID: -1302325873128922654}
-  - component: {fileID: -1470666414078855731}
   m_Layer: 0
   m_Name: Grape Bubble
   m_TagString: Untagged
@@ -174,17 +173,3 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0.017289687}
   m_Radius: 0.6319792
---- !u!114 &-1470666414078855731
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4055458548814130139}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee78aef8b835e6c4ab8f77a912b35a32, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PoolItem
-  defaultCapacity: 50
-  maxSize: 200

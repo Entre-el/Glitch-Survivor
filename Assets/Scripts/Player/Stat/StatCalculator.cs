@@ -21,7 +21,9 @@ public class StatCalculator
         PlayerCritMultiplier = new CharacterStat(baseStats.PlayerCritMultiplier);
         PlayerPierce = new CharacterStat(baseStats.PlayerPierce);
         PlayerMagnetRadius = new CharacterStat(baseStats.PlayerMagnetRadius);
-        PlayerProjectileSpeedMultiplier = new CharacterStat(baseStats.PlayerProjectileSpeedMultiplier);
+        PlayerProjectileSpeedMultiplier = new CharacterStat(
+            baseStats.PlayerProjectileSpeedMultiplier
+        );
         PlayerRecoveryPre5s = new CharacterStat(baseStats.PlayerRecoveryPre5s);
         PlayerMaxHealth = new CharacterStat(baseStats.PlayerMaxHealth);
         PlayerDashSpeed = new CharacterStat(baseStats.PlayerDashSpeed);

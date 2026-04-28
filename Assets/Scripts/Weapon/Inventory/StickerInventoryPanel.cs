@@ -1,93 +1,156 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class StickerInventoryPanel : BasePanel
 {
-    [Header("散落区域设置")]
+    [Header("区域与预制体设置")]
     public RectTransform scatterZone; // 底部散落区的空UI节点
-    public float minScatterDistance = 120f; // 贴纸之间的最小防重叠像素距离
-
-    [Header("预制体与数据")]
+    public RectTransform stickerZone; // 实际挂载贴纸的节点
     public GameObject stickerPrefab; // 贴纸UI的预制体
+
     [Header("武器槽位引用")]
     public WeaponSlotUI fireSlot;
     public WeaponSlotUI pierceSlot;
     public WeaponSlotUI critSlot;
     public WeaponSlotUI fadeSlot;
-    // 记录已经生成的散落坐标，用于防重叠判定
-    private List<Vector2> occupiedPositions = new(4);
+
+    [Header("物理参数：全局散落 (从天而降)")]
+    [Tooltip("每次生成贴纸时X轴增加的偏移量，防止完全重叠")]
+    public float spawnOffsetXStep = 80f;
+    public Vector2 scatterVelocityX = new(-500f, 500f);
+    public Vector2 scatterVelocityY = new(-200f, -800f);
+    public Vector2 scatterAngularVelocity = new(-300f, 300f);
+
+    [Header("物理参数：槽位拆卸 (精准空投)")]
+    public Vector2 ejectVelocityX = new(-300f, 300f);
+    public Vector2 ejectVelocityY = new(300f, 800f);
+    public Vector2 ejectAngularVelocity = new(-300f, 300f);
+
+    // 用于记录上一次生成的X坐标，实现依次排开的效果
+    private float currentSpawnX = 0f;
 
     public override void OnShow()
     {
         base.OnShow();
-        occupiedPositions.Clear();
-        // 1. 获取底层的数据管家
-        WeaponSlotManager weaponData = InventoryManager.Instance.currentWeaponSlotManager;
 
-        // 2. 强制同步 UI 槽位的视觉表现
+        // 1. 清理旧的散落物并激活区域
+        foreach (Transform child in stickerZone)
+        {
+            Destroy(child.gameObject);
+        }
+        scatterZone.gameObject.SetActive(true);
+
+        // 2. 获取数据并同步 UI 槽位
+        WeaponSlotManager weaponData = InventoryManager.Instance.currentWeaponSlotManager;
         if (weaponData != null)
         {
             fireSlot.UpdateVisual(weaponData.FireSticker);
-            
-            if (weaponData.SubContexts.Count > 0)
+
+            if (weaponData.SubContexts != null && weaponData.SubContexts.Count > 0)
             {
-                pierceSlot.UpdateVisual(weaponData.SubContexts[0].PierceSticker);
-                // ... 同步其他槽位
+                var subCtx = weaponData.SubContexts[0];
+                pierceSlot.UpdateVisual(subCtx.PierceSticker);
+                critSlot.UpdateVisual(subCtx.CritSticker);
+                fadeSlot.UpdateVisual(subCtx.FadeSticker);
             }
         }
-        // 假设从 InventoryManager 获取未安装的贴纸列表
+        else
+        {
+            Debug.LogWarning("打开背包时，没有检测到绑定的武器！");
+        }
+
+        // 3. 获取未安装的贴纸并从顶部散落
         List<StickerSO> unequippedStickers = InventoryManager.Instance.GetUnequippedStickers();
-        
+
+        // 🌟 初始化生成起点 (从左侧开始)
+        float halfWidth = stickerZone.rect.width / 2f - 50f;
+        currentSpawnX = -halfWidth;
+
         foreach (var stickerData in unequippedStickers)
         {
-            SpawnScatteredSticker(stickerData);
+            SpawnScatteredSticker(stickerData, halfWidth);
         }
     }
 
-    private void SpawnScatteredSticker(StickerSO data)
+    public override void OnHide()
     {
-        // 实例化贴纸
-        GameObject stickerObj = Instantiate(stickerPrefab, scatterZone);
-        DraggableStickerUI dragLogic = stickerObj.GetComponent<DraggableStickerUI>();
-        
-        // 寻找一个不重叠的随机本地坐标
-        Vector2 targetPos = GetNonOverlappingPosition();
-        occupiedPositions.Add(targetPos);
-        
-        // 生成一个随机旋转角度 (-30 到 30度)
-        float randomAngle = Random.Range(-30f, 30f);
-        
-        // 注入数据并让贴纸自己飞过去
-        dragLogic.Initialize(data, targetPos, randomAngle);
+        base.OnHide();
+        scatterZone.gameObject.SetActive(false);
     }
 
-    // 🌟 核心：随机散落且防重叠的数学算法
-    private Vector2 GetNonOverlappingPosition()
+    // 🌟 从天而降：用于打开背包时的全局散落
+    private void SpawnScatteredSticker(StickerSO data, float halfWidth)
     {
-        int maxAttempts = 30; // 防止死循环
-        float width = scatterZone.rect.width / 2f - 60f; // 减去边缘缓冲
-        float height = scatterZone.rect.height / 2f - 60f;
+        Rigidbody2D rb = CreateStickerBase(data, out GameObject stickerObj);
 
-        for (int i = 0; i < maxAttempts; i++)
+        // 🌟 核心排版逻辑：叠加 X 轴偏移量
+        currentSpawnX += spawnOffsetXStep;
+
+        // 如果超出了右边界，折返回左侧（稍微加点随机防死板）
+        if (currentSpawnX > halfWidth)
         {
-            Vector2 randomPos = new Vector2(Random.Range(-width, width), Random.Range(-height, height));
-            bool isOverlapping = false;
-
-            // 检查与现有贴纸的距离
-            foreach (var pos in occupiedPositions)
-            {
-                if (Vector2.Distance(randomPos, pos) < minScatterDistance)
-                {
-                    isOverlapping = true;
-                    break;
-                }
-            }
-
-            if (!isOverlapping) return randomPos; // 找到合适的位置！
+            currentSpawnX = -halfWidth + Random.Range(0f, 40f);
         }
-        
-        // 如果试了30次都没找到（东西太多了），强制返回一个坐标
-        return Vector2.zero; 
+
+        float topY = stickerZone.rect.height / 4f;
+
+        // 应用坐标
+        stickerObj.transform.localPosition = new Vector3(currentSpawnX, topY, 0f);
+
+        // 应用面板中配置的散落物理力
+        if (rb != null)
+        {
+            rb.linearVelocity = new Vector2(
+                Random.Range(scatterVelocityX.x, scatterVelocityX.y),
+                Random.Range(scatterVelocityY.x, scatterVelocityY.y)
+            );
+            rb.angularVelocity = Random.Range(scatterAngularVelocity.x, scatterAngularVelocity.y);
+        }
+    }
+
+    // 🌟 精准空投：用于从槽位上扣下贴纸
+    public void SpawnStickerAtMouse(StickerSO data, Vector2 screenPosition, Camera uiCamera = null)
+    {
+        Rigidbody2D rb = CreateStickerBase(data, out GameObject stickerObj);
+
+        // 屏幕坐标精准转换为散落区的本地坐标
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            stickerZone,
+            screenPosition,
+            uiCamera,
+            out Vector2 localPoint
+        );
+
+        stickerObj.transform.localPosition = (Vector3)localPoint;
+
+        // 应用面板中配置的弹射物理力
+        if (rb != null)
+        {
+            rb.linearVelocity = new Vector2(
+                Random.Range(ejectVelocityX.x, ejectVelocityX.y),
+                Random.Range(ejectVelocityY.x, ejectVelocityY.y)
+            );
+            rb.angularVelocity = Random.Range(ejectAngularVelocity.x, ejectAngularVelocity.y);
+        }
+    }
+
+    // 🛠️ 核心工具方法：提取重复的实例化和初始化逻辑
+    private Rigidbody2D CreateStickerBase(StickerSO data, out GameObject stickerObj)
+    {
+        stickerObj = Instantiate(stickerPrefab, stickerZone);
+        stickerObj.transform.localScale = Vector3.one;
+        stickerObj.SetActive(true);
+
+        if (stickerObj.TryGetComponent<DraggableStickerUI>(out var dragLogic))
+        {
+            dragLogic.Initialize(data);
+        }
+
+        if (scatterZone.TryGetComponent<PhysicsSimulationZone>(out var zone))
+        {
+            zone.MarkCacheDirty();
+        }
+
+        return stickerObj.GetComponent<Rigidbody2D>();
     }
 }

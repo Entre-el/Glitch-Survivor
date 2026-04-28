@@ -10,9 +10,10 @@ public class MainMenu : MonoBehaviour
         EventCenter.AddListener(EventDefine.OnRequestSceneChange, ExecuteSceneTransition);
     }
 
-    void Start()
+     [System.Obsolete]
+     void Start()
     {
-        UIManger.Instance.ShowPanel<MenuPanel>();
+        UIManager.Instance.ShowPanel<MenuPanel>();
         
         if (AudioManager.Instance != null) 
         {
