@@ -10,12 +10,12 @@ public class CharacterMenu : MonoBehaviour
         EventCenter.AddListener(EventDefine.OnRequestSceneChange, ExecuteSceneTransition);
     }
 
-     [System.Obsolete]
-     void Start()
+    [System.Obsolete]
+    void Start()
     {
         UIManager.Instance.ShowPanel<CharacterSelectionPanel>();
-        
-        if (AudioManager.Instance != null) 
+
+        if (AudioManager.Instance != null)
         {
             AudioManager.Instance.PlayBGM("Menu");
         }

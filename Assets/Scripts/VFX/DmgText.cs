@@ -4,7 +4,7 @@ using UnityEngine;
 public class DmgText : PoolItem
 {
     private TMPro.TextMeshPro textMesh;
-    
+
     // 🌟 核心：记录初始状态，防止对象池脏数据污染
     private float baseFontSize;
     private Color baseColor = Color.white;

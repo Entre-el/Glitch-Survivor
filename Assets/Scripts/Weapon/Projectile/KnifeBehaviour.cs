@@ -1,6 +1,3 @@
 using UnityEngine;
 
-public class KnifeBehaviour : ProjectileBase
-{
-    
-}
+public class KnifeBehaviour : ProjectileBase { }

@@ -15,5 +15,6 @@ public class StatModifier
     }
 
     // 简化版构造函数
-    public StatModifier(float value, StatModType type, object source) : this(value, type, (int)type, source) { }
+    public StatModifier(float value, StatModType type, object source)
+        : this(value, type, (int)type, source) { }
 }

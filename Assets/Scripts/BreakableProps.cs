@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class BreakableProps : MonoBehaviour
 {
-    public Color damageColor = new Color(1,0,0,1);
+    public Color damageColor = new Color(1, 0, 0, 1);
     public float damageFlashDuration = 0.2f;
     public float deathFadeTime = 0.6f;
     Color originalColor;
@@ -13,8 +13,7 @@ public class BreakableProps : MonoBehaviour
 
     void Start()
     {
-        
-        if(!TryGetComponent<SpriteRenderer>(out sr))
+        if (!TryGetComponent<SpriteRenderer>(out sr))
         {
             sr = GetComponentInChildren<SpriteRenderer>();
         }
@@ -39,12 +38,18 @@ public class BreakableProps : MonoBehaviour
     IEnumerator BreakFade()
     {
         WaitForEndOfFrame w = new WaitForEndOfFrame();
-        float t = 0, origAlpha = sr.color.a;
-        while(t < deathFadeTime)
+        float t = 0,
+            origAlpha = sr.color.a;
+        while (t < deathFadeTime)
         {
             yield return w;
-            t+= Time.deltaTime;
-            sr.color = new Color(sr.color.r,sr.color.g,sr.color.b,(1-t/deathFadeTime)*origAlpha);
+            t += Time.deltaTime;
+            sr.color = new Color(
+                sr.color.r,
+                sr.color.g,
+                sr.color.b,
+                (1 - t / deathFadeTime) * origAlpha
+            );
         }
         Destroy(gameObject);
     }

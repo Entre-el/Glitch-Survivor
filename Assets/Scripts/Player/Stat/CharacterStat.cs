@@ -41,10 +41,11 @@ public class CharacterStat
         isDirty = true;
         statModifiers.Add(mod);
         // 按照计算顺序进行排序 (Flat -> PercentAdd -> PercentMult)
-        statModifiers.Sort(CompareModifierOrder); 
+        statModifiers.Sort(CompareModifierOrder);
     }
-    public virtual void AddModifiers(float Value,StatModType Type,int Order,object Source)
-    {        
+
+    public virtual void AddModifiers(float Value, StatModType Type, int Order, object Source)
+    {
         AddModifier(new StatModifier(Value, Type, Order, Source));
     }
 
@@ -68,8 +69,10 @@ public class CharacterStat
 
     private int CompareModifierOrder(StatModifier a, StatModifier b)
     {
-        if (a.Order < b.Order) return -1;
-        else if (a.Order > b.Order) return 1;
+        if (a.Order < b.Order)
+            return -1;
+        else if (a.Order > b.Order)
+            return 1;
         return 0; // 如果顺序一样，保持原样
     }
 
@@ -91,12 +94,15 @@ public class CharacterStat
             {
                 // 注意：百分比加法是相互叠加的。例如两个 +10%，等于 +20%
                 sumPercentAdd += mod.Value;
-                
+
                 // 如果这是最后一个 PercentAdd，或者下一个修饰器不是 PercentAdd 了，就结算一次
-                if (i + 1 >= statModifiers.Count || statModifiers[i + 1].Type != StatModType.PercentAdd)
+                if (
+                    i + 1 >= statModifiers.Count
+                    || statModifiers[i + 1].Type != StatModType.PercentAdd
+                )
                 {
                     finalValue *= (1.0f + sumPercentAdd);
-                    sumPercentAdd = 0; 
+                    sumPercentAdd = 0;
                 }
             }
             else if (mod.Type == StatModType.PercentMult)
@@ -107,13 +113,14 @@ public class CharacterStat
         }
 
         // 可以根据需要返回 Mathf.Round() 取整，这里保留浮点精度
-        return (float)Math.Round(finalValue, 4); 
+        return (float)Math.Round(finalValue, 4);
     }
 }
+
 // 定义修饰器的类型（数值越大，计算优先级越靠后）
 public enum StatModType
 {
-    Flat = 100,       // 固定值加减 (如：攻击力 +5)
+    Flat = 100, // 固定值加减 (如：攻击力 +5)
     PercentAdd = 200, // 百分比加法 (如：攻击力 +10%, 多个同类相互叠加)
-    PercentMult = 300 // 百分比独立乘法 (如：最终伤害 x1.5, 极为稀有和强大的词缀)
+    PercentMult = 300, // 百分比独立乘法 (如：最终伤害 x1.5, 极为稀有和强大的词缀)
 }

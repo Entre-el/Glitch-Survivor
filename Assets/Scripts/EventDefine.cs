@@ -38,6 +38,7 @@ public enum EventDefine
     OnPlayerExpChanged,
     OnPlayerLevelUp,
     OnDamagePopup,
+    OnEnemyDied,
 }
 
 public struct DmgMessage

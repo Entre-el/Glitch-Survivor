@@ -8,61 +8,66 @@ using UnityEngine;
 [RequireComponent(typeof(Transform))]
 public class EnemyCore : MonoBehaviour
 {
-    [field: SerializeField] public TransformAnchorSO TargetAnchor { get; private set; }
+    [field: SerializeField]
+    public TransformAnchorSO TargetAnchor { get; private set; }
     public EnemyStatSO enemyStatSO;
     public EnemyLocomotion Locomotion { get; private set; }
     public EnemyHealth Health { get; private set; }
     public EnemyVisuals Visuals { get; private set; }
     private readonly List<BaseEnemyBuff> activeBuffs = new(4);
+
     private void Awake()
     {
         Locomotion = GetComponent<EnemyLocomotion>();
         Health = GetComponent<EnemyHealth>();
         Visuals = GetComponent<EnemyVisuals>();
-    
 
-        if(TargetAnchor == null)
+        if (TargetAnchor == null)
         {
             TargetAnchor = FindAnyObjectByType<TransformAnchorSO>(); // 尝试在场景中找到一个 TransformAnchorSO 实例
-            if(TargetAnchor == null)
+            if (TargetAnchor == null)
             {
                 Debug.LogError("TargetAnchor is not set");
-                return; 
+                return;
             }
         }
+        EventCenter.AddListener(EventDefine.OnEnemyDied, OnEnemyDied);
     }
-    public void AddBuff(BaseEnemyBuff newBuff,int stackCount = 1,float duration = 2f)
+
+    public void AddBuff(BaseEnemyBuff newBuff, int stackCount = 1, float duration = 2f)
     {
-        if(activeBuffs.Contains(newBuff))
+        if (activeBuffs.Contains(newBuff))
         {
             newBuff.stackCount++; // 如果已经有这个 Buff 了，增加层数
-            newBuff.OnAddStack(stackCount); // 如果已经有这个 Buff 了，刷新持续时间
+            newBuff.OnAddStack(stackCount, duration); // 如果已经有这个 Buff 了，刷新持续时间
             return; // 已经有这个 Buff 了，直接返回
         }
         activeBuffs.Add(newBuff);
         newBuff.OnApply(); // 触发初始效果
-        
+
         // 通知 UI 更新（使用我们之前学过的事件系统）
         // EventCenter.Broadcast(EventDefine.OnBuffAdded, myCore.gameObject, newBuff.buffData);
     }
+
     public void BuffTick()
     {
         for (int i = activeBuffs.Count - 1; i >= 0; i--)
-            {
-                BaseEnemyBuff buff = activeBuffs[i];
-                buff.OnTick(Time.deltaTime);
+        {
+            BaseEnemyBuff buff = activeBuffs[i];
+            buff.OnTick(Time.deltaTime);
 
-                // 检查 Buff 是否到期
-                if (buff.timeRemaining <= 0)
-                {
-                    buff.OnRemove();
-                    activeBuffs.RemoveAt(i);
-                    
-                    // 通知 UI 移除图标
-                    // EventCenter.Broadcast(EventDefine.OnBuffRemoved, myCore.gameObject, buff.buffData);
-                }
+            // 检查 Buff 是否到期
+            if (buff.timeRemaining <= 0)
+            {
+                buff.OnRemove();
+                activeBuffs.RemoveAt(i);
+
+                // 通知 UI 移除图标
+                // EventCenter.Broadcast(EventDefine.OnBuffRemoved, myCore.gameObject, buff.buffData);
             }
+        }
     }
+
     public void ClearBuffs()
     {
         foreach (var buff in activeBuffs)
@@ -71,21 +76,22 @@ public class EnemyCore : MonoBehaviour
         }
         activeBuffs.Clear(); // 再清空列表
     }
-    public void TakeDamage(float damage,bool isCrit)
+
+    public void TakeDamage(float damage, bool isCrit)
     {
-        Health.currentHealth -= damage;
-        EventCenter.Broadcast(EventDefine.OnDamagePopup,new DmgMessage
-        {
-            amount = (int)damage,
-            position = transform.position,
-            isCritical = isCrit
-        });
-        if (Health.currentHealth <= 0)
-        {
-            Die();
-        }
+        Health.TakeDamage((int)damage);
+        EventCenter.Broadcast(
+            EventDefine.OnDamagePopup,
+            new DmgMessage
+            {
+                amount = (int)damage,
+                position = transform.position,
+                isCritical = isCrit,
+            }
+        );
     }
-    public void Die()
+
+    public void OnEnemyDied()
     {
         // 1. 播放死亡动画
         //Visuals.PlayDeathAnimation();

@@ -8,7 +8,7 @@ using UnityEngine;
 public class PlayerCore : MonoBehaviour
 {
     [field: SerializeField]
-    public TransformAnchorSO playerTransformAnchor { get; private set; }
+    public TransformAnchorSO PlayerTransformAnchor { get; private set; }
 
     // 假设你听了我的建议，创建了基础数据的 SO 并在面板拖拽赋值
     [SerializeField]
@@ -51,7 +51,7 @@ public class PlayerCore : MonoBehaviour
         {
             weaponBrain.Initialize(this);
         }
-        playerTransformAnchor.Value = transform; // 🌟 连接核心和敌人追踪系统的桥梁
+        PlayerTransformAnchor.Value = transform; // 🌟 连接核心和敌人追踪系统的桥梁
     }
 
     private void Start()
@@ -62,13 +62,13 @@ public class PlayerCore : MonoBehaviour
 
     public void OnEnable()
     {
-        if (playerTransformAnchor != null)
-            playerTransformAnchor.Value = transform;
+        if (PlayerTransformAnchor != null)
+            PlayerTransformAnchor.Value = transform;
     }
 
     public void OnDisable()
     {
-        if (playerTransformAnchor != null)
-            playerTransformAnchor.Value = null;
+        if (PlayerTransformAnchor != null)
+            PlayerTransformAnchor.Value = null;
     }
 }

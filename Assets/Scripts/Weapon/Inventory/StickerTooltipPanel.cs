@@ -1,6 +1,6 @@
-using UnityEngine;
-using TMPro;
 using System.Text;
+using TMPro;
+using UnityEngine;
 
 public class StickerTooltipPanel : BasePanel
 {
@@ -11,7 +11,7 @@ public class StickerTooltipPanel : BasePanel
     public TextMeshProUGUI descText;
     public RectTransform rectTransform;
 
-    public Vector2 offset = new(50f, -50f); 
+    public Vector2 offset = new(50f, -50f);
 
     public override void OnInit()
     {
@@ -23,7 +23,8 @@ public class StickerTooltipPanel : BasePanel
     // 🌟 核心修改：加入可为空的 StickerSlotType 参数
     public void OnShow(StickerSO sticker, StickerSlotType? hoveredSlot = null)
     {
-        if (!hasInit) OnInit();
+        if (!hasInit)
+            OnInit();
 
         nameText.text = sticker.stickerName;
 
@@ -31,11 +32,12 @@ public class StickerTooltipPanel : BasePanel
         if (hoveredSlot.HasValue && hoveredSlot.Value != StickerSlotType.Any)
         {
             string specificDesc = sticker.GetDescriptionForSlot(hoveredSlot.Value);
-            
+
             if (string.IsNullOrEmpty(specificDesc))
             {
                 // 如果这个槽位没写描述，给个友好的提示
-                descText.text = $"<color=#888888>该贴纸装配至【{hoveredSlot.Value}】槽位时无特殊效果。</color>";
+                descText.text =
+                    $"<color=#888888>该贴纸装配至【{hoveredSlot.Value}】槽位时无特殊效果。</color>";
             }
             else
             {
@@ -47,23 +49,23 @@ public class StickerTooltipPanel : BasePanel
         else
         {
             StringBuilder sb = new StringBuilder();
-            
-            if (!string.IsNullOrEmpty(sticker.fireDescription)) 
+
+            if (!string.IsNullOrEmpty(sticker.fireDescription))
                 sb.AppendLine($"<b>【开火】</b> {sticker.fireDescription}");
-                
-            if (!string.IsNullOrEmpty(sticker.pierceDescription)) 
+
+            if (!string.IsNullOrEmpty(sticker.pierceDescription))
                 sb.AppendLine($"<b>【穿透】</b> {sticker.pierceDescription}");
-                
-            if (!string.IsNullOrEmpty(sticker.critDescription)) 
+
+            if (!string.IsNullOrEmpty(sticker.critDescription))
                 sb.AppendLine($"<b>【暴击】</b> {sticker.critDescription}");
-                
-            if (!string.IsNullOrEmpty(sticker.fadeDescription)) 
+
+            if (!string.IsNullOrEmpty(sticker.fadeDescription))
                 sb.AppendLine($"<b>【消失】</b> {sticker.fadeDescription}");
 
             descText.text = sb.Length > 0 ? sb.ToString() : "暂无描述";
         }
-        
-        OnShow(); 
+
+        OnShow();
     }
 
     private void Update()

@@ -2,13 +2,14 @@
 public abstract class BaseEnemyBuff
 {
     public EnemyBuffSO buffData; // 引用的数据
-    public float duration = 2f;       // 持续时间
-    public float timeRemaining;  // 剩余时间
-    protected EnemyCore target;  // 宿主
+    public float duration = 2f; // 持续时间
+    public float timeRemaining; // 剩余时间
+    protected EnemyCore target; // 宿主
     public int stackCount = 0;
+    public BuffType BuffType => buffData.buffType; // 方便外部访问 Buff 类型
 
     // 构造函数：初始化 Buff
-    public BaseEnemyBuff(EnemyBuffSO data, EnemyCore target,float duration = 2f)
+    public BaseEnemyBuff(EnemyBuffSO data, EnemyCore target, float duration = 2f)
     {
         this.buffData = data;
         this.duration = duration;
@@ -17,15 +18,14 @@ public abstract class BaseEnemyBuff
     }
 
     // 1. 刚挂上时的瞬间效果
-    public virtual void OnApply() 
-    {
-        
-    }
-    public virtual void OnTick(float deltaTime) 
+    public virtual void OnApply() { }
+
+    public virtual void OnTick(float deltaTime)
     {
         timeRemaining -= deltaTime;
     }
-    public virtual void OnAddStack(int addedStacks = 1,float duration = 2f)
+
+    public virtual void OnAddStack(int addedStacks = 1, float duration = 2f)
     {
         stackCount += addedStacks;
         timeRemaining = duration; // 刷新持续时间

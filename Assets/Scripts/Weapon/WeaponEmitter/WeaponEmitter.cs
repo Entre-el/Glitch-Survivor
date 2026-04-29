@@ -8,6 +8,7 @@ public class WeaponEmitter : MonoBehaviour
     public float projectileRange;
     public float projectileDamage;
     public float projectilePierce;
+
     public virtual ProjectileBase SpawnBullet()
     {
         Object newBullet = ObjectPoolManager.Instance.Get(projectilePrefab.gameObject);

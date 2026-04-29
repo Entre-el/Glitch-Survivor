@@ -23,11 +23,11 @@ public class PoolItemCollector
         //targetSO.ClearRequiredItems();
 
         // 2. 定义你要扫描的文件夹路径 (可以定义多个)
-        string[] searchFolders = new string[] 
-        { 
-            "Assets/Prefabs/Enemies", 
+        string[] searchFolders = new string[]
+        {
+            "Assets/Prefabs/Enemies",
             "Assets/Prefabs/Props",
-            "Assets/Prefabs/Projectiles"
+            "Assets/Prefabs/Projectiles",
         };
 
         // 3. 使用 AssetDatabase 查找这些文件夹下的所有 Prefab
@@ -39,12 +39,14 @@ public class PoolItemCollector
         {
             // 将 GUID 转换回具体的文件路径
             string assetPath = AssetDatabase.GUIDToAssetPath(guid);
-            
+
             // 加载预制体
             PoolItem poolItem = AssetDatabase.LoadAssetAtPath<PoolItem>(assetPath);
-            if (poolItem!= null && targetSO.requiredItems.Exists(item => item.name == poolItem.name) == false) // 避免重复添加
+            if (
+                poolItem != null
+                && targetSO.requiredItems.Exists(item => item.name == poolItem.name) == false
+            ) // 避免重复添加
             {
-
                 targetSO.requiredItems.Add(poolItem);
                 count++;
             }
@@ -55,7 +57,9 @@ public class PoolItemCollector
         EditorUtility.SetDirty(targetSO);
         AssetDatabase.SaveAssets();
 
-        Debug.Log($"<color=green>✅ 收集完成！共找到并添加了 {count} 个 PoolItem 到 {targetSO.name}。</color>");
+        Debug.Log(
+            $"<color=green>✅ 收集完成！共找到并添加了 {count} 个 PoolItem 到 {targetSO.name}。</color>"
+        );
     }
 }
 #endif

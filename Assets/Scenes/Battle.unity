@@ -10259,7 +10259,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb449f70d29ef9b48bc5d9b8b4893847, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCore
-  <playerTransformAnchor>k__BackingField: {fileID: 11400000, guid: 2db80b6fbf58fb7469ef6bdd73569147, type: 2}
+  <PlayerTransformAnchor>k__BackingField: {fileID: 11400000, guid: 2db80b6fbf58fb7469ef6bdd73569147, type: 2}
   baseStatsSO: {fileID: 11400000, guid: 78d6a8ab58778084e9a32625eaba294d, type: 2}
   weaponBrain: {fileID: 1327191087}
 --- !u!114 &1327191083

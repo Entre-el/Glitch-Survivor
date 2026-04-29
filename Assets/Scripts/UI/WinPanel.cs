@@ -1,4 +1,5 @@
 using UnityEngine;
+
 public class WinPanel : BasePanel
 {
     public override void OnInit()
@@ -6,11 +7,13 @@ public class WinPanel : BasePanel
         base.OnInit();
         gameObject.SetActive(false);
     }
+
     public override void OnShow()
     {
         base.OnShow();
         Time.timeScale = 0f;
     }
+
     public override void OnHide()
     {
         base.OnHide();

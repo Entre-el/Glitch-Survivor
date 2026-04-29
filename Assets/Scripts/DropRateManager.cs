@@ -27,7 +27,11 @@ public class DropRateManager : MonoBehaviour
         if (possibleDrops.Count > 0)
         {
             int randomIndex = Random.Range(0, possibleDrops.Count);
-            Instantiate(possibleDrops[randomIndex].itemPrefab, transform.position, Quaternion.identity);
+            Instantiate(
+                possibleDrops[randomIndex].itemPrefab,
+                transform.position,
+                Quaternion.identity
+            );
         }
     }
 }

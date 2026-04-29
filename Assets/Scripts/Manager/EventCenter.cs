@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public static class EventCenter
 {
     private static Dictionary<EventDefine, Delegate> eventTable = new(100);
+
     public static void AddListener<T>(EventDefine eventType, Action<T> handler)
     {
         if (!eventTable.ContainsKey(eventType))
@@ -17,7 +17,8 @@ public static class EventCenter
             eventTable[eventType] = (Action<T>)eventTable[eventType] + handler;
         }
     }
-        public static void AddListener(EventDefine eventType, Action handler)
+
+    public static void AddListener(EventDefine eventType, Action handler)
     {
         if (!eventTable.ContainsKey(eventType))
         {
@@ -28,13 +29,14 @@ public static class EventCenter
             eventTable[eventType] = (Action)eventTable[eventType] + handler;
         }
     }
+
     public static void RemoveListener<T>(EventDefine eventType, Action<T> handler)
     {
         if (eventTable.ContainsKey(eventType))
         {
             // 从委托链中“剥离（-=）”这个方法指针
             eventTable[eventType] = (Action<T>)eventTable[eventType] - handler;
-            
+
             // 如果频道里一个听众都没了，就把频道从字典里删掉，节约内存
             if (eventTable[eventType] == null)
             {
@@ -42,6 +44,7 @@ public static class EventCenter
             }
         }
     }
+
     public static void RemoveListener(EventDefine eventType, Action handler)
     {
         if (eventTable.ContainsKey(eventType))
@@ -53,6 +56,7 @@ public static class EventCenter
             }
         }
     }
+
     public static void Broadcast(EventDefine eventType)
     {
         if (eventTable.TryGetValue(eventType, out Delegate d))
@@ -68,6 +72,7 @@ public static class EventCenter
             }
         }
     }
+
     public static void Broadcast<T>(EventDefine eventType, T arg)
     {
         if (eventTable.TryGetValue(eventType, out Delegate d))
@@ -83,7 +88,8 @@ public static class EventCenter
             }
         }
     }
-        public static void Broadcast<T1, T2>(EventDefine eventType, T1 arg1, T2 arg2)
+
+    public static void Broadcast<T1, T2>(EventDefine eventType, T1 arg1, T2 arg2)
     {
         if (eventTable.TryGetValue(eventType, out Delegate d))
         {

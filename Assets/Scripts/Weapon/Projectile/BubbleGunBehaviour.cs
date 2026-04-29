@@ -1,7 +1,4 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
-public class BubbleGunBehaviour : ProjectileBase
-{
-
-}
+public class BubbleGunBehaviour : ProjectileBase { }

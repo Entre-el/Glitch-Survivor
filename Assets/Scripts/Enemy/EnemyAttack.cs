@@ -1,7 +1,9 @@
 using UnityEngine;
+
 public class EnemyAttack : MonoBehaviour
 {
     private EnemyCore core;
+
     private void Awake()
     {
         TryGetComponent<EnemyCore>(out EnemyCore enemyCore);

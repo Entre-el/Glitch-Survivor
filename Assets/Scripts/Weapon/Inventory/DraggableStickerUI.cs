@@ -1,16 +1,21 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using System.Collections.Generic;
 
 // 🌟 新增：IPointerEnterHandler, IPointerExitHandler 接口用于处理地上贴纸的鼠标悬停
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(CanvasGroup))]
 [RequireComponent(typeof(RectTransform))]
 [RequireComponent(typeof(Image))]
-public class DraggableStickerUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
+public class DraggableStickerUI
+    : MonoBehaviour,
+        IBeginDragHandler,
+        IDragHandler,
+        IEndDragHandler,
+        IPointerEnterHandler,
+        IPointerExitHandler
 {
-
     [Header("数据")]
     public float rotationLerpSpeed = 15f;
     private StickerSO myData;
@@ -34,7 +39,8 @@ public class DraggableStickerUI : MonoBehaviour, IBeginDragHandler, IDragHandler
     public void Initialize(StickerSO data)
     {
         myData = data;
-        if (myImage != null) myImage.sprite = data.icon;
+        if (myImage != null)
+            myImage.sprite = data.icon;
     }
 
     private void Update()
@@ -43,7 +49,11 @@ public class DraggableStickerUI : MonoBehaviour, IBeginDragHandler, IDragHandler
         {
             float currentZ = rectTransform.eulerAngles.z;
             float targetZ = 0f;
-            float newZ = Mathf.LerpAngle(currentZ, targetZ, Time.unscaledDeltaTime * rotationLerpSpeed);
+            float newZ = Mathf.LerpAngle(
+                currentZ,
+                targetZ,
+                Time.unscaledDeltaTime * rotationLerpSpeed
+            );
             rectTransform.rotation = Quaternion.Euler(0, 0, newZ);
         }
     }
@@ -68,7 +78,7 @@ public class DraggableStickerUI : MonoBehaviour, IBeginDragHandler, IDragHandler
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        isDragging = true; 
+        isDragging = true;
         rb.bodyType = RigidbodyType2D.Kinematic;
         rb.linearVelocity = Vector2.zero;
         rb.angularVelocity = 0f;
@@ -88,11 +98,14 @@ public class DraggableStickerUI : MonoBehaviour, IBeginDragHandler, IDragHandler
     public void OnDrag(PointerEventData eventData)
     {
         // 1. 移动贴纸坐标
-        if (RectTransformUtility.ScreenPointToWorldPointInRectangle(
-            rectTransform, 
-            eventData.position, 
-            eventData.pressEventCamera, 
-            out Vector3 worldPoint))
+        if (
+            RectTransformUtility.ScreenPointToWorldPointInRectangle(
+                rectTransform,
+                eventData.position,
+                eventData.pressEventCamera,
+                out Vector3 worldPoint
+            )
+        )
         {
             rectTransform.position = worldPoint;
         }
@@ -122,7 +135,7 @@ public class DraggableStickerUI : MonoBehaviour, IBeginDragHandler, IDragHandler
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        isDragging = false; 
+        isDragging = false;
         canvasGroup.blocksRaycasts = true;
 
         // 松手时，隐藏 Tooltip
@@ -135,7 +148,7 @@ public class DraggableStickerUI : MonoBehaviour, IBeginDragHandler, IDragHandler
 
         if (targetSlot != null)
         {
-            StickerSO existingSticker = targetSlot.GetCurrentSticker(); 
+            StickerSO existingSticker = targetSlot.GetCurrentSticker();
 
             if (existingSticker != null)
             {
@@ -143,8 +156,15 @@ public class DraggableStickerUI : MonoBehaviour, IBeginDragHandler, IDragHandler
                 if (panel != null && panel.gameObject.activeInHierarchy)
                 {
                     InventoryManager.Instance.UnequipSticker(targetSlot.mySlotType);
-                    Vector2 slotScreenPos = RectTransformUtility.WorldToScreenPoint(eventData.pressEventCamera, targetSlot.transform.position);
-                    panel.SpawnStickerAtMouse(existingSticker, slotScreenPos, eventData.pressEventCamera);
+                    Vector2 slotScreenPos = RectTransformUtility.WorldToScreenPoint(
+                        eventData.pressEventCamera,
+                        targetSlot.transform.position
+                    );
+                    panel.SpawnStickerAtMouse(
+                        existingSticker,
+                        slotScreenPos,
+                        eventData.pressEventCamera
+                    );
                 }
             }
 
@@ -152,12 +172,13 @@ public class DraggableStickerUI : MonoBehaviour, IBeginDragHandler, IDragHandler
             if (success)
             {
                 targetSlot.UpdateVisual(myData);
-                
+
                 // 贴纸被成功装入，由于要销毁自身，为了防止 Tooltip 卡在屏幕上，再保险隐藏一次
-                if (StickerTooltipPanel.Instance != null) StickerTooltipPanel.Instance.OnHide();
-                
-                Destroy(gameObject); 
-                return; 
+                if (StickerTooltipPanel.Instance != null)
+                    StickerTooltipPanel.Instance.OnHide();
+
+                Destroy(gameObject);
+                return;
             }
             else
             {
@@ -165,9 +186,9 @@ public class DraggableStickerUI : MonoBehaviour, IBeginDragHandler, IDragHandler
             }
         }
 
-        rb.bodyType = RigidbodyType2D.Dynamic; 
-        rb.linearVelocity = throwVelocity * 0.02f; 
-        rb.angularVelocity = Random.Range(-100f, 100f); 
+        rb.bodyType = RigidbodyType2D.Dynamic;
+        rb.linearVelocity = throwVelocity * 0.02f;
+        rb.angularVelocity = Random.Range(-100f, 100f);
     }
 
     private WeaponSlotUI DetectSlotUnderMouse(PointerEventData eventData)
@@ -178,8 +199,9 @@ public class DraggableStickerUI : MonoBehaviour, IBeginDragHandler, IDragHandler
         foreach (var result in results)
         {
             WeaponSlotUI slot = result.gameObject.GetComponentInParent<WeaponSlotUI>();
-            if (slot != null) return slot; 
+            if (slot != null)
+                return slot;
         }
-        return null; 
+        return null;
     }
 }

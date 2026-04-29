@@ -9,6 +9,7 @@ public class SubWeaponContext
     public StickerSO CritSticker;
     public StickerSO FadeSticker;
 }
+
 [System.Serializable]
 public class StickerEquipData
 {
@@ -26,11 +27,17 @@ public class WeaponSlotManager
     public List<SubWeaponContext> SubContexts = new List<SubWeaponContext>();
 
     // 🌟 完善：传入武器的基础伤害、基础穿透、基础击退
-    public CombatPayload GeneratePayload(int contextIndex, float baseDmg, int basePierce, float baseKnockback, PlayerCore core)
+    public CombatPayload GeneratePayload(
+        int contextIndex,
+        float baseDmg,
+        int basePierce,
+        float baseKnockback,
+        PlayerCore core
+    )
     {
         SubWeaponContext ctx = SubContexts[contextIndex];
         StatCalculator stats = core.Stats; // 提取你的属性计算器
-        
+
         // 🌟 核心机制 1：处理穿透 (Float 强转 Int)
         int finalPierce = basePierce + Mathf.FloorToInt(stats.PlayerPierce.Value);
 
@@ -53,8 +60,8 @@ public class WeaponSlotManager
             PierceSticker = ctx.PierceSticker,
             CritSticker = ctx.CritSticker,
             FadeSticker = ctx.FadeSticker,
-            
-            SourceEntity = core.gameObject
+
+            SourceEntity = core.gameObject,
         };
     }
 }

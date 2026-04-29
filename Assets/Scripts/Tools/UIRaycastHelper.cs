@@ -1,8 +1,8 @@
-using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem; 
 using System.Collections.Generic;
 using System.Text;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 public class UIRaycastHelper : MonoBehaviour
 {
@@ -41,13 +41,17 @@ public class UIRaycastHelper : MonoBehaviour
 
         if (results.Count == 0)
         {
-            Debug.Log("<color=#888888>【UI雷达】当前鼠标下方非常干净，没有任何 UI 拦截射线。</color>");
+            Debug.Log(
+                "<color=#888888>【UI雷达】当前鼠标下方非常干净，没有任何 UI 拦截射线。</color>"
+            );
             return;
         }
 
         // 使用 StringBuilder 拼接，优化性能
         StringBuilder sb = new StringBuilder();
-        sb.AppendLine($"<color=cyan>【UI雷达】按下 X 键！在鼠标坐标 {Pointer.current.position.ReadValue()} 处发现了 {results.Count} 层 UI：</color>");
+        sb.AppendLine(
+            $"<color=cyan>【UI雷达】按下 X 键！在鼠标坐标 {Pointer.current.position.ReadValue()} 处发现了 {results.Count} 层 UI：</color>"
+        );
 
         for (int i = 0; i < results.Count; i++)
         {
@@ -57,7 +61,9 @@ public class UIRaycastHelper : MonoBehaviour
             if (i == 0)
             {
                 // 第 0 层是最顶层的，也就是直接吃掉你鼠标点击的“头号嫌疑犯”
-                sb.AppendLine($"<color=red>► [最顶层拦截] <b>{obj.name}</b></color> (路径: {fullPath})");
+                sb.AppendLine(
+                    $"<color=red>► [最顶层拦截] <b>{obj.name}</b></color> (路径: {fullPath})"
+                );
             }
             else
             {
@@ -76,11 +82,12 @@ public class UIRaycastHelper : MonoBehaviour
     {
         List<RaycastResult> results = new List<RaycastResult>();
 
-        if (EventSystem.current == null || Pointer.current == null) return results;
+        if (EventSystem.current == null || Pointer.current == null)
+            return results;
 
         PointerEventData eventData = new PointerEventData(EventSystem.current)
         {
-            position = Pointer.current.position.ReadValue()
+            position = Pointer.current.position.ReadValue(),
         };
 
         EventSystem.current.RaycastAll(eventData, results);

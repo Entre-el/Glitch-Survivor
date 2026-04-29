@@ -36,8 +36,10 @@ public class MatchColliderToRect : UIBehaviour // 继承 UIBehaviour 是为了�
 
     private void UpdateColliderSize()
     {
-        if (rectTransform == null) rectTransform = GetComponent<RectTransform>();
-        if (boxCollider == null) boxCollider = GetComponent<BoxCollider2D>();
+        if (rectTransform == null)
+            rectTransform = GetComponent<RectTransform>();
+        if (boxCollider == null)
+            boxCollider = GetComponent<BoxCollider2D>();
 
         if (rectTransform != null && boxCollider != null)
         {

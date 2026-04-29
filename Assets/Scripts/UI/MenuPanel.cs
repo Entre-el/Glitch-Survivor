@@ -7,7 +7,6 @@ public class MenuPanel : BasePanel
     public Button exitButton;
     public Button instructionButton;
     public CanvasGroup instructionScreen;
-    
 
     public override void OnShow()
     {

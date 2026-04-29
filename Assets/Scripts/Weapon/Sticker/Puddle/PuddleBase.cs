@@ -22,6 +22,7 @@ public class PuddleBase : PoolItem
 
     // 使用 OnTriggerStay2D，配合时间控制，实现“每秒附加一次”
     private float applyTimer;
+
     protected void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Enemy"))

@@ -906,7 +906,7 @@ MonoBehaviour:
       m_LastClickedID:
         m_Data: 0
       m_ExpandedIDs:
-      - m_Data: -1392
+      - m_Data: -1328
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -1098,7 +1098,7 @@ MonoBehaviour:
       m_LastClickedID:
         m_Data: 0
       m_ExpandedIDs:
-      - m_Data: -1392
+      - m_Data: -1328
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -1197,15 +1197,15 @@ MonoBehaviour:
       m_Data: 56698
     m_ExpandedIDs:
     - m_Data: 0
-    - m_Data: 53160
-    - m_Data: 53162
-    - m_Data: 53164
-    - m_Data: 53166
-    - m_Data: 53168
-    - m_Data: 53170
-    - m_Data: 53172
-    - m_Data: 53174
-    - m_Data: 53176
+    - m_Data: 53812
+    - m_Data: 53814
+    - m_Data: 53816
+    - m_Data: 53818
+    - m_Data: 53820
+    - m_Data: 53822
+    - m_Data: 53824
+    - m_Data: 53826
+    - m_Data: 53828
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1239,15 +1239,15 @@ MonoBehaviour:
       m_Data: 59582
     m_ExpandedIDs:
     - m_Data: 0
-    - m_Data: 53160
-    - m_Data: 53162
-    - m_Data: 53164
-    - m_Data: 53166
-    - m_Data: 53168
-    - m_Data: 53170
-    - m_Data: 53172
-    - m_Data: 53174
-    - m_Data: 53176
+    - m_Data: 53812
+    - m_Data: 53814
+    - m_Data: 53816
+    - m_Data: 53818
+    - m_Data: 53820
+    - m_Data: 53822
+    - m_Data: 53824
+    - m_Data: 53826
+    - m_Data: 53828
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -3097,20 +3097,20 @@ MonoBehaviour:
   m_FolderTreeState:
     scrollPos: {x: 0, y: 397.99997}
     m_SelectedIDs:
-    - m_Data: 56148
+    - m_Data: 54054
     m_LastClickedID:
-      m_Data: 56148
+      m_Data: 54054
     m_ExpandedIDs:
     - m_Data: 0
-    - m_Data: 53160
-    - m_Data: 53162
-    - m_Data: 53164
-    - m_Data: 53166
-    - m_Data: 53168
-    - m_Data: 53170
-    - m_Data: 53172
-    - m_Data: 53174
-    - m_Data: 53176
+    - m_Data: 53812
+    - m_Data: 53814
+    - m_Data: 53816
+    - m_Data: 53818
+    - m_Data: 53820
+    - m_Data: 53822
+    - m_Data: 53824
+    - m_Data: 53826
+    - m_Data: 53828
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -3143,15 +3143,15 @@ MonoBehaviour:
       m_Data: 0
     m_ExpandedIDs:
     - m_Data: 0
-    - m_Data: 53160
-    - m_Data: 53162
-    - m_Data: 53164
-    - m_Data: 53166
-    - m_Data: 53168
-    - m_Data: 53170
-    - m_Data: 53172
-    - m_Data: 53174
-    - m_Data: 53176
+    - m_Data: 53812
+    - m_Data: 53814
+    - m_Data: 53816
+    - m_Data: 53818
+    - m_Data: 53820
+    - m_Data: 53822
+    - m_Data: 53824
+    - m_Data: 53826
+    - m_Data: 53828
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -3178,9 +3178,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs:
-    - m_Data: -2374
-    m_LastClickedInstanceID: -2374
+    m_SelectedInstanceIDs: []
+    m_LastClickedInstanceID: 0
     m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs:
     - m_Data: 51918

@@ -7,21 +7,22 @@ public enum GameState
     Paused,
     GameOver,
     Win,
-    LevelingUp
+    LevelingUp,
 }
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-    
+
     [Header("游戏状态")]
     public GameState currentGameState = GameState.Playing;
     public GameState previousGameState; // 用于暂停恢复时回退状态
 
     [Header("全局配置")]
     public float cutInDuration = 2f;
+
     // 不再用 GameObject，直接拿 PlayerCore 的引用，彻底消灭 SendMessage
-    public PlayerCore playerCore; 
+    public PlayerCore playerCore;
 
     void Awake()
     {
@@ -73,7 +74,8 @@ public class GameManager : MonoBehaviour
 
     private void OnPlayerDied()
     {
-        if (currentGameState == GameState.GameOver) return; // 防止重复触发
+        if (currentGameState == GameState.GameOver)
+            return; // 防止重复触发
 
         SaveBattleData();
         OnGameOver();
@@ -84,71 +86,71 @@ public class GameManager : MonoBehaviour
         // 你的保存逻辑
     }
 
-     [Obsolete]
-     public void PauseGame()
+    [Obsolete]
+    public void PauseGame()
     {
         if (currentGameState == GameState.Playing)
         {
             ChangeState(GameState.Paused);
-            
+
             // UI 和时间流逝交给 UIManager 处理
-            UIManager.Instance.ShowPanel<PausePanel>(); 
-            
+            UIManager.Instance.ShowPanel<PausePanel>();
+
             // GameManager 只负责非 UI 的全局表现（比如音效变调）
             if (AudioManager.Instance != null && AudioManager.Instance.bgmSource != null)
                 AudioManager.Instance.bgmSource.pitch = 0.5f;
-                
+
             Debug.Log("Game Paused");
         }
     }
 
-     [Obsolete]
-     public void ResumeGame()
+    [Obsolete]
+    public void ResumeGame()
     {
         if (currentGameState == GameState.Paused)
         {
             ChangeState(previousGameState);
-            
+
             // 通知 UI 关闭暂停面板
             UIManager.Instance.HidePanel<PausePanel>();
-            
+
             if (AudioManager.Instance != null && AudioManager.Instance.bgmSource != null)
                 AudioManager.Instance.bgmSource.pitch = 1f;
-                
+
             Debug.Log("Game Resumed");
         }
     }
 
-     [Obsolete]
-     public void OnGameOver()
+    [Obsolete]
+    public void OnGameOver()
     {
         ChangeState(GameState.GameOver);
-        
+
         if (AudioManager.Instance != null)
             AudioManager.Instance.CrossfadeBGM("GameOver", cutInDuration);
-            
+
         // 呼出结算面板
         UIManager.Instance.ShowPanel<ResultsPanel>();
         EventCenter.Broadcast(EventDefine.OnGameOver);
     }
 
-     [Obsolete]
-     public void OnWinGame()
+    [Obsolete]
+    public void OnWinGame()
     {
         ChangeState(GameState.Win);
-        
+
         if (AudioManager.Instance != null)
             AudioManager.Instance.CrossfadeBGM("GameWin", cutInDuration);
-            
+
         UIManager.Instance.ShowPanel<WinPanel>();
     }
 
-     [Obsolete]
-     public void StartLevelUp()
+    [Obsolete]
+    public void StartLevelUp()
     {
         ChangeState(GameState.LevelingUp);
         UIManager.Instance.ShowPanel<LevelUpPanel>();
-        
+
         // 🌟 彻底抛弃 SendMessage！直接调用对应脚本的方法，或者走 EventCenter
         // if (playerCore != null && playerCore.UpgradeManager != null)
         // {
@@ -156,8 +158,8 @@ public class GameManager : MonoBehaviour
         // }
     }
 
-     [Obsolete]
-     public void EndLevelUp()
+    [Obsolete]
+    public void EndLevelUp()
     {
         UIManager.Instance.HidePanel<LevelUpPanel>();
         ChangeState(GameState.Playing);
@@ -166,7 +168,7 @@ public class GameManager : MonoBehaviour
     public void QuitGame()
     {
         EventCenter.Broadcast(EventDefine.OnGameQuit);
-        
+
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else
