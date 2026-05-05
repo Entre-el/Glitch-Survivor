@@ -7,6 +7,8 @@ public enum BuffType
     Stun,
     AttackBoost,
     Drunk,
+    Marked,
+    Vulnerable,
 }
 
 [CreateAssetMenu(menuName = "EnemyBuff", fileName = "SO/EnemyBuffSO")]

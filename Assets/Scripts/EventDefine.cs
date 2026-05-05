@@ -39,12 +39,23 @@ public enum EventDefine
     OnPlayerLevelUp,
     OnDamagePopup,
     OnEnemyDied,
+    OnBuffExpired,
 }
 
+// 定义伤害的语义类型
+public enum DamageType
+{
+    Normal, // 普通伤害
+    Critical, // 暴击
+    Poison, // 毒属性持续伤害
+    Heal, // 治疗
+    Dodge, // 闪避（可飘字 "MISS"）
+}
+
+// 更新事件载荷
 public struct DmgMessage
 {
     public int amount;
     public Vector3 position;
-    public bool isCritical;
-    public GameObject attacker;
+    public DamageType damageType; // 取代原本的 bool isCritical
 }

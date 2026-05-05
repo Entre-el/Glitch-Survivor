@@ -14,6 +14,11 @@ public class EnemyVisuals : MonoBehaviour
         animator = anim;
     }
 
+    public void Initialize(EnemyCore core)
+    {
+        this.core = core;
+    }
+
     public void PlayHitReaction()
     {
         if (animator != null)

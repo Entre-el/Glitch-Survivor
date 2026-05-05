@@ -1,24 +1,13 @@
-public class DrunkBuff : BaseEnemyBuff
+public class VulnerableBuff : BaseEnemyBuff
 {
-    private float tickTimer = 0f;
-    public override float SpeedMultiplier => 0.5f; // 这个属性可以被其他 Buff 叠加时访问，返回一个减速倍率
-
-    public DrunkBuff(EnemyBuffSO data, IBuffable target, float? duration = null)
+    public VulnerableBuff(EnemyBuffSO data, IBuffable target, float? duration = null)
         : base(data, target, duration) { }
 
-    // 处理持续扣血（每秒扣一次）
+    public override void OnApply() { }
+
     public override void OnTick(float deltaTime)
     {
         base.OnTick(deltaTime); // 别忘了扣总时间
-        tickTimer += deltaTime;
-        if (tickTimer >= 1f)
-        {
-            tickTimer -= 1f;
-            if (target is IDamageable damageable)
-            {
-                damageable.TakeDamage(5f, false, DamageType.Poison); // 每秒流失 5 点血)
-            }
-        }
         if (timeRemaining <= 0)
         {
             OnRemoveStack(1);
@@ -38,5 +27,10 @@ public class DrunkBuff : BaseEnemyBuff
     public override void OnRemoveStack(int removedStacks = 1)
     {
         base.OnRemoveStack(removedStacks);
+    }
+
+    public override float OnModifyCirtDamage(float incomingDamage)
+    {
+        return incomingDamage * 1.5f;
     }
 }

@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 2461549084011342578}
   - component: {fileID: 1054986354260562945}
   - component: {fileID: 232334709271898368}
-  - component: {fileID: -4855840793852198085}
   m_Layer: 0
   m_Name: Player DamageVFX
   m_TagString: Untagged
@@ -4895,17 +4894,3 @@ ParticleSystemRenderer:
   m_MeshWeighting1: 1
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
---- !u!114 &-4855840793852198085
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3770913158852694712}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee78aef8b835e6c4ab8f77a912b35a32, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PoolItem
-  defaultCapacity: 50
-  maxSize: 200

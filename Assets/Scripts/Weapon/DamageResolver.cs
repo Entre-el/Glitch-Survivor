@@ -26,7 +26,7 @@ public static class DamageResolver
             }
 
             // 执行处决：扣血
-            enemyCore.TakeDamage((int)actualDamage, isCrit);
+            enemyCore.TakeDamage((int)actualDamage, isCrit, DamageType.Normal, true);
 
             // 处理物理击退
             if (payload.KnockbackForce > 0 && victim.TryGetComponent<Rigidbody2D>(out var enemyRb))
@@ -67,7 +67,7 @@ public static class DamageResolver
         if (victim.TryGetComponent<EnemyCore>(out var enemyCore))
             // 3. 执行处决：扣血
             // 把是否暴击传给怪物，方便怪物头顶弹出红色的暴击伤害数字
-            enemyCore.TakeDamage((int)actualDamage, isCrit);
+            enemyCore.TakeDamage((int)actualDamage, isCrit, DamageType.Normal, true);
 
         // 4. 处理物理击退 (如果有需要的话)
         if (payload.KnockbackForce > 0 && victim.TryGetComponent<Rigidbody2D>(out var enemyRb))

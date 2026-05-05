@@ -11,13 +11,13 @@ GameObject:
   - component: {fileID: 6440090668078912837}
   - component: {fileID: 2055016325272498474}
   - component: {fileID: 2045952987023461714}
-  - component: {fileID: 608866913188787242}
-  - component: {fileID: -7669806749505458749}
-  - component: {fileID: 8480707205476632371}
   - component: {fileID: -7110688191384213133}
   - component: {fileID: 1664196551421175698}
-  - component: {fileID: 2157274609297513540}
-  m_Layer: 0
+  - component: {fileID: 1545502546696674732}
+  - component: {fileID: 2168928653417041951}
+  - component: {fileID: 6429295828828912757}
+  - component: {fileID: -8190390380812506248}
+  m_Layer: 7
   m_Name: Fly
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -120,58 +120,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &608866913188787242
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5707308963716222226}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f56e663a5d83826438cc5600935b48e9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyMovement
---- !u!114 &-7669806749505458749
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5707308963716222226}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 92d9db15815a6b740a8796cc51381644, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyStats
-  enemyData: {fileID: 11400000, guid: fff1bd3ac521b4343885d71dc0230eff, type: 2}
-  currentMoveSpeed: 0
-  currentHealth: 0
-  currentDamage: 0
-  despawnDistance: 20
-  damageColor: {r: 1, g: 0, b: 0, a: 1}
-  damageFlashDuration: 0.2
-  deathFadeTime: 0.6
-  hitSFX: {fileID: 8300000, guid: 7a3422d6b11481d4897ab95f6036bc66, type: 3}
---- !u!114 &8480707205476632371
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5707308963716222226}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6caf08a19f88c064cb6ca2850880ed14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DropRateManager
-  drops:
-  - name: Gem
-    itemPrefab: {fileID: 7748952014671748350, guid: 6f3de92992e77de4a94d6480f454aea3, type: 3}
-    dropRate: 60
-  - name: Coin
-    itemPrefab: {fileID: 7748952014671748350, guid: 6f3de92992e77de4a94d6480f454aea3, type: 3}
-    dropRate: 40
 --- !u!50 &-7110688191384213133
 Rigidbody2D:
   serializedVersion: 5
@@ -185,7 +133,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 3
-  m_LinearDamping: 0
+  m_LinearDamping: 1
   m_AngularDamping: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}
@@ -235,7 +183,7 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: -0.14830804}
   m_Radius: 0.2556401
---- !u!114 &2157274609297513540
+--- !u!114 &1545502546696674732
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -244,8 +192,50 @@ MonoBehaviour:
   m_GameObject: {fileID: 5707308963716222226}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee78aef8b835e6c4ab8f77a912b35a32, type: 3}
+  m_Script: {fileID: 11500000, guid: d11a6d7e85e40d64c8992837a80bee95, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PoolItem
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyLocomotion
+  baseSpeed: 0
+  currentSpeed: 0
+--- !u!114 &2168928653417041951
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5707308963716222226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddb37009cac51cc4fac7b6ddf4f82ead, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
+  maxHealth: 20
+  currentHealth: 20
+--- !u!114 &6429295828828912757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5707308963716222226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efe87d92c60d7f1409430cc0ad51b89e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyVisuals
+--- !u!114 &-8190390380812506248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5707308963716222226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f601c3ff5e6c014daabf30ddad998db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyCore
   defaultCapacity: 50
   maxSize: 200
+  <TargetAnchor>k__BackingField: {fileID: 11400000, guid: 2db80b6fbf58fb7469ef6bdd73569147, type: 2}
+  enemyStatSO: {fileID: 11400000, guid: fff1bd3ac521b4343885d71dc0230eff, type: 2}

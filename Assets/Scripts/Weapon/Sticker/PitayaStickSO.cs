@@ -1,15 +1,15 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Stickers/Grape (葡萄)")]
-public class GrapeStickerSO : StickerSO
+[CreateAssetMenu(menuName = "Stickers/Pitaya (火龙果)")]
+public class PitayaStickerSO : StickerSO
 {
-    // 🍇 1. 开火槽：分裂为两个 0.6 倍伤害、0.8 倍大小的子弹
+    // 1. 开火时:暴击率增加30%
     public override void OnFireSlot(CombatPayload payload, Transform emitter, Vector2 direction)
     {
-        SplitBullets(payload, emitter.position, direction, 2, 20f, 0.6f, 0.9f);
+        payload.CritChance += 30f; // 暴击率增加30%
     }
 
-    // 🍇 2. 穿透槽：穿透时分裂为两个 0.5 倍伤害、0.7 倍大小的子弹
+    // 2. 穿透时:子弹暴击率变为1.5倍
     public override void OnPierceSlot(
         CombatPayload payload,
         GameObject target,
@@ -17,19 +17,19 @@ public class GrapeStickerSO : StickerSO
         Vector2 direction
     )
     {
-        SplitBullets(payload, hitPoint, direction, 2, 20f, 0.5f, 0.8f, target);
+        payload.CritChance *= 1.5f; // 子弹暴击率变为1.5倍
     }
 
-    // 🍇 3. 暴击槽：附加醉酒效果
+    // 3. 暴击时:敌人下次受到的伤害翻倍
     public override void OnCritSlot(CombatPayload payload, GameObject target, Vector3 hitPoint)
     {
         if (target.TryGetComponent<EnemyCore>(out EnemyCore enemyCore))
         {
-            enemyCore.AddBuff(new DrunkBuff(appliedBuffs[0], enemyCore)); // 直接应用醉酒状态，持续 2 秒
+            enemyCore.AddBuff(new MarkedBuff(appliedBuffs[0], enemyCore, -1)); // 应用标记状态
         }
     }
 
-    // 🍇 4. 消失槽：留下一滩葡萄酒
+    // 4. 消失时:生成一个区域对敌人施加脆弱(敌人受到暴击伤害+50%)
     public override void OnFadeSlot(CombatPayload payload, Vector3 fadePoint)
     {
         if (puddlePrefab != null)
@@ -42,9 +42,6 @@ public class GrapeStickerSO : StickerSO
 
             if (puddle != null)
             {
-                // 🌟 核心：让生成的醉酒区域，继承这颗子弹临死前的尺寸！
-                // 因为 Unity 的 CircleCollider2D 会自动随着 transform.localScale 缩放，
-                // 所以碰撞判定范围会自动变小，完美符合你的需求！
                 puddle.transform.localScale = new Vector3(
                     puddle.transform.localScale.x * payload.BulletScale,
                     puddle.transform.localScale.y * payload.BulletScale,

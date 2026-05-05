@@ -33,6 +33,6 @@ public class EnemyHealth : MonoBehaviour
 
     public void Die()
     {
-        EventCenter.Broadcast(EventDefine.OnEnemyDied, myCore);
+        myCore.OnDied();
     }
 }
