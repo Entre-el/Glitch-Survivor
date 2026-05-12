@@ -27,5 +27,15 @@ public class BasePuddle : PoolItem
         }
     }
 
-    protected virtual void OnTriggerStay2D(Collider2D collision) { }
+    protected virtual void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.TryGetComponent(out IBuffable buffable)) // 只对实现了 IBuffable 接口的对象应用效果
+        {
+            if (applyTimer > defaultBuffApplyInterval)
+            {
+                buffable.AddBuff(new VulnerableBuff(buffSO, buffable, defaultDuration)); // 给对象添加流血 Buff，持续时间使用默认值
+                applyTimer = 0;
+            }
+        }
+    }
 }

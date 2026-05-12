@@ -3,6 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class ProjectileBase : PoolItem
 {
+    [SerializeField]
     private CombatPayload payload;
     private Rigidbody2D rb;
 
@@ -12,7 +13,7 @@ public class ProjectileBase : PoolItem
     private float timer;
 
     // 🌟 新增：记录这颗子弹不能打的敌人
-    private GameObject ignoredTarget;
+    private IDamageable ignoredTarget;
 
     private void Awake()
     {
@@ -20,10 +21,10 @@ public class ProjectileBase : PoolItem
     }
 
     // 🌟 修改：加入 optional 的 ignoredTarget 参数
-    public void Initialize(
+    public virtual void Initialize(
         CombatPayload payload,
         Vector2 direction,
-        GameObject ignoredTarget = null
+        IDamageable ignoredTarget = null
     )
     {
         this.payload = payload;
@@ -46,23 +47,23 @@ public class ProjectileBase : PoolItem
     {
         if (payload.FadeSticker != null)
         {
-            payload.FadeSticker.OnFadeSlot(payload, transform.position);
+            payload.FadeSticker.OnFadeSlot(ref payload, transform.position);
         }
         ReturnToPool();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.layer == 7)
+        if (collision.TryGetComponent<IDamageable>(out var damageable))
         {
             // 🌟 核心拦截：如果碰到的刚好是生出我的那个敌人，直接无视它！穿过去！
-            if (collision.gameObject == ignoredTarget)
+            if (damageable == ignoredTarget)
                 return;
 
             Vector2 currentDirection = rb.linearVelocity.normalized;
             DamageResolver.ResolveCollision(
-                collision.gameObject,
-                payload,
+                damageable,
+                ref payload,
                 transform.position,
                 currentDirection
             );
@@ -70,7 +71,7 @@ public class ProjectileBase : PoolItem
             if (payload.PierceCount > 0)
             {
                 payload.PierceCount--;
-                ignoredTarget = collision.gameObject;
+                ignoredTarget = damageable; // 更新不能打的敌人为当前这个，确保下一次碰到它时能穿过去
             }
             else
             {

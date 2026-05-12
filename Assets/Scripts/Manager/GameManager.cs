@@ -86,7 +86,6 @@ public class GameManager : MonoBehaviour
         // 你的保存逻辑
     }
 
-    [Obsolete]
     public void PauseGame()
     {
         if (currentGameState == GameState.Playing)
@@ -104,7 +103,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    [Obsolete]
     public void ResumeGame()
     {
         if (currentGameState == GameState.Paused)
@@ -121,7 +119,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    [Obsolete]
     public void OnGameOver()
     {
         ChangeState(GameState.GameOver);
@@ -134,7 +131,6 @@ public class GameManager : MonoBehaviour
         EventCenter.Broadcast(EventDefine.OnGameOver);
     }
 
-    [Obsolete]
     public void OnWinGame()
     {
         ChangeState(GameState.Win);
@@ -158,7 +154,6 @@ public class GameManager : MonoBehaviour
         // }
     }
 
-    [Obsolete]
     public void EndLevelUp()
     {
         UIManager.Instance.HidePanel<LevelUpPanel>();

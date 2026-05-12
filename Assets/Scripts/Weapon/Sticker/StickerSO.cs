@@ -58,18 +58,25 @@ public abstract class StickerSO : ScriptableObject
     }
 
     // 四大生命周期 Hook 虚方法 (由 DamageResolver 判官在对应时机回调)
-    public virtual void OnFireSlot(CombatPayload payload, Transform emitter, Vector2 direction) { }
+    public virtual void OnFireSlot(ref CombatPayload payload, Transform emitter, Vector2 direction)
+    {
+        SpawnBullet(payload, emitter.position, direction, null);
+    }
 
     public virtual void OnPierceSlot(
-        CombatPayload payload,
-        GameObject target,
+        ref CombatPayload payload,
+        IDamageable target,
         Vector3 hitPoint,
         Vector2 direction
     ) { }
 
-    public virtual void OnCritSlot(CombatPayload payload, GameObject target, Vector3 hitPoint) { }
+    public virtual void OnCritSlot(
+        ref CombatPayload payload,
+        IDamageable target,
+        Vector3 hitPoint
+    ) { }
 
-    public virtual void OnFadeSlot(CombatPayload payload, Vector3 fadePoint) { }
+    public virtual void OnFadeSlot(ref CombatPayload payload, Vector3 fadePoint) { }
 
     protected void SplitBullets(
         CombatPayload basePayload,
@@ -79,7 +86,7 @@ public abstract class StickerSO : ScriptableObject
         float splitAngle,
         float damageMult,
         float scaleMult,
-        GameObject ignoredTarget = null
+        IDamageable ignoredTarget = null
     )
     {
         CombatPayload newPayload = basePayload;
@@ -108,11 +115,16 @@ public abstract class StickerSO : ScriptableObject
         CombatPayload payload,
         Vector3 pos,
         Vector2 dir,
-        GameObject ignoredTarget
+        IDamageable ignoredTarget
     )
     {
         GameObject bullet = ObjectPoolManager.Instance.Get(bulletPrefab, pos, Quaternion.identity);
-        if (bullet != null && bullet.TryGetComponent<ProjectileBase>(out var proj))
+        if (bullet == null)
+        {
+            Debug.LogError($"[{stickerName}] 无法生成子弹：贴纸和载荷中均未提供 bulletPrefab！");
+            return;
+        }
+        else if (bullet.TryGetComponent<ProjectileBase>(out var proj))
         {
             // 🌟 完美注入
             proj.Initialize(payload, dir, ignoredTarget);

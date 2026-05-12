@@ -4,15 +4,16 @@ using UnityEngine;
 public class PitayaStickerSO : StickerSO
 {
     // 1. 开火时:暴击率增加30%
-    public override void OnFireSlot(CombatPayload payload, Transform emitter, Vector2 direction)
+    public override void OnFireSlot(ref CombatPayload payload, Transform emitter, Vector2 direction)
     {
         payload.CritChance += 30f; // 暴击率增加30%
+        base.OnFireSlot(ref payload, emitter, direction); // 保持基类的默认行为（如果有的话）
     }
 
     // 2. 穿透时:子弹暴击率变为1.5倍
     public override void OnPierceSlot(
-        CombatPayload payload,
-        GameObject target,
+        ref CombatPayload payload,
+        IDamageable target,
         Vector3 hitPoint,
         Vector2 direction
     )
@@ -21,16 +22,16 @@ public class PitayaStickerSO : StickerSO
     }
 
     // 3. 暴击时:敌人下次受到的伤害翻倍
-    public override void OnCritSlot(CombatPayload payload, GameObject target, Vector3 hitPoint)
+    public override void OnCritSlot(ref CombatPayload payload, IDamageable target, Vector3 hitPoint)
     {
-        if (target.TryGetComponent<EnemyCore>(out EnemyCore enemyCore))
+        if (target is IBuffable buffable)
         {
-            enemyCore.AddBuff(new MarkedBuff(appliedBuffs[0], enemyCore, -1)); // 应用标记状态
+            buffable.AddBuff(new MarkedBuff(appliedBuffs[0], buffable, -1), -1, 1); // 应用标记状态
         }
     }
 
     // 4. 消失时:生成一个区域对敌人施加脆弱(敌人受到暴击伤害+50%)
-    public override void OnFadeSlot(CombatPayload payload, Vector3 fadePoint)
+    public override void OnFadeSlot(ref CombatPayload payload, Vector3 fadePoint)
     {
         if (puddlePrefab != null)
         {

@@ -11,4 +11,5 @@ public interface IBuffable
     {
         throw new System.NotImplementedException();
     }
+    public void UpdateBuffDisplay();
 }

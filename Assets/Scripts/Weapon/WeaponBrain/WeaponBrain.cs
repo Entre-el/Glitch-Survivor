@@ -5,7 +5,7 @@ public abstract class WeaponBrain : MonoBehaviour
     protected PlayerCore core;
 
     [Header("插槽管家")]
-    public WeaponSlotManager SlotManager = new WeaponSlotManager();
+    public WeaponSlotManager SlotManager = new();
 
     [Header("基础配置")]
     public float FireRate = 2f;

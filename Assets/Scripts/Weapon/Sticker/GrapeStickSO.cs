@@ -4,15 +4,15 @@ using UnityEngine;
 public class GrapeStickerSO : StickerSO
 {
     // 🍇 1. 开火槽：分裂为两个 0.6 倍伤害、0.8 倍大小的子弹
-    public override void OnFireSlot(CombatPayload payload, Transform emitter, Vector2 direction)
+    public override void OnFireSlot(ref CombatPayload payload, Transform emitter, Vector2 direction)
     {
         SplitBullets(payload, emitter.position, direction, 2, 20f, 0.6f, 0.9f);
     }
 
     // 🍇 2. 穿透槽：穿透时分裂为两个 0.5 倍伤害、0.7 倍大小的子弹
     public override void OnPierceSlot(
-        CombatPayload payload,
-        GameObject target,
+        ref CombatPayload payload,
+        IDamageable target,
         Vector3 hitPoint,
         Vector2 direction
     )
@@ -21,16 +21,16 @@ public class GrapeStickerSO : StickerSO
     }
 
     // 🍇 3. 暴击槽：附加醉酒效果
-    public override void OnCritSlot(CombatPayload payload, GameObject target, Vector3 hitPoint)
+    public override void OnCritSlot(ref CombatPayload payload, IDamageable target, Vector3 hitPoint)
     {
-        if (target.TryGetComponent<EnemyCore>(out EnemyCore enemyCore))
+        if (target is IBuffable buffable)
         {
-            enemyCore.AddBuff(new DrunkBuff(appliedBuffs[0], enemyCore)); // 直接应用醉酒状态，持续 2 秒
+            buffable.AddBuff(new DrunkBuff(appliedBuffs[0], buffable)); // 直接应用醉酒状态，持续 2 秒
         }
     }
 
     // 🍇 4. 消失槽：留下一滩葡萄酒
-    public override void OnFadeSlot(CombatPayload payload, Vector3 fadePoint)
+    public override void OnFadeSlot(ref CombatPayload payload, Vector3 fadePoint)
     {
         if (puddlePrefab != null)
         {

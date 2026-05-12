@@ -1,8 +1,17 @@
 using UnityEngine;
 
-// 任何可受击的实体必须实现此接口
 public interface IDamageable
 {
-    // showPopup 默认值为 true，不影响以前写的攻击代码
-    void TakeDamage(float damage, bool isCrit, DamageType type, bool showPopup = true);
+    GameObject GameObject { get; }
+    Transform Transform { get; }
+
+    // 引入 sourcePosition 与 knockbackForce
+    void TakeDamage(
+        float damage,
+        bool isCrit,
+        DamageType type,
+        Vector3? sourcePosition = null,
+        float knockbackForce = 0f,
+        bool showPopup = true
+    );
 }

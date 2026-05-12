@@ -8,7 +8,7 @@ using UnityEngine;
 [RequireComponent(typeof(Transform))]
 public class EnemyCore : PoolItem, IDamageable, IBuffable
 {
-    private static readonly WaitForSeconds _waitForSeconds1 = new(1f);
+    private static readonly WaitForSeconds _waitForSeconds03 = new(0.3f);
 
     [field: SerializeField]
     public TransformAnchorSO TargetAnchor { get; private set; }
@@ -16,13 +16,27 @@ public class EnemyCore : PoolItem, IDamageable, IBuffable
     public EnemyLocomotion Locomotion { get; private set; }
     public EnemyHealth Health { get; private set; }
     public EnemyVisuals Visuals { get; private set; }
-    private readonly List<BaseEnemyBuff> activeBuffs = new(4);
+    public EnemyBuffUIController BuffUIController { get; private set; }
+
+    [SerializeField]
+    private List<BaseEnemyBuff> activeBuffs = new(4);
+
+    //实现接口IDamageable的Getter方法
+    public GameObject GameObject
+    {
+        get => gameObject;
+    }
+    public Transform Transform
+    {
+        get => transform;
+    }
 
     private void Awake()
     {
         Locomotion = GetComponent<EnemyLocomotion>();
         Health = GetComponent<EnemyHealth>();
         Visuals = GetComponent<EnemyVisuals>();
+        BuffUIController = GetComponentInChildren<EnemyBuffUIController>(); // 在子对象中寻找 UI 控制器
         if (TargetAnchor == null)
         {
             TargetAnchor = FindAnyObjectByType<TransformAnchorSO>(); // 尝试在场景中找到一个 TransformAnchorSO 实例
@@ -40,6 +54,7 @@ public class EnemyCore : PoolItem, IDamageable, IBuffable
         Locomotion.Initialize(this);
         Health.Initialize(this);
         Visuals.Initialize(this);
+        BuffUIController.Initialize();
     }
 
     private void OnEnable()
@@ -67,14 +82,19 @@ public class EnemyCore : PoolItem, IDamageable, IBuffable
             if (buff.BuffType == newBuff.BuffType)
             {
                 buff.OnAddStack(stackCount, duration);
+                UpdateBuffDisplay(); // 刷新层数
                 return; // 已经有这个 Buff 了，直接返回
             }
         }
         activeBuffs.Add(newBuff);
         newBuff.OnApply(); // 触发初始效果
         RecalculateSpeed(); // 叠加后重新计算速度
-        // 通知 UI 更新（使用我们之前学过的事件系统）
-        // EventCenter.Broadcast(EventDefine.OnBuffAdded, myCore.gameObject, newBuff.buffData);
+        BuffUIController.UpdateBuffDisplay(activeBuffs);
+    }
+
+    public void UpdateBuffDisplay()
+    {
+        BuffUIController.UpdateBuffDisplay(activeBuffs);
     }
 
     public void RemoveBuff(BaseEnemyBuff buff)
@@ -82,8 +102,7 @@ public class EnemyCore : PoolItem, IDamageable, IBuffable
         if (activeBuffs.Remove(buff))
         {
             RecalculateSpeed(); // 移除后重新计算速度
-            // 通知 UI 更新（使用我们之前学过的事件系统）
-            // EventCenter.Broadcast(EventDefine.OnBuffRemoved, myCore.gameObject, buff.buffData);
+            BuffUIController.UpdateBuffDisplay(activeBuffs);
         }
     }
 
@@ -103,9 +122,17 @@ public class EnemyCore : PoolItem, IDamageable, IBuffable
             buff.OnRemove(); // 先触发清理逻辑
         }
         activeBuffs.Clear(); // 再清空列表
+        BuffUIController.ClearDisplay(); // 同步清理 UI 显示
     }
 
-    public void TakeDamage(float damage, bool isCrit, DamageType type, bool showPopup = true)
+    public void TakeDamage(
+        float damage,
+        bool isCrit,
+        DamageType type,
+        Vector3? sourcePosition = null,
+        float knockbackForce = 0f,
+        bool showPopup = true
+    )
     {
         float finalDamage = damage;
 
@@ -123,6 +150,22 @@ public class EnemyCore : PoolItem, IDamageable, IBuffable
         }
         // 经过 Buff 修改后，真正扣减生命值
         Health.TakeDamage((int)finalDamage);
+        if (type == DamageType.Normal)
+        {
+            Visuals.PlayHitEffect();
+            // 实体自决物理反馈
+            if (knockbackForce > 0.001f && sourcePosition.HasValue)
+            {
+                Vector2 knockbackDir = (transform.position - sourcePosition.Value).normalized;
+
+                // 假设实体拥有独立的运动控制器
+                if (TryGetComponent<Rigidbody2D>(out var rb))
+                {
+                    // 可在此处乘上实体的抗性系数 (Mass / KnockbackResistance)
+                    rb.AddForce(knockbackDir * knockbackForce, ForceMode2D.Impulse);
+                }
+            }
+        }
 
         if (showPopup)
         {
@@ -133,8 +176,13 @@ public class EnemyCore : PoolItem, IDamageable, IBuffable
                     amount = (int)finalDamage,
                     position = transform.position,
                     damageType = type, // 逻辑层只传递类型，不管颜色！
+                    isCirt = isCrit,
                 }
             );
+        }
+        if (Health.currentHealth <= 0)
+        {
+            OnDied();
         }
     }
 
@@ -152,7 +200,7 @@ public class EnemyCore : PoolItem, IDamageable, IBuffable
 
     private IEnumerator DeathCoroutine()
     {
-        yield return _waitForSeconds1; // 等待 1 秒钟，给动画时间播放
+        yield return _waitForSeconds03; // 等待 0.3 秒钟，给动画时间播放
         ClearBuffs(); // 确保所有 Buff 都被清理掉
         // 3. 从对象池回收
         ReturnToPool();

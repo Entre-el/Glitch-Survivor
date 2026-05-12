@@ -80,7 +80,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 783151373
   m_SortingLayer: 1
-  m_SortingOrder: 11
+  m_SortingOrder: 20
   m_MaskInteraction: 0
   m_Sprite: {fileID: 4062854969985130524, guid: 04bb3867d963c704abb2b60b648ffd17, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -104,3 +104,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee78aef8b835e6c4ab8f77a912b35a32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PoolItem
+  defaultCapacity: 50
+  maxSize: 200

@@ -5,11 +5,13 @@ using UnityEngine.SceneManagement;
 
 public class SceneController : MonoBehaviour
 {
+    private static readonly WaitForSeconds _waitForSeconds0_15 = new(0.15f);
+    private static readonly WaitForSeconds _waitForSeconds0_1 = new(0.1f);
     public static SceneController Instance;
 
     void Awake()
     {
-        if (Instance is null)
+        if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
@@ -24,7 +26,6 @@ public class SceneController : MonoBehaviour
         StartCoroutine(HardcoreLoadSequence(sceneData));
     }
 
-    [System.Obsolete]
     private IEnumerator HardcoreLoadSequence(SceneSO sceneData)
     {
         // 1. 锁死时间，清理旧 UI（把 MenuPanel 关掉！）
@@ -42,7 +43,7 @@ public class SceneController : MonoBehaviour
 
         // 3. 阶段一：建立连接 (视觉欺骗)
         loadingUI.UpdateProgress(0.1f, $"建立连接: {sceneData.loadingMainText}");
-        yield return new WaitForSeconds(0.1f);
+        yield return _waitForSeconds0_1;
 
         // 4. 阶段二：底层真实加载！
         loadingUI.UpdateProgress(0.2f, "正在读取底层场景资产...");
@@ -75,7 +76,7 @@ public class SceneController : MonoBehaviour
 
         // 7. 阶段五：完美跨越生死
         loadingUI.UpdateProgress(1f, "系统重组完毕。进入实战。");
-        yield return new WaitForSeconds(0.15f); // 最后的视觉停留
+        yield return _waitForSeconds0_15; // 最后的视觉停留
 
         // 切 BGM (假设 AudioManager 也是永生的)
         if (AudioManager.Instance != null)

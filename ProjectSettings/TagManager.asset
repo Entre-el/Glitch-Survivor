@@ -43,14 +43,35 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Background
+  - name: MapBackground
     uniqueID: 783151373
     locked: 0
-  - name: Midground
+  - name: Puddle
+    uniqueID: 1967570433
+    locked: 0
+  - name: MapProp
     uniqueID: 2229870561
     locked: 0
-  - name: Foreground
+  - name: Drops
+    uniqueID: 2619628121
+    locked: 0
+  - name: Enemy
     uniqueID: 4214906305
+    locked: 0
+  - name: Player
+    uniqueID: 3236200791
+    locked: 0
+  - name: Weapon
+    uniqueID: 726785669
+    locked: 0
+  - name: Projectiles
+    uniqueID: 2600902481
+    locked: 0
+  - name: VFX
+    uniqueID: 1280376085
+    locked: 0
+  - name: UI
+    uniqueID: 677297513
     locked: 0
   m_RenderingLayers:
   - Default

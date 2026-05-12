@@ -46,7 +46,6 @@ public enum EventDefine
 public enum DamageType
 {
     Normal, // 普通伤害
-    Critical, // 暴击
     Poison, // 毒属性持续伤害
     Heal, // 治疗
     Dodge, // 闪避（可飘字 "MISS"）
@@ -57,5 +56,6 @@ public struct DmgMessage
 {
     public int amount;
     public Vector3 position;
-    public DamageType damageType; // 取代原本的 bool isCritical
+    public DamageType damageType;
+    public bool isCirt;
 }

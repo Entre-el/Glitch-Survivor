@@ -1,6 +1,6 @@
 public class MarkedBuff : BaseEnemyBuff
 {
-    public MarkedBuff(EnemyBuffSO data, EnemyCore target, float duration = 5f)
+    public MarkedBuff(EnemyBuffSO data, IBuffable target, float duration = 5f)
         : base(data, target, duration) { }
 
     // 🌟 拦截即将到来的伤害

@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -32,7 +33,11 @@ public class DamagePopupUI : PoolItem
             textMesh.text = $"{style.prefix}{message.amount}";
         }
 
-        // 3. 应用视觉样式
+        // 3. 应用视觉样式\
+        if (message.isCirt)
+        {
+            textMesh.text += "!";
+        }
         textMesh.color = style.textColor;
         textMesh.fontSize = baseFontSize * style.sizeMultiplier;
         if (style.customFont != null)
@@ -41,6 +46,30 @@ public class DamagePopupUI : PoolItem
         }
 
         // 4. 执行动画（这里省略你原本的向上漂移、透明度渐变等动画代码）
-        // ...
+        StartCoroutine(AnimateAndRecycle());
+    }
+
+    IEnumerator AnimateAndRecycle()
+    {
+        float duration = 1f; // 动画持续时间
+        float elapsed = 0f;
+        Vector3 startPos = transform.position;
+        Vector3 endPos = startPos + Vector3.up * 2f; // 向上漂移
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / duration;
+
+            // 漂移
+            transform.position = Vector3.Lerp(startPos, endPos, t);
+            // 渐变（从完全不透明到完全透明）
+            textMesh.color = new Color(textMesh.color.r, textMesh.color.g, textMesh.color.b, 1 - t);
+
+            yield return null;
+        }
+
+        // 动画结束后回收对象
+        ReturnToPool();
     }
 }

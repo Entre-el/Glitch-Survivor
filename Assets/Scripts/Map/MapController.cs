@@ -17,6 +17,7 @@ public class MapController : MonoBehaviour
         public PoolItem tileItem;
         public TileBase tileBase;
         public float spawnChance;
+
         [Range(0f, 1f)]
         public float propDensity;
         public List<PropData> allowedProps;
@@ -26,6 +27,7 @@ public class MapController : MonoBehaviour
     {
         public List<GameObject> spawnedProps;
         public List<PoolItem> propItems;
+
         public ChunkProps(int capacity)
         {
             spawnedProps = new List<GameObject>(capacity);
@@ -38,14 +40,15 @@ public class MapController : MonoBehaviour
     public Tilemap globalTilemap;
 
     [Header("Map Settings")]
-    public float chunkSize = 20f;    
+    public float chunkSize = 20f;
     public int chunkRadius = 1;
     public int disableRadius = 2;
-    public float noiseScale = 0.05f; 
+    public float noiseScale = 0.05f;
     public List<TileBases> commonBiomes = new();
 
     [Header("Rare Biome Settings")]
     public float patchNoiseScale = 0.08f;
+
     [Range(0f, 1f)]
     public float rarePatchThreshold = 0.85f;
     public List<TileBases> rareBiomes = new();
@@ -53,7 +56,7 @@ public class MapController : MonoBehaviour
     private float commonTotalChance = 0;
     private float rareTotalChance = 0;
     public int biomeResolution = 2;
-    
+
     private float seedX;
     private float seedY;
 
@@ -66,18 +69,23 @@ public class MapController : MonoBehaviour
     {
         // 注册事件 (如果是由外部 GameManager 统一调度的)
         EventCenter.AddListener(EventDefine.OnMapPrepareRequst, InitializePool);
-        
+
         seedX = Random.Range(-100000f, 100000f);
         seedY = Random.Range(-100000f, 100000f);
 
-        foreach (var tile in commonBiomes) commonTotalChance += tile.spawnChance;
-        foreach (var tile in rareBiomes) rareTotalChance += tile.spawnChance;
+        foreach (var tile in commonBiomes)
+            commonTotalChance += tile.spawnChance;
+        foreach (var tile in rareBiomes)
+            rareTotalChance += tile.spawnChance;
 
         // 如果你希望地图一加载就自己把池子建好，可以直接在这里调用：
-        // InitializePool(); 
+        // InitializePool();
 
         Vector2 playerCoord = GetChunkCoordFromVector3(playerAnchor.Value.position);
-        currentChunkCoord = new Vector2Int(Mathf.FloorToInt(playerCoord.x), Mathf.FloorToInt(playerCoord.y));
+        currentChunkCoord = new Vector2Int(
+            Mathf.FloorToInt(playerCoord.x),
+            Mathf.FloorToInt(playerCoord.y)
+        );
         UpdateChunks();
     }
 
@@ -89,12 +97,16 @@ public class MapController : MonoBehaviour
 
     void Update()
     {
-        if (playerAnchor == null || playerAnchor.Value == null) return; // 防御性判断
+        if (playerAnchor == null || playerAnchor.Value == null)
+            return; // 防御性判断
 
         Vector2 playerCoord = GetChunkCoordFromVector3(playerAnchor.Value.position);
         if (playerCoord != currentChunkCoord)
         {
-            currentChunkCoord = new Vector2Int(Mathf.FloorToInt(playerCoord.x), Mathf.FloorToInt(playerCoord.y));
+            currentChunkCoord = new Vector2Int(
+                Mathf.FloorToInt(playerCoord.x),
+                Mathf.FloorToInt(playerCoord.y)
+            );
             UpdateChunks();
         }
     }
@@ -104,15 +116,15 @@ public class MapController : MonoBehaviour
         foreach (var tile in commonBiomes)
         {
             // 修复：必须传入 GameObject 参数
-            if (tile.tileItem != null) 
+            if (tile.tileItem != null)
                 ObjectPoolManager.Instance.RegisterPool(tile.tileItem.gameObject);
-            
+
             if (tile.allowedProps != null)
             {
                 foreach (var prop in tile.allowedProps)
                 {
                     // 修复：方法名是 RegisterPool，并且传入 gameObject
-                    if (prop.propItem != null) 
+                    if (prop.propItem != null)
                         ObjectPoolManager.Instance.RegisterPool(prop.propItem.gameObject);
                 }
             }
@@ -121,15 +133,15 @@ public class MapController : MonoBehaviour
         foreach (var tile in rareBiomes)
         {
             // 修复：同上
-            if (tile.tileItem != null) 
+            if (tile.tileItem != null)
                 ObjectPoolManager.Instance.RegisterPool(tile.tileItem.gameObject);
-            
+
             if (tile.allowedProps != null)
             {
                 foreach (var prop in tile.allowedProps)
                 {
                     // 修复：同上
-                    if (prop.propItem != null) 
+                    if (prop.propItem != null)
                         ObjectPoolManager.Instance.RegisterPool(prop.propItem.gameObject);
                 }
             }
@@ -142,7 +154,10 @@ public class MapController : MonoBehaviour
         {
             for (int yOffset = -chunkRadius; yOffset <= chunkRadius; yOffset++)
             {
-                Vector2Int targetCoord = new Vector2Int(currentChunkCoord.x + xOffset, currentChunkCoord.y + yOffset);
+                Vector2Int targetCoord = new Vector2Int(
+                    currentChunkCoord.x + xOffset,
+                    currentChunkCoord.y + yOffset
+                );
                 if (!loadedChunks.ContainsKey(targetCoord))
                 {
                     SpawnChunk(targetCoord);
@@ -160,10 +175,12 @@ public class MapController : MonoBehaviour
             float chunkWorldX = gridCoord.x * chunkSize;
             float chunkWorldY = gridCoord.y * chunkSize;
 
-            if (chunkWorldX < playerAnchor.Value.position.x - chunkSize * disableRadius ||
-                chunkWorldX > playerAnchor.Value.position.x + chunkSize * disableRadius ||
-                chunkWorldY < playerAnchor.Value.position.y - chunkSize * disableRadius ||
-                chunkWorldY > playerAnchor.Value.position.y + chunkSize * disableRadius)
+            if (
+                chunkWorldX < playerAnchor.Value.position.x - chunkSize * disableRadius
+                || chunkWorldX > playerAnchor.Value.position.x + chunkSize * disableRadius
+                || chunkWorldY < playerAnchor.Value.position.y - chunkSize * disableRadius
+                || chunkWorldY > playerAnchor.Value.position.y + chunkSize * disableRadius
+            )
             {
                 EraseChunkTiles(gridCoord);
 
@@ -173,7 +190,10 @@ public class MapController : MonoBehaviour
 
                     if (propToReturn.TryGetComponent(out PoolItem item))
                     {
-                        propToReturn.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
+                        propToReturn.transform.SetPositionAndRotation(
+                            Vector3.zero,
+                            Quaternion.identity
+                        );
                         // 优雅地自我回收
                         item.ReturnToPool();
                     }
@@ -190,7 +210,7 @@ public class MapController : MonoBehaviour
         foreach (Vector2Int key in chunksToRemove)
         {
             loadedChunks.Remove(key);
-        }  
+        }
     }
 
     void SpawnChunk(Vector2Int gridCoord)
@@ -210,8 +230,10 @@ public class MapController : MonoBehaviour
                 int absoluteX = startX + x;
                 int absoluteY = startY + y;
 
-                int snappedX = Mathf.FloorToInt((float)absoluteX / biomeResolution) * biomeResolution;
-                int snappedY = Mathf.FloorToInt((float)absoluteY / biomeResolution) * biomeResolution;
+                int snappedX =
+                    Mathf.FloorToInt((float)absoluteX / biomeResolution) * biomeResolution;
+                int snappedY =
+                    Mathf.FloorToInt((float)absoluteY / biomeResolution) * biomeResolution;
 
                 float worldX = snappedX * noiseScale + seedX;
                 float worldY = snappedY * noiseScale + seedY;
@@ -230,11 +252,11 @@ public class MapController : MonoBehaviour
                     selectedBiome = rareBiomes[0];
                     foreach (var tile in rareBiomes)
                     {
-                        currentCumulative += tile.spawnChance; 
+                        currentCumulative += tile.spawnChance;
                         if (mappedNoise <= currentCumulative)
                         {
                             selectedBiome = tile;
-                            break; 
+                            break;
                         }
                     }
                 }
@@ -243,14 +265,14 @@ public class MapController : MonoBehaviour
                     float mappedNoise = baseNoise * commonTotalChance;
                     float currentCumulative = 0f;
                     selectedBiome = commonBiomes[0];
-                    
+
                     foreach (var tile in commonBiomes)
                     {
-                        currentCumulative += tile.spawnChance; 
+                        currentCumulative += tile.spawnChance;
                         if (mappedNoise <= currentCumulative)
                         {
                             selectedBiome = tile;
-                            break; 
+                            break;
                         }
                     }
                 }
@@ -259,11 +281,12 @@ public class MapController : MonoBehaviour
 
                 if (selectedBiome.allowedProps != null && selectedBiome.allowedProps.Count > 0)
                 {
-                    if (Random.value <= selectedBiome.propDensity) 
+                    if (Random.value <= selectedBiome.propDensity)
                     {
                         float totalPropWeight = 0;
-                        foreach (var p in selectedBiome.allowedProps) totalPropWeight += p.propWeight;
-                        
+                        foreach (var p in selectedBiome.allowedProps)
+                            totalPropWeight += p.propWeight;
+
                         float randomPropHit = Random.value * totalPropWeight;
                         float currentPropCumulative = 0f;
                         PoolItem finalPropItem = selectedBiome.allowedProps[0].propItem;
@@ -281,11 +304,15 @@ public class MapController : MonoBehaviour
                         // 加入了上一轮讨论的防御性判断
                         if (finalPropItem != null && ObjectPoolManager.Instance != null)
                         {
-                            GameObject propObj = ObjectPoolManager.Instance.Get(finalPropItem.gameObject);
+                            GameObject propObj = ObjectPoolManager.Instance.Get(
+                                finalPropItem.gameObject
+                            );
                             if (propObj != null)
                             {
                                 Vector3Int cellPos = new Vector3Int(startX + x, startY + y, 0);
-                                Vector3 cellCenterWorldPos = globalTilemap.GetCellCenterWorld(cellPos);
+                                Vector3 cellCenterWorldPos = globalTilemap.GetCellCenterWorld(
+                                    cellPos
+                                );
                                 propObj.transform.position = cellCenterWorldPos;
                                 newChunkProps.spawnedProps.Add(propObj);
                                 newChunkProps.propItems.Add(finalPropItem);

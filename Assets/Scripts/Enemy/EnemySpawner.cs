@@ -5,13 +5,15 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class EnemySpawner : MonoBehaviour
-{ 
+{
     [SerializeField]
-    private  TransformAnchorSO playerAnchor;
+    private TransformAnchorSO playerAnchor;
+
     [Header("Audio")]
     public AudioClip finalWaveBGM;
     public float cutInDuration = 2f;
     public static EnemySpawner Instance;
+
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -22,9 +24,10 @@ public class EnemySpawner : MonoBehaviour
         {
             Instance = this;
         }
-    currentGroupCount = 0;
-    currentWaveCount = 0;
+        currentGroupCount = 0;
+        currentWaveCount = 0;
     }
+
     [System.Serializable]
     public class EnemyGroup
     {
@@ -34,24 +37,31 @@ public class EnemySpawner : MonoBehaviour
             public GameObject enemyPrefab;
             public int enemyCount;
         }
+
         public List<Enemies> enemysList;
         public bool isGathered;
         public int difficultyLevel;
     }
+
     [System.Serializable]
     public class Wave
     {
         public string waveName;
         public EnemyGroup[] enemyGroups;
     }
+
     public float waveSpawnInterval;
+
     [SerializeField]
     private float waveSpawnTimer;
     public float groupSpawnInterval;
+
     [SerializeField]
     private float groupSpawnTimer;
+
     [SerializeField]
     private int currentWaveCount;
+
     [SerializeField]
     private int currentGroupCount;
 
@@ -61,25 +71,27 @@ public class EnemySpawner : MonoBehaviour
     public int roundEdgeLength;
     public List<Wave> waves;
     private bool isDone = false;
+
     void Start()
     {
         isDone = false;
         enemiesAlive = 0;
-        
+
         // 游戏开始，直接启动刷怪流水线！
         StartCoroutine(SpawnProcess());
     }
 
     void Update()
     {
-        if(isDone)
+        if (isDone)
         {
-            if(enemiesAlive <= 0)
+            if (enemiesAlive <= 0)
             {
                 EventCenter.Broadcast(EventDefine.OnGameWin);
             }
         }
     }
+
     private IEnumerator SpawnProcess()
     {
         // 第一层：遍历所有的波次
@@ -92,7 +104,7 @@ public class EnemySpawner : MonoBehaviour
             for (int g = 0; g < currentWave.enemyGroups.Length; g++)
             {
                 EnemyGroup currentGroup = currentWave.enemyGroups[g];
-                if(enemiesAlive >= maxEnemiesAllowed)
+                if (enemiesAlive >= maxEnemiesAllowed)
                 {
                     Debug.Log("当前场上怪物过多，等待怪物数量下降后继续生成...");
                     // 等待直到场上怪物数量降到允许范围内
@@ -102,14 +114,14 @@ public class EnemySpawner : MonoBehaviour
                 SpawnEnemyGroup(currentGroup);
 
                 // 暂停组与组之间的间隔时间
-                yield return new WaitForSeconds(groupSpawnInterval); 
+                yield return new WaitForSeconds(groupSpawnInterval);
                 currentGroupCount++;
             }
             currentGroupCount = 0;
             // 波与波之间的休息时间
             yield return new WaitForSeconds(waveSpawnInterval);
             currentWaveCount++;
-            if(currentWaveCount == waves.Count - 1)
+            if (currentWaveCount == waves.Count - 1)
             {
                 EventCenter.Broadcast(EventDefine.OnBossDied);
             }
@@ -117,6 +129,7 @@ public class EnemySpawner : MonoBehaviour
         Debug.Log($"所有波次的怪物生成完毕");
         isDone = true;
     }
+
     private void SpawnEnemyGroup(EnemyGroup group)
     {
         if (group.isGathered)
@@ -126,8 +139,12 @@ public class EnemySpawner : MonoBehaviour
             {
                 for (int i = 0; i < enemies.enemyCount; i++)
                 {
-                    GameObject enemy = ObjectPoolManager.Instance.Get(enemies.enemyPrefab, spawnPosition);
-                    enemy.transform.position = spawnPosition+new Vector2(Random.Range(-3f, 3f), Random.Range(-3f, 3f));
+                    GameObject enemy = ObjectPoolManager.Instance.Get(
+                        enemies.enemyPrefab,
+                        spawnPosition
+                    );
+                    enemy.transform.position =
+                        spawnPosition + new Vector2(Random.Range(-3f, 3f), Random.Range(-3f, 3f));
                     enemy.SetActive(true);
                     enemiesAlive++;
                 }
@@ -140,41 +157,61 @@ public class EnemySpawner : MonoBehaviour
                 for (int i = 0; i < singleGroup.enemyCount; i++)
                 {
                     Vector2 randomSpawnPosition = GetRoundEnemyPosition(roundEdgeLength);
-                    GameObject enemy = ObjectPoolManager.Instance.Get(singleGroup.enemyPrefab, randomSpawnPosition+new Vector2(Random.Range(-3f, 3f), Random.Range(-3f, 3f)), Quaternion.identity);
-                    enemy.transform.position = randomSpawnPosition+new Vector2(Random.Range(-3f, 3f), Random.Range(-3f, 3f));
+                    GameObject enemy = ObjectPoolManager.Instance.Get(
+                        singleGroup.enemyPrefab,
+                        randomSpawnPosition
+                            + new Vector2(Random.Range(-3f, 3f), Random.Range(-3f, 3f)),
+                        Quaternion.identity
+                    );
+                    enemy.transform.position =
+                        randomSpawnPosition
+                        + new Vector2(Random.Range(-3f, 3f), Random.Range(-3f, 3f));
                     enemy.SetActive(true);
                     enemiesAlive++;
                 }
             }
         }
     }
+
     public Vector2 GetRoundEnemyPosition(int edgeLength)
     {
         int edge = Random.Range(0, 4);
-        float randomPos = Random.Range(-1f,1f);
+        float randomPos = Random.Range(-1f, 1f);
         Vector2 spawnPosition;
         switch (edge)
         {
-        case 0:
-            spawnPosition = new Vector2(playerAnchor.Value.position.x + edgeLength*randomPos, playerAnchor.Value.position.y + edgeLength);
-            break;
-        case 1:
-            spawnPosition = new Vector2(playerAnchor.Value.position.x + edgeLength*randomPos, playerAnchor.Value.position.y - edgeLength);
-            break;
-        case 2:
-            spawnPosition = new Vector2(playerAnchor.Value.position.x + edgeLength, playerAnchor.Value.position.y + edgeLength*randomPos);
-            break;
-        case 3:
-            spawnPosition = new Vector2(playerAnchor.Value.position.x - edgeLength, playerAnchor.Value.position.y + edgeLength*randomPos);
-            break;
-        default:
-            throw new System.Exception($"Unexpected edge value: {edge}");
+            case 0:
+                spawnPosition = new Vector2(
+                    playerAnchor.Value.position.x + edgeLength * randomPos,
+                    playerAnchor.Value.position.y + edgeLength
+                );
+                break;
+            case 1:
+                spawnPosition = new Vector2(
+                    playerAnchor.Value.position.x + edgeLength * randomPos,
+                    playerAnchor.Value.position.y - edgeLength
+                );
+                break;
+            case 2:
+                spawnPosition = new Vector2(
+                    playerAnchor.Value.position.x + edgeLength,
+                    playerAnchor.Value.position.y + edgeLength * randomPos
+                );
+                break;
+            case 3:
+                spawnPosition = new Vector2(
+                    playerAnchor.Value.position.x - edgeLength,
+                    playerAnchor.Value.position.y + edgeLength * randomPos
+                );
+                break;
+            default:
+                throw new System.Exception($"Unexpected edge value: {edge}");
         }
         return spawnPosition;
     }
+
     public void OnEnemyKilled()
     {
         enemiesAlive--;
     }
 }
- 

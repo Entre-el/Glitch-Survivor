@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro; // 强烈依赖 TMP
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "DamagePopupStyleConfig", menuName = "SO/UI/DamagePopupStyleConfig")]
+[CreateAssetMenu(fileName = "DamagePopupStyleConfig", menuName = "DamagePopupStyleConfig")]
 public class DamagePopupStyleConfigSO : ScriptableObject
 {
     [Serializable]
@@ -18,7 +18,7 @@ public class DamagePopupStyleConfigSO : ScriptableObject
 
     // 存储所有样式的列表
     [SerializeField]
-    private List<PopupStyle> styles = new List<PopupStyle>();
+    private List<PopupStyle> styles = new();
 
     // 供外部查询样式的方法
     public PopupStyle GetStyle(DamageType type)
