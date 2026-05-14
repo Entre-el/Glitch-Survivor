@@ -182,7 +182,7 @@ public class DraggableStickerUI
             }
             else
             {
-                Debug.LogWarning($"⚠️ 装配失败：这枚贴纸不能放进 [{targetSlot.mySlotType}] 槽位！");
+                //Debug.LogWarning($"⚠️ 装配失败：这枚贴纸不能放进 [{targetSlot.mySlotType}] 槽位！");
             }
         }
 

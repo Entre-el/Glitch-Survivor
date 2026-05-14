@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -3450691597599658628}
   - component: {fileID: 5394248057756058564}
   - component: {fileID: -4046080760805150536}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: TallSandpile
   m_TagString: Prop
   m_Icon: {fileID: 0}
@@ -82,7 +82,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -2065096735
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 10
   m_MaskInteraction: 0
   m_Sprite: {fileID: -3131756468849351659, guid: 04bb3867d963c704abb2b60b648ffd17, type: 3}

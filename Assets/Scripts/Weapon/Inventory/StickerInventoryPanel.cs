@@ -56,7 +56,7 @@ public class StickerInventoryPanel : BasePanel
         }
         else
         {
-            Debug.LogWarning("打开背包时，没有检测到绑定的武器！");
+            //Debug.LogWarning("打开背包时，没有检测到绑定的武器！");
         }
 
         // 3. 获取未安装的贴纸并从顶部散落

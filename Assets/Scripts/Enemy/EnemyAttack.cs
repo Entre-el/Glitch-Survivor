@@ -15,7 +15,7 @@ public class EnemyAttack : MonoBehaviour
         // 🌟 核心：直接调用核心组件里的数据和方法！不需要再 GetComponent 了！
         if (core.TargetAnchor == null)
         {
-            Debug.LogWarning("EnemyAttack: TargetAnchor is not set.");
+            //Debug.LogWarning("EnemyAttack: TargetAnchor is not set.");
             return;
         }
 

@@ -15,7 +15,7 @@ public class PoolItemCollector
 
         if (targetSO == null)
         {
-            Debug.LogError($"<color=red>找不到 SceneSO！请检查路径：{soPath}</color>");
+            //Debug.LogError($"<color=red>找不到 SceneSO！请检查路径：{soPath}</color>");
             return;
         }
 
@@ -57,9 +57,7 @@ public class PoolItemCollector
         EditorUtility.SetDirty(targetSO);
         AssetDatabase.SaveAssets();
 
-        Debug.Log(
-            $"<color=green>✅ 收集完成！共找到并添加了 {count} 个 PoolItem 到 {targetSO.name}。</color>"
-        );
+        //Debug.Log($"<color=green>✅ 收集完成！共找到并添加了 {count} 个 PoolItem 到 {targetSO.name}。</color>");
     }
 }
 #endif

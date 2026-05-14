@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6168768226313164565}
   - component: {fileID: 8867245084935275198}
   - component: {fileID: 8657816022805179691}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Pitaya Bubble
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -135,6 +135,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ProjectileBase
   defaultCapacity: 50
   maxSize: 200
+  payload:
+    FinalDamage: 0
+    CritChance: 0
+    CritMultiplier: 0
+    PierceCount: 0
+    ProjectileSpeedMult: 0
+    KnockbackForce: 0
+    BulletScale: 0
+    OriginalDirection: {x: 0, y: 0}
+    FireSticker: {fileID: 0}
+    PierceSticker: {fileID: 0}
+    CritSticker: {fileID: 0}
+    FadeSticker: {fileID: 0}
+    SourceEntity: {fileID: 0}
   currentSpeed: 10
   lifeTime: 1.5
 --- !u!58 &8657816022805179691

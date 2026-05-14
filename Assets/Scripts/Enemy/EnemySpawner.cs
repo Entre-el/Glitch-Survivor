@@ -1,217 +1,118 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class EnemySpawner : MonoBehaviour
 {
-    [SerializeField]
-    private TransformAnchorSO playerAnchor;
+    [Header("核心引用")]
+    [Tooltip("要生成的怪物预制体")]
+    public GameObject enemyPrefab;
 
-    [Header("Audio")]
-    public AudioClip finalWaveBGM;
-    public float cutInDuration = 2f;
-    public static EnemySpawner Instance;
+    [Tooltip("玩家的 Transform，怪物将围绕玩家生成")]
+    public Transform playerTransform;
 
-    void Awake()
+    [Header("生成规则")]
+    [Tooltip("同屏最大怪物数量上限")]
+    public int maxEnemiesOnScreen = 1000;
+
+    [Tooltip("每次触发生成的怪物数量（分摊 CPU 压力）")]
+    public int spawnCountPerTick = 5;
+
+    [Tooltip("生成间隔时间（秒）")]
+    public float spawnInterval = 0.1f;
+
+    [Header("生成范围 (视野外环形)")]
+    [Tooltip("最小生成半径（保证不刷在屏幕内贴脸）")]
+    public float minSpawnRadius = 15f;
+
+    [Tooltip("最大生成半径")]
+    public float maxSpawnRadius = 20f;
+
+    private float timer;
+    private int currentActiveEnemies = 0;
+
+    private void OnEnable()
     {
-        if (Instance != null && Instance != this)
+        // 🌟 监听怪物死亡事件，动态扣减同屏数量
+        // （结合你之前 EnemyCore 里的 EventCenter.Broadcast(EventDefine.OnEnemyDied, this)）
+        EventCenter.AddListener<EnemyCore>(EventDefine.OnEnemyDied, OnEnemyDied);
+    }
+
+    private void OnDisable()
+    {
+        EventCenter.RemoveListener<EnemyCore>(EventDefine.OnEnemyDied, OnEnemyDied);
+    }
+
+    private void Update()
+    {
+        if (playerTransform == null || enemyPrefab == null)
+            return;
+
+        timer += Time.deltaTime;
+
+        // 如果时间到了，并且当前同屏怪物没达到上限，就开始刷怪
+        if (timer >= spawnInterval && currentActiveEnemies < maxEnemiesOnScreen)
         {
-            Destroy(this.gameObject);
+            timer = 0f;
+            SpawnBatch();
         }
-        else
+    }
+
+    private void SpawnBatch()
+    {
+        // 计算这次到底能刷多少只（防止最后一次刷怪超出上限）
+        int spawnCount = Mathf.Min(spawnCountPerTick, maxEnemiesOnScreen - currentActiveEnemies);
+
+        for (int i = 0; i < spawnCount; i++)
         {
-            Instance = this;
-        }
-        currentGroupCount = 0;
-        currentWaveCount = 0;
-    }
+            Vector3 spawnPosition = GetRandomOffScreenPosition();
 
-    [System.Serializable]
-    public class EnemyGroup
-    {
-        [System.Serializable]
-        public class Enemies
-        {
-            public GameObject enemyPrefab;
-            public int enemyCount;
-        }
+            // 🌟 核心：绝对不能用 Instantiate，必须从你的对象池中获取！
+            GameObject enemyObj = ObjectPoolManager.Instance.Get(
+                enemyPrefab,
+                spawnPosition,
+                Quaternion.identity
+            );
 
-        public List<Enemies> enemysList;
-        public bool isGathered;
-        public int difficultyLevel;
-    }
-
-    [System.Serializable]
-    public class Wave
-    {
-        public string waveName;
-        public EnemyGroup[] enemyGroups;
-    }
-
-    public float waveSpawnInterval;
-
-    [SerializeField]
-    private float waveSpawnTimer;
-    public float groupSpawnInterval;
-
-    [SerializeField]
-    private float groupSpawnTimer;
-
-    [SerializeField]
-    private int currentWaveCount;
-
-    [SerializeField]
-    private int currentGroupCount;
-
-    [Header("Spawn Attributes")]
-    private float enemiesAlive;
-    public int maxEnemiesAllowed;
-    public int roundEdgeLength;
-    public List<Wave> waves;
-    private bool isDone = false;
-
-    void Start()
-    {
-        isDone = false;
-        enemiesAlive = 0;
-
-        // 游戏开始，直接启动刷怪流水线！
-        StartCoroutine(SpawnProcess());
-    }
-
-    void Update()
-    {
-        if (isDone)
-        {
-            if (enemiesAlive <= 0)
+            if (enemyObj != null)
             {
-                EventCenter.Broadcast(EventDefine.OnGameWin);
+                currentActiveEnemies++;
             }
         }
     }
 
-    private IEnumerator SpawnProcess()
+    // 🌟 获取屏幕外的随机环形坐标
+    private Vector3 GetRandomOffScreenPosition()
     {
-        // 第一层：遍历所有的波次
-        for (int w = 0; w < waves.Count; w++)
-        {
-            Wave currentWave = waves[w];
-            Debug.Log($"开始生成波次：{currentWave.waveName}");
+        // 随机生成一个 2D 方向向量
+        Vector2 randomDir = Random.insideUnitCircle.normalized;
 
-            // 第二层：遍历这一波里的所有怪物组
-            for (int g = 0; g < currentWave.enemyGroups.Length; g++)
-            {
-                EnemyGroup currentGroup = currentWave.enemyGroups[g];
-                if (enemiesAlive >= maxEnemiesAllowed)
-                {
-                    Debug.Log("当前场上怪物过多，等待怪物数量下降后继续生成...");
-                    // 等待直到场上怪物数量降到允许范围内
-                    yield return new WaitUntil(() => enemiesAlive < maxEnemiesAllowed);
-                }
-                // 把当前组直接传给生成函数
-                SpawnEnemyGroup(currentGroup);
+        // 随机生成一个距离（在最小和最大半径之间）
+        float randomDistance = Random.Range(minSpawnRadius, maxSpawnRadius);
 
-                // 暂停组与组之间的间隔时间
-                yield return new WaitForSeconds(groupSpawnInterval);
-                currentGroupCount++;
-            }
-            currentGroupCount = 0;
-            // 波与波之间的休息时间
-            yield return new WaitForSeconds(waveSpawnInterval);
-            currentWaveCount++;
-            if (currentWaveCount == waves.Count - 1)
-            {
-                EventCenter.Broadcast(EventDefine.OnBossDied);
-            }
-        }
-        Debug.Log($"所有波次的怪物生成完毕");
-        isDone = true;
+        // 以玩家为中心，加上方向和距离，得出最终坐标
+        Vector3 spawnPos =
+            playerTransform.position + new Vector3(randomDir.x, randomDir.y, 0f) * randomDistance;
+
+        return spawnPos;
     }
 
-    private void SpawnEnemyGroup(EnemyGroup group)
+    // 怪物死亡时的回调
+    private void OnEnemyDied(EnemyCore deadEnemy)
     {
-        if (group.isGathered)
-        {
-            Vector2 spawnPosition = GetRoundEnemyPosition(roundEdgeLength);
-            foreach (var enemies in group.enemysList)
-            {
-                for (int i = 0; i < enemies.enemyCount; i++)
-                {
-                    GameObject enemy = ObjectPoolManager.Instance.Get(
-                        enemies.enemyPrefab,
-                        spawnPosition
-                    );
-                    enemy.transform.position =
-                        spawnPosition + new Vector2(Random.Range(-3f, 3f), Random.Range(-3f, 3f));
-                    enemy.SetActive(true);
-                    enemiesAlive++;
-                }
-            }
-        }
-        else
-        {
-            foreach (var singleGroup in group.enemysList)
-            {
-                for (int i = 0; i < singleGroup.enemyCount; i++)
-                {
-                    Vector2 randomSpawnPosition = GetRoundEnemyPosition(roundEdgeLength);
-                    GameObject enemy = ObjectPoolManager.Instance.Get(
-                        singleGroup.enemyPrefab,
-                        randomSpawnPosition
-                            + new Vector2(Random.Range(-3f, 3f), Random.Range(-3f, 3f)),
-                        Quaternion.identity
-                    );
-                    enemy.transform.position =
-                        randomSpawnPosition
-                        + new Vector2(Random.Range(-3f, 3f), Random.Range(-3f, 3f));
-                    enemy.SetActive(true);
-                    enemiesAlive++;
-                }
-            }
-        }
+        currentActiveEnemies--;
+        // 防止出现负数异常
+        currentActiveEnemies = Mathf.Max(0, currentActiveEnemies);
     }
 
-    public Vector2 GetRoundEnemyPosition(int edgeLength)
+    // （可选）在 Scene 视图中画出刷怪范围，方便你调整数值
+    private void OnDrawGizmosSelected()
     {
-        int edge = Random.Range(0, 4);
-        float randomPos = Random.Range(-1f, 1f);
-        Vector2 spawnPosition;
-        switch (edge)
+        if (playerTransform != null)
         {
-            case 0:
-                spawnPosition = new Vector2(
-                    playerAnchor.Value.position.x + edgeLength * randomPos,
-                    playerAnchor.Value.position.y + edgeLength
-                );
-                break;
-            case 1:
-                spawnPosition = new Vector2(
-                    playerAnchor.Value.position.x + edgeLength * randomPos,
-                    playerAnchor.Value.position.y - edgeLength
-                );
-                break;
-            case 2:
-                spawnPosition = new Vector2(
-                    playerAnchor.Value.position.x + edgeLength,
-                    playerAnchor.Value.position.y + edgeLength * randomPos
-                );
-                break;
-            case 3:
-                spawnPosition = new Vector2(
-                    playerAnchor.Value.position.x - edgeLength,
-                    playerAnchor.Value.position.y + edgeLength * randomPos
-                );
-                break;
-            default:
-                throw new System.Exception($"Unexpected edge value: {edge}");
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(playerTransform.position, minSpawnRadius);
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(playerTransform.position, maxSpawnRadius);
         }
-        return spawnPosition;
-    }
-
-    public void OnEnemyKilled()
-    {
-        enemiesAlive--;
     }
 }

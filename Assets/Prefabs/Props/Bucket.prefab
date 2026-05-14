@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -8620081317559720875}
   - component: {fileID: 1368295058584900841}
   - component: {fileID: -4148935994648048822}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bucket
   m_TagString: Prop
   m_Icon: {fileID: 0}
@@ -82,7 +82,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -2065096735
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 10
   m_MaskInteraction: 0
   m_Sprite: {fileID: 2623177520308975339, guid: 04bb3867d963c704abb2b60b648ffd17, type: 3}

@@ -51,7 +51,7 @@ public class ObjectPoolManager : MonoBehaviour
 
         if (!prefab.TryGetComponent<PoolItem>(out var poolSettings))
         {
-            Debug.LogError($"[对象池] 预制体 {prefab.name} 缺少 PoolItem 组件，无法建池！");
+            //Debug.LogError($"[对象池] 预制体 {prefab.name} 缺少 PoolItem 组件，无法建池！");
             return;
         }
 
@@ -104,9 +104,7 @@ public class ObjectPoolManager : MonoBehaviour
         // 如果发现有人想要东西，但池子还没建，帮他当场建一个！(极致的容错率)
         if (!pools.ContainsKey(prefab))
         {
-            Debug.LogWarning(
-                $"[对象池] 试图获取未注册的预制体 {prefab.name}，正在自动为您按需建池..."
-            );
+            //Debug.LogWarning($"[对象池] 试图获取未注册的预制体 {prefab.name}，正在自动为您按需建池...");
             RegisterPool(prefab);
         }
 

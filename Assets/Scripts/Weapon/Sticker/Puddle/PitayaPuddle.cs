@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class PitayaPuddle : BasePuddle
 {
-    protected override void OnTriggerStay2D(Collider2D collision)
+    protected override void ApplyBuffToEnemy(IBuffable enemy)
     {
-        base.OnTriggerStay2D(collision);
+        enemy.AddBuff(new VulnerableBuff(buffSO, enemy, duration)); // 给对象添加流血 Buff，持续时间使用默认值
     }
 }

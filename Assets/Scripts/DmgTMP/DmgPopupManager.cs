@@ -6,6 +6,12 @@ public class DmgPopupManager : MonoBehaviour
     public DamagePopupUI dmgPopupPrefab;
     public Transform popupContainer;
 
+    [Header("性能限制")]
+    public int maxPopupsOnScreen = 40; // 同屏最多 40 个飘字
+
+    // 静态计数器：全局追踪当前激活的飘字数量
+    public static int CurrentActivePopups = 0;
+
     void Start()
     {
         // 注册全局伤害监听
@@ -14,10 +20,18 @@ public class DmgPopupManager : MonoBehaviour
 
     private void ShowDamagePopup(DmgMessage message)
     {
+        if (CurrentActivePopups >= maxPopupsOnScreen)
+        {
+            return;
+        }
         // 从对象池获取实例
         DamagePopupUI popup = ObjectPoolManager.Instance.Get<DamagePopupUI>(
             dmgPopupPrefab.gameObject
         );
+        if (popup != null)
+        {
+            CurrentActivePopups++;
+        }
 
         // 维持UI层级与世界坐标
         popup.transform.SetParent(popupContainer, false);

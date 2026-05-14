@@ -72,7 +72,7 @@ public class UIRaycastHelper : MonoBehaviour
             }
         }
 
-        Debug.Log(sb.ToString());
+        //Debug.Log(sb.ToString());
     }
 
     /// <summary>

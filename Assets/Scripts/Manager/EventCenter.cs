@@ -68,7 +68,7 @@ public static class EventCenter
             }
             else
             {
-                Debug.LogError($"广播事件 {eventType} 的参数类型不匹配！没有Action类型");
+                //Debug.LogError($"广播事件 {eventType} 的参数类型不匹配！没有Action类型");
             }
         }
     }
@@ -84,7 +84,7 @@ public static class EventCenter
             }
             else
             {
-                Debug.LogError($"广播事件 {eventType} 的参数类型不匹配！");
+                //Debug.LogError($"广播事件 {eventType} 的参数类型不匹配！");
             }
         }
     }
@@ -100,7 +100,7 @@ public static class EventCenter
             }
             else
             {
-                Debug.LogError($"广播事件 {eventType} 的参数类型不匹配！没有Action<T1, T2>类型");
+                //Debug.LogError($"广播事件 {eventType} 的参数类型不匹配！没有Action<T1, T2>类型");
             }
         }
     }

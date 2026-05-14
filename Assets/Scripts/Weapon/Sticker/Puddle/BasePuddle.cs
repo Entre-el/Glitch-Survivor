@@ -1,41 +1,88 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Collider2D))]
 public class BasePuddle : PoolItem
 {
-    public EnemyBuffSO buffSO; // 这个可以在编辑器里赋值，或者通过代码加载
-    protected float defaultDuration = 3f;
-    protected float defaultBuffApplyInterval = 1f;
-    public float duration = 3f; // 区域存在 3 秒
-    public float buffApplyInterval = 1f; // 给踩在里面的怪上 Buff 的频率，单位秒
-    protected float timeRemaining;
-    protected float applyTimer; // 用于控制给踩在里面的怪上 Buff 的频率
+    public EnemyBuffSO buffSO;
+    public float duration = 3f;
+    public float buffApplyInterval = 1f;
 
-    private void OnEnable()
+    [Header("Spatial Query")]
+    public float radius = 2f;
+    public LayerMask targetLayer;
+
+    protected float timeRemaining;
+    protected float applyTimer;
+
+    // 预分配容量，避免扩容导致GC；复用实例
+    protected static readonly List<Collider2D> hitBufferList = new(128);
+
+    // 物理查询过滤器，Struct类型
+    protected ContactFilter2D contactFilter;
+
+    protected virtual void Awake()
     {
-        timeRemaining = duration;
-        applyTimer = 0f;
+        // 初始化Filter配置
+        contactFilter = new ContactFilter2D
+        {
+            useTriggers = true, // 视敌人Collider配置而定
+            useLayerMask = true,
+            layerMask = targetLayer,
+        };
     }
 
-    private void Update()
+    protected virtual void OnEnable()
+    {
+        timeRemaining = duration;
+        applyTimer = buffApplyInterval;
+    }
+
+    protected virtual void Update()
     {
         timeRemaining -= Time.deltaTime;
-        applyTimer += Time.deltaTime;
         if (timeRemaining <= 0)
         {
             ReturnToPool();
+            return;
+        }
+
+        applyTimer += Time.deltaTime;
+        if (applyTimer >= buffApplyInterval)
+        {
+            applyTimer = 0f;
+            ApplyAoEEffect();
         }
     }
 
-    protected virtual void OnTriggerStay2D(Collider2D collision)
+    protected virtual void ApplyAoEEffect()
     {
-        if (collision.TryGetComponent(out IBuffable buffable)) // 只对实现了 IBuffable 接口的对象应用效果
+        // 引擎底层会自动调用 hitBufferList.Clear()
+        int hitCount = Physics2D.OverlapCircle(
+            transform.position,
+            radius,
+            contactFilter,
+            hitBufferList
+        );
+
+        for (int i = 0; i < hitCount; i++)
         {
-            if (applyTimer > defaultBuffApplyInterval)
+            if (hitBufferList[i].TryGetComponent(out IBuffable buffable))
             {
-                buffable.AddBuff(new VulnerableBuff(buffSO, buffable, defaultDuration)); // 给对象添加流血 Buff，持续时间使用默认值
-                applyTimer = 0;
+                ApplyBuffToEnemy(buffable);
             }
         }
     }
+
+    protected virtual void ApplyBuffToEnemy(IBuffable enemy)
+    {
+        // 交由子类重写
+    }
+
+#if UNITY_EDITOR
+    protected virtual void OnDrawGizmosSelected()
+    {
+        Gizmos.color = new Color(0.8f, 0.2f, 0.8f, 0.3f);
+        Gizmos.DrawWireSphere(transform.position, radius);
+    }
+#endif
 }

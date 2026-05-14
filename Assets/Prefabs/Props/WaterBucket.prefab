@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3801642150180711046}
   - component: {fileID: 1967894231379310205}
   - component: {fileID: -3172499506309679609}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: WaterBucket
   m_TagString: Prop
   m_Icon: {fileID: 0}
@@ -82,7 +82,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -2065096735
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 10
   m_MaskInteraction: 0
   m_Sprite: {fileID: -2229393840641828426, guid: 04bb3867d963c704abb2b60b648ffd17, type: 3}

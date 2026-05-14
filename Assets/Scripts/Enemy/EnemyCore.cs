@@ -21,6 +21,14 @@ public class EnemyCore : PoolItem, IDamageable, IBuffable
     [SerializeField]
     private List<BaseEnemyBuff> activeBuffs = new(4);
 
+    [Header("伤害合并优化")]
+    private float accumulatedDamage = 0f; // 攒起来的总伤害
+    private float damagePopupTimer = 0f; // 倒计时器
+    private const float POPUP_DELAY = 0.1f; // 合并时间窗口 (0.1秒)
+    private bool pendingPopup = false; // 是否有正在排队的飘字
+    private bool hasCritInBatch = false; // 这批伤害里是否包含暴击
+    private DamageType priorityDamageType = DamageType.Normal; // 优先显示的伤害类型
+
     //实现接口IDamageable的Getter方法
     public GameObject GameObject
     {
@@ -42,7 +50,7 @@ public class EnemyCore : PoolItem, IDamageable, IBuffable
             TargetAnchor = FindAnyObjectByType<TransformAnchorSO>(); // 尝试在场景中找到一个 TransformAnchorSO 实例
             if (TargetAnchor == null)
             {
-                Debug.LogError("TargetAnchor is not set");
+                //Debug.LogError("TargetAnchor is not set");
                 return;
             }
         }
@@ -71,6 +79,14 @@ public class EnemyCore : PoolItem, IDamageable, IBuffable
         if (Locomotion != null && Locomotion.enabled)
         {
             BuffTick();
+        }
+        if (pendingPopup)
+        {
+            damagePopupTimer -= Time.deltaTime;
+            if (damagePopupTimer <= 0f)
+            {
+                FlushDamagePopup(); // 时间到，弹出合并后的飘字！
+            }
         }
     }
 
@@ -169,19 +185,26 @@ public class EnemyCore : PoolItem, IDamageable, IBuffable
 
         if (showPopup)
         {
-            EventCenter.Broadcast(
-                EventDefine.OnDamagePopup,
-                new DmgMessage
-                {
-                    amount = (int)finalDamage,
-                    position = transform.position,
-                    damageType = type, // 逻辑层只传递类型，不管颜色！
-                    isCirt = isCrit,
-                }
-            );
+            accumulatedDamage += finalDamage;
+
+            // 如果这批伤害里有任何一次是暴击，合并后的数字就显示为暴击字体
+            if (isCrit)
+                hasCritInBatch = true;
+
+            // 如果有特殊伤害(如毒/火)，覆盖普通伤害颜色
+            if (type != DamageType.Normal)
+                priorityDamageType = type;
+
+            if (!pendingPopup)
+            {
+                // 如果是这 0.1 秒内的第一发子弹，启动倒计时
+                pendingPopup = true;
+                damagePopupTimer = POPUP_DELAY;
+            }
         }
         if (Health.currentHealth <= 0)
         {
+            FlushDamagePopup(); // 先把最后的伤害飘字弹出来，再死掉
             OnDied();
         }
     }
@@ -229,5 +252,28 @@ public class EnemyCore : PoolItem, IDamageable, IBuffable
         // 🌟 最终结算：基础速度 * 最强加速 * 最强减速
         // 例如：基础 10 * 加速 1.5 * 减速 0.5 = 最终速度 7.5
         Locomotion.currentSpeed = Locomotion.baseSpeed * maxHasteMultiplier * minSlowMultiplier;
+    }
+
+    private void FlushDamagePopup()
+    {
+        if (!pendingPopup || accumulatedDamage <= 0)
+            return;
+
+        EventCenter.Broadcast(
+            EventDefine.OnDamagePopup,
+            new DmgMessage
+            {
+                amount = (int)accumulatedDamage,
+                position = transform.position,
+                damageType = priorityDamageType,
+                isCirt = hasCritInBatch,
+            }
+        );
+
+        // 状态重置，等待下一轮合并
+        accumulatedDamage = 0f;
+        pendingPopup = false;
+        hasCritInBatch = false;
+        priorityDamageType = DamageType.Normal;
     }
 }

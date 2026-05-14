@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8682012544766605682}
   - component: {fileID: -1244100719243963820}
   - component: {fileID: -7360161564239851115}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: OysterMush
   m_TagString: Prop
   m_Icon: {fileID: 0}
@@ -141,7 +141,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -2065096735
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 590150312393183423, guid: 04bb3867d963c704abb2b60b648ffd17, type: 3}

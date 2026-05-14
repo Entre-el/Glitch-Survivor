@@ -22,7 +22,7 @@ public class InventoryManager : MonoBehaviour
         if (activeBrain != null)
         {
             currentWeaponSlotManager = activeBrain.SlotManager;
-            Debug.Log($"🎒 背包系统已连接到武器：{activeBrain.gameObject.name}");
+            //Debug.Log($"🎒 背包系统已连接到武器：{activeBrain.gameObject.name}");
         }
     }
 
@@ -115,7 +115,7 @@ public class InventoryManager : MonoBehaviour
                 break;
         }
 
-        Debug.Log($"✅ 成功将 [{sticker.stickerName}] 装备到了 [{slotType}] 槽位！");
+        //Debug.Log($"✅ 成功将 [{sticker.stickerName}] 装备到了 [{slotType}] 槽位！");
         return true;
     }
 
@@ -145,6 +145,6 @@ public class InventoryManager : MonoBehaviour
                 break;
         }
 
-        Debug.Log($"⬇️ 成功卸下了 [{slotType}] 槽位的贴纸！");
+        //Debug.Log($"⬇️ 成功卸下了 [{slotType}] 槽位的贴纸！");
     }
 }

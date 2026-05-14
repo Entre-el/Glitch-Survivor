@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1536712572173920092}
   - component: {fileID: 725118116832322120}
   - component: {fileID: 1923838213835105668}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PurpleLily
   m_TagString: Prop
   m_Icon: {fileID: 0}

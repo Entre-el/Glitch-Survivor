@@ -121,7 +121,7 @@ public abstract class StickerSO : ScriptableObject
         GameObject bullet = ObjectPoolManager.Instance.Get(bulletPrefab, pos, Quaternion.identity);
         if (bullet == null)
         {
-            Debug.LogError($"[{stickerName}] 无法生成子弹：贴纸和载荷中均未提供 bulletPrefab！");
+            //Debug.LogError($"[{stickerName}] 无法生成子弹：贴纸和载荷中均未提供 bulletPrefab！");
             return;
         }
         else if (bullet.TryGetComponent<ProjectileBase>(out var proj))

@@ -129,7 +129,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5707308963716222226}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -198,6 +198,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyLocomotion
   baseSpeed: 0
   currentSpeed: 0
+  separationRadius: 0.3
+  separationWeight: 1.5
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!114 &2168928653417041951
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -11,8 +11,8 @@ public class HpBarPanel : BasePanel
         if (playerHealth == null)
         {
             if (!TryGetComponent<PlayerHealth>(out playerHealth))
-                Debug.LogError("PlayerStats component not found");
-            return;
+                //Debug.LogError("PlayerStats component not found");
+                return;
         }
         base.OnInit();
     }

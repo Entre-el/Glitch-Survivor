@@ -70,6 +70,9 @@ public class DamagePopupUI : PoolItem
         }
 
         // 动画结束后回收对象
+        DmgPopupManager.CurrentActivePopups--;
+        if (DmgPopupManager.CurrentActivePopups < 0)
+            DmgPopupManager.CurrentActivePopups = 0;
         ReturnToPool();
     }
 }

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -2923536846827193392}
   - component: {fileID: -3131090328032920407}
   - component: {fileID: -5075375654687884075}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Mush
   m_TagString: Prop
   m_Icon: {fileID: 0}
@@ -82,7 +82,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -2065096735
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 10
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1400832232712754758, guid: 04bb3867d963c704abb2b60b648ffd17, type: 3}

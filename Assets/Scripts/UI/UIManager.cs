@@ -97,7 +97,7 @@ public class UIManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError($"UI架构异常：尝试打开未注册的面板 {type.Name}");
+            //Debug.LogError($"UI架构异常：尝试打开未注册的面板 {type.Name}");
         }
     }
 
@@ -137,7 +137,7 @@ public class UIManager : MonoBehaviour
             return panel as T;
         }
 
-        Debug.LogError($"UI架构异常：尝试获取未注册的面板 {type.Name}");
+        //Debug.LogError($"UI架构异常：尝试获取未注册的面板 {type.Name}");
         return null;
     }
 }

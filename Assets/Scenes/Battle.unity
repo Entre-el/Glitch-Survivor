@@ -511,6 +511,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2055016325272498474, guid: a58676795aeb74f4f864528b69736e8c, type: 3}
+      propertyPath: m_SortingOrder
+      value: -139
+      objectReference: {fileID: 0}
     - target: {fileID: 2168928653417041951, guid: a58676795aeb74f4f864528b69736e8c, type: 3}
       propertyPath: maxHealth
       value: 200
@@ -955,7 +959,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &87711288
 Transform:
   m_ObjectHideFlags: 0
@@ -983,53 +987,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eca21b0d753aa154380c34b6b4989cf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
-  playerAnchor: {fileID: 11400000, guid: 2db80b6fbf58fb7469ef6bdd73569147, type: 2}
-  finalWaveBGM: {fileID: 8300000, guid: 33a8f13f2ae6be04890aef8ba92a8c82, type: 3}
-  cutInDuration: 2
-  waveSpawnInterval: 15
-  waveSpawnTimer: 0
-  groupSpawnInterval: 7
-  groupSpawnTimer: 0
-  currentWaveCount: 0
-  currentGroupCount: 0
-  maxEnemiesAllowed: 200
-  roundEdgeLength: 20
-  waves:
-  - waveName: Wave1
-    enemyGroups:
-    - enemysList:
-      - enemyPrefab: {fileID: 1468309060539859647, guid: 4775da15f28597d4cad237b99ee09eea, type: 3}
-        enemyCount: 3
-      isGathered: 1
-      difficultyLevel: 0
-    - enemysList:
-      - enemyPrefab: {fileID: 5707308963716222226, guid: a58676795aeb74f4f864528b69736e8c, type: 3}
-        enemyCount: 5
-      isGathered: 1
-      difficultyLevel: 0
-    - enemysList:
-      - enemyPrefab: {fileID: 5707308963716222226, guid: e2bb2ba1d4edfa349b87a37112492177, type: 3}
-        enemyCount: 10
-      isGathered: 0
-      difficultyLevel: 0
-  - waveName: Wave2
-    enemyGroups:
-    - enemysList:
-      - enemyPrefab: {fileID: 5707308963716222226, guid: 18815829f9768864b96f88a9418c6149, type: 3}
-        enemyCount: 15
-      - enemyPrefab: {fileID: 5707308963716222226, guid: 8ee3b6ffa2f038241bee8113f407dd9a, type: 3}
-        enemyCount: 1
-      isGathered: 0
-      difficultyLevel: 0
-    - enemysList:
-      - enemyPrefab: {fileID: 5707308963716222226, guid: 48469104c8c6c11458756c0ff05ac9f6, type: 3}
-        enemyCount: 20
-      - enemyPrefab: {fileID: 5707308963716222226, guid: 8de4b3f8c5c2c7e438eb1107d447d43d, type: 3}
-        enemyCount: 1
-      - enemyPrefab: {fileID: 5707308963716222226, guid: 62be6a115b0f4ff4a9332dcaf5193bbc, type: 3}
-        enemyCount: 1
-      isGathered: 0
-      difficultyLevel: 0
+  enemyPrefab: {fileID: 1468309060539859647, guid: 4775da15f28597d4cad237b99ee09eea, type: 3}
+  playerTransform: {fileID: 1327191079}
+  maxEnemiesOnScreen: 1000
+  spawnCountPerTick: 5
+  spawnInterval: 0.1
+  minSpawnRadius: 15
+  maxSpawnRadius: 20
 --- !u!1 &115627933
 GameObject:
   m_ObjectHideFlags: 0
@@ -3335,6 +3299,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2055016325272498474, guid: a58676795aeb74f4f864528b69736e8c, type: 3}
+      propertyPath: m_SortingOrder
+      value: -28
+      objectReference: {fileID: 0}
     - target: {fileID: 2168928653417041951, guid: a58676795aeb74f4f864528b69736e8c, type: 3}
       propertyPath: maxHealth
       value: 200

@@ -41,7 +41,7 @@ public class PlayerExperience : MonoBehaviour
         // 计算下一级所需的经验（经验曲线）
         ExpToNextLevel = (ExpToNextLevel * expMultiplierPerLevel) + flatExpIncreasePerLevel;
 
-        Debug.Log($"<color=#FFFF00>🌟 玩家升到了 {CurrentLevel} 级！</color>");
+        //Debug.Log($"<color=#FFFF00>🌟 玩家升到了 {CurrentLevel} 级！</color>");
 
         // 🌟 核心劫持：向全宇宙广播玩家升级了！
         // UIManager 会监听到这个事件，然后：

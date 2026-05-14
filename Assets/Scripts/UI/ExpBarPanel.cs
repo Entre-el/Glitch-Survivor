@@ -12,8 +12,8 @@ public class ExpBarPanel : BasePanel
         if (playerExperience == null)
         {
             if (!TryGetComponent<PlayerExperience>(out playerExperience))
-                Debug.LogError("PlayerExp component not found");
-            return;
+                //Debug.LogError("PlayerExp component not found");
+                return;
         }
         base.OnInit();
     }

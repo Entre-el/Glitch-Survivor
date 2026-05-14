@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3760658676427280504}
   - component: {fileID: 2904663766397044972}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: tilemap_62
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -78,7 +78,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -2065096735
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 9180185122099951743, guid: 04bb3867d963c704abb2b60b648ffd17, type: 3}
@@ -104,7 +104,7 @@ GameObject:
   - component: {fileID: -2047352179004150114}
   - component: {fileID: 6781455045827050137}
   - component: {fileID: -6219713729403553725}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Tree
   m_TagString: Prop
   m_Icon: {fileID: 0}
@@ -215,6 +215,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee78aef8b835e6c4ab8f77a912b35a32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PoolItem
+  defaultCapacity: 50
+  maxSize: 200
 --- !u!1 &7228982063650729856
 GameObject:
   m_ObjectHideFlags: 0
@@ -225,7 +227,7 @@ GameObject:
   m_Component:
   - component: {fileID: 327839440910081129}
   - component: {fileID: 8821170970082510560}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: tilemap_80
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -293,7 +295,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -2065096735
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -185618232069188130, guid: 04bb3867d963c704abb2b60b648ffd17, type: 3}

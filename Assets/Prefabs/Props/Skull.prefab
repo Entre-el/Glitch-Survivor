@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2033886341363431848}
   - component: {fileID: 9022246582397817007}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: tilemap_84
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -78,7 +78,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -2065096735
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 5424348670514132440, guid: 04bb3867d963c704abb2b60b648ffd17, type: 3}
@@ -101,7 +101,7 @@ GameObject:
   m_Component:
   - component: {fileID: 59813300876470849}
   - component: {fileID: 2845187558255423999}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: tilemap_67
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -169,7 +169,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -2065096735
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 8876887957534861168, guid: 04bb3867d963c704abb2b60b648ffd17, type: 3}
@@ -192,7 +192,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7368091302457328847}
   - component: {fileID: 6437748861821067670}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: tilemap_85
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -260,7 +260,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -2065096735
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 2229891254195283420, guid: 04bb3867d963c704abb2b60b648ffd17, type: 3}
@@ -283,7 +283,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6822664037011460120}
   - component: {fileID: 5152008544610638761}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: tilemap_66
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -351,7 +351,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -2065096735
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 2628091620012382583, guid: 04bb3867d963c704abb2b60b648ffd17, type: 3}
@@ -377,7 +377,7 @@ GameObject:
   - component: {fileID: -8053223754891740740}
   - component: {fileID: 2384031994709718127}
   - component: {fileID: -8381292132098180653}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Skull
   m_TagString: Prop
   m_Icon: {fileID: 0}
@@ -490,3 +490,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee78aef8b835e6c4ab8f77a912b35a32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PoolItem
+  defaultCapacity: 50
+  maxSize: 200

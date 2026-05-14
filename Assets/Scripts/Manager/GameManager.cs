@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("检测到多个 GameManager 实例，正在销毁多余实例。");
+            //Debug.LogWarning("检测到多个 GameManager 实例，正在销毁多余实例。");
             Destroy(gameObject);
         }
     }
@@ -99,7 +99,7 @@ public class GameManager : MonoBehaviour
             if (AudioManager.Instance != null && AudioManager.Instance.bgmSource != null)
                 AudioManager.Instance.bgmSource.pitch = 0.5f;
 
-            Debug.Log("Game Paused");
+            //Debug.Log("Game Paused");
         }
     }
 
@@ -115,7 +115,7 @@ public class GameManager : MonoBehaviour
             if (AudioManager.Instance != null && AudioManager.Instance.bgmSource != null)
                 AudioManager.Instance.bgmSource.pitch = 1f;
 
-            Debug.Log("Game Resumed");
+            //Debug.Log("Game Resumed");
         }
     }
 

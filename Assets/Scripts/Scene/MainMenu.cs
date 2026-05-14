@@ -29,7 +29,7 @@ public class MainMenu : MonoBehaviour
         }
         else
         {
-            Debug.LogError("致命异常：找不到全局的 SceneController，无法过图！");
+            //Debug.LogError("致命异常：找不到全局的 SceneController，无法过图！");
         }
     }
 

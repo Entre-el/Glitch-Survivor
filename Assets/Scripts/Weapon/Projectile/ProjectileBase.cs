@@ -11,6 +11,7 @@ public class ProjectileBase : PoolItem
     public float currentSpeed = 10f;
     public float lifeTime = 1.5f;
     private float timer;
+    private bool isDead = false;
 
     // 🌟 新增：记录这颗子弹不能打的敌人
     private IDamageable ignoredTarget;
@@ -27,6 +28,7 @@ public class ProjectileBase : PoolItem
         IDamageable ignoredTarget = null
     )
     {
+        this.isDead = false;
         this.payload = payload;
         this.timer = lifeTime;
         this.ignoredTarget = ignoredTarget; // 存下来
@@ -45,6 +47,9 @@ public class ProjectileBase : PoolItem
 
     public void Die()
     {
+        if (isDead)
+            return;
+        isDead = true;
         if (payload.FadeSticker != null)
         {
             payload.FadeSticker.OnFadeSlot(ref payload, transform.position);
