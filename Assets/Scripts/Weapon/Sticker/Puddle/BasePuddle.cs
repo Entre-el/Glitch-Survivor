@@ -34,7 +34,7 @@ public class BasePuddle : PoolItem
     protected virtual void OnEnable()
     {
         timeRemaining = duration;
-        applyTimer = buffApplyInterval;
+        applyTimer = buffApplyInterval / 4;
     }
 
     protected virtual void Update()

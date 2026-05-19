@@ -13,7 +13,6 @@ public class DamagePopupStyleConfigSO : ScriptableObject
         public Color textColor;
         public float sizeMultiplier; // 基础大小的缩放倍率
         public TMP_FontAsset customFont; // 可选的特殊字体
-        public string prefix; // 可选前缀，如 "+" 或 "-"
     }
 
     // 存储所有样式的列表

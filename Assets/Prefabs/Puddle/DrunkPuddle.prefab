@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3098502894475721555}
   - component: {fileID: 4046266592443368441}
-  - component: {fileID: 4158846116240928072}
   - component: {fileID: -7455286351042341801}
   m_Layer: 0
   m_Name: DrunkPuddle
@@ -93,42 +92,6 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!58 &4158846116240928072
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8313769304882078424}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0.008168857, y: 0}
-  m_Radius: 0.8754398
 --- !u!114 &-7455286351042341801
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -146,3 +109,7 @@ MonoBehaviour:
   buffSO: {fileID: 11400000, guid: 5816abdbb5d187f4c9bab5e50a77e829, type: 2}
   duration: 3
   buffApplyInterval: 1
+  radius: 1.76
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 128

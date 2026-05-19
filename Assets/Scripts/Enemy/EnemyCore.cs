@@ -4,8 +4,8 @@ using UnityEngine;
 
 [RequireComponent(typeof(EnemyLocomotion))]
 [RequireComponent(typeof(EnemyHealth))]
-[RequireComponent(typeof(EnemyVisuals))]
 [RequireComponent(typeof(Transform))]
+[RequireComponent(typeof(EnemyVisuals))]
 public class EnemyCore : PoolItem, IDamageable, IBuffable
 {
     private static readonly WaitForSeconds _waitForSeconds03 = new(0.3f);
